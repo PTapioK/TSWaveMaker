@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\trigger.o
+./release\action.o
+./release\event.o
+./release\tag.o
+./release\team.o
+./release\script.o
+./release\taskforce.o
+./release\moc_mainwindow.o
+);
