@@ -24,9 +24,9 @@ using namespace std;
 #include "script.h"
 #include "infodialog.h"
 
-
 namespace Ui {
 class MainWindow;
+class TriggerSection;
 }
 
 class Tag;

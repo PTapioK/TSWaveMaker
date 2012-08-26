@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Mon 20. Aug 22:36:35 2012
+** Created: Sun 26. Aug 21:30:44 2012
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,23 +36,6 @@ static const uint qt_meta_data_MainWindow[] = {
       33,   11,   11,   11, 0x08,
       44,   11,   11,   11, 0x08,
       57,   11,   11,   11, 0x08,
-      64,   11,   11,   11, 0x08,
-     101,   11,   11,   11, 0x08,
-     125,   11,   11,   11, 0x08,
-     151,   11,   11,   11, 0x08,
-     173,   11,   11,   11, 0x08,
-     199,   11,   11,   11, 0x08,
-     225,   11,   11,   11, 0x08,
-     255,   11,   11,   11, 0x08,
-     281,   11,   11,   11, 0x08,
-     307,   11,   11,   11, 0x08,
-     333,   11,   11,   11, 0x08,
-     363,   11,   11,   11, 0x08,
-     392,   11,   11,   11, 0x08,
-     428,   11,   11,   11, 0x08,
-     452,   11,   11,   11, 0x08,
-     488,   11,   11,   11, 0x08,
-     512,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -60,22 +43,6 @@ static const uint qt_meta_data_MainWindow[] = {
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0NewFile()\0OpenFile()\0"
     "SaveFile()\0SaveFileAs()\0Info()\0"
-    "on_listWidget_itemSelectionChanged()\0"
-    "on_pushButton_clicked()\0"
-    "on_pushButton_2_clicked()\0"
-    "on_checkBox_clicked()\0on_pushButton_4_clicked()\0"
-    "on_pushButton_3_clicked()\0"
-    "on_timeEdit_editingFinished()\0"
-    "on_pushButton_5_clicked()\0"
-    "on_pushButton_6_clicked()\0"
-    "on_pushButton_7_clicked()\0"
-    "on_listWidget_2_itemClicked()\0"
-    "on_checkBox_5_stateChanged()\0"
-    "on_comboBox_2_currentIndexChanged()\0"
-    "on_checkBox_2_clicked()\0"
-    "on_comboBox_3_currentIndexChanged()\0"
-    "on_comboBox_activated()\0"
-    "on_checkBox_4_stateChanged()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -89,23 +56,6 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->SaveFile(); break;
         case 3: _t->SaveFileAs(); break;
         case 4: _t->Info(); break;
-        case 5: _t->on_listWidget_itemSelectionChanged(); break;
-        case 6: _t->on_pushButton_clicked(); break;
-        case 7: _t->on_pushButton_2_clicked(); break;
-        case 8: _t->on_checkBox_clicked(); break;
-        case 9: _t->on_pushButton_4_clicked(); break;
-        case 10: _t->on_pushButton_3_clicked(); break;
-        case 11: _t->on_timeEdit_editingFinished(); break;
-        case 12: _t->on_pushButton_5_clicked(); break;
-        case 13: _t->on_pushButton_6_clicked(); break;
-        case 14: _t->on_pushButton_7_clicked(); break;
-        case 15: _t->on_listWidget_2_itemClicked(); break;
-        case 16: _t->on_checkBox_5_stateChanged(); break;
-        case 17: _t->on_comboBox_2_currentIndexChanged(); break;
-        case 18: _t->on_checkBox_2_clicked(); break;
-        case 19: _t->on_comboBox_3_currentIndexChanged(); break;
-        case 20: _t->on_comboBox_activated(); break;
-        case 21: _t->on_checkBox_4_stateChanged(); break;
         default: ;
         }
     }
@@ -144,9 +94,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 5;
     }
     return _id;
 }
