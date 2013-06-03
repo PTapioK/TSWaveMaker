@@ -26,6 +26,7 @@ public:
 	void setDis(bool dis);
 
 	void setName(string nName);
+	QString getName() { return name.c_str(); }
 
 	void addEvent(Event *nEvent);
 	void addAction(Action *nAction);

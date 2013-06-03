@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     script.cpp \
     taskforce.cpp \
     infodialog.cpp \
-    triggersection.cpp
+    triggersection.cpp \
+    teamsection.cpp
 
 HEADERS  += mainwindow.h \
     main.h \
@@ -33,11 +34,13 @@ HEADERS  += mainwindow.h \
     script.h \
     taskforce.h \
     infodialog.h \
-    triggersection.h
+    triggersection.h \
+    teamsection.h
 
 FORMS    += mainwindow.ui \
     infodialog.ui \
-    triggersection.ui
+    triggersection.ui \
+    teamsection.ui
 
 OTHER_FILES += \
     qtc_packaging/debian_harmattan/rules \

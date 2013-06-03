@@ -7,6 +7,7 @@ class Taskforce
 {
 public:
 	Taskforce();
+	std::string getID() { return ID; }
 private:
 	std::string ID;
 };

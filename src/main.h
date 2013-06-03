@@ -27,6 +27,7 @@ using namespace std;
 namespace Ui {
 class MainWindow;
 class TriggerSection;
+class TeamSection;
 }
 
 class Tag;
@@ -51,7 +52,6 @@ extern std::map <std::string, Taskforce*>::iterator taskforceIT;
 extern std::map <std::string, std::string>::iterator aitriggerIT;
 
 extern std::vector<std::string> filedata;
-extern std::vector<std::string>::iterator fileIT;
 
 extern std::vector <Action*>::iterator actionIT;
 extern std::vector <Event*>::iterator eventIT;
@@ -70,12 +70,15 @@ void WriteToFileBuffer(std::string section, std::string ID, string value);
 void AddToFileBuffer(std::string section, std::string ID, string value, int count);
 void ReadFileToBuffer();
 void ParseBuffer();
+Team* FindNewTeamFromFile(string teamID);
 bool isFirstWave(string ID);
 Tag* FindTag(string trigID);
 string DecToWaypointID(int32_t dec);
 string FindTriggerName(string trigID);
 int32_t WaypointIDToDec(string wID);
 void ClearValueAtBuffer(string line);
+bool ConverToBool(string str);
+string GetValueStr(string line);
 
 #define XOR(a,b) ((a)||(b) || (a) && (b))
 

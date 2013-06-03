@@ -101,7 +101,9 @@ void TriggerSection::on_EditTriggerName_clicked()
 // Is disabled
 void TriggerSection::on_isDisabledCheck_clicked()
 {
-	triggers[ui->TriggerList->currentItem()->text().toStdString()]->setDis(ui->isDisabledCheck->isChecked());
+	if(ui->TriggerList->currentRow() != -1) {
+		triggers[ui->TriggerList->currentItem()->text().toStdString()]->setDis(ui->isDisabledCheck->isChecked());
+	}
 }
 
 // Delete trigger
@@ -237,7 +239,10 @@ void TriggerSection::on_DeleteAction_clicked()
 {
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cur_trig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
-		cur_trig->eraseAction(ui->ActionList->currentRow());
+
+		for(int i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
+			cur_trig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
+		}
 
 		clearActionList();
 		int i = 0;
@@ -263,15 +268,19 @@ void TriggerSection::on_CloneAction_clicked()
 			++i;
 		}
 
-		Action *nAct = new Action(cur_trig->getAction(ui->ActionList->currentRow()), cur_trig->getID());
-		cur_trig->addAction(nAct);
+		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+			Action *nAct = new Action(cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a))), cur_trig->getID());
+			cur_trig->addAction(nAct);
 
-		stringstream iSS;
-		iSS << i;
-		QString text = "Action ";
-		text += iSS.str().c_str();
+			stringstream iSS;
+			iSS << i;
+			QString text = "Action ";
+			text += iSS.str().c_str();
 
-		ui->ActionList->addItem(text);
+			ui->ActionList->addItem(text);
+
+			++i;
+		}
 	}
 }
 
@@ -280,15 +289,12 @@ void TriggerSection::on_ActionList_itemClicked()
 	ui->TeamtypeBox->clear();
 	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
 		ui->TeamtypeBox->addItem((*teamIT).first.c_str());
-		ui->STTBox->setEnabled(true);
 	}
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
 		Action *cAct = cTrig->getAction(ui->ActionList->currentRow());
 		if(cAct->getType() == 80) {
 			ui->isReinforcementCheck->setChecked(true);
-			qDebug() << cAct->getP2().c_str();
-			qDebug() << ui->TeamtypeBox->findText(cAct->getP2().c_str());
 			ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(cAct->getP2().c_str()));
 		} else {
 			ui->isReinforcementCheck->setChecked(false);
@@ -308,11 +314,14 @@ void TriggerSection::on_isReinforcementCheck_stateChanged()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
 		if(ui->isReinforcementCheck->isChecked()) {
-			cTrig->getAction(ui->ActionList->currentRow())->editType(80);
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(80);
+			}
 			ui->TeamtypeBox->setEnabled(true);
 		} else {
-			cTrig->getAction(ui->ActionList->currentRow())->editType(0);
-			ui->STTBox->setEnabled(false);
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(0);
+			}
 		}
 	}
 }
@@ -322,7 +331,9 @@ void TriggerSection::on_WaypointBox_currentIndexChanged()
 {
 	if(ui->ActionList->currentItem() != NULL) {
 		Trigger *cTrig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
-		cTrig->getAction(ui->ActionList->currentRow())->editWPoint(atoi(ui->WaypointBox->currentText().toStdString().c_str()));
+		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+			cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editWPoint(atoi(ui->WaypointBox->currentText().toStdString().c_str()));
+		}
 	}
 }
 
@@ -332,11 +343,13 @@ void TriggerSection::clearTriggerList() {
 }
 
 void TriggerSection::clearActionList() {
-	delete ui->ActionList->item(ui->ActionList->currentRow());
+	for(int i = 0; i < ui->ActionList->selectedItems().size(); ++i) {
+		delete ui->ActionList->selectedItems().at(i);
+	}
 	ui->ActionList->clear();
 }
 
-// Make waypoints grow in ascending order to all actions
+// Make waypoints grow in ascending order to selected actions
 void TriggerSection::on_WPointAOBox_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
@@ -359,8 +372,8 @@ void TriggerSection::on_WPointAOBox_clicked()
 				}
 			}
 
-			for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
-				Action *cur_act = (*actionIT);
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				Action *cur_act = cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)));
 				if(i == waypoints.size()) { i = j; }
 				cur_act->editWPoint((*(waypoints.begin()+i)));
 				++i;
@@ -374,33 +387,28 @@ void TriggerSection::on_WPointAOBox_clicked()
 	}
 }
 
-// Starting waypoint to "Make waypoints grow in ascending order to all actions"
+// Starting waypoint to "Make waypoints grow in ascending order in all actions"
 void TriggerSection::on_SWaypointBox_currentIndexChanged()
 {
 	sWPoint = atoi(ui->SWaypointBox->currentText().toStdString().c_str());
 	on_WPointAOBox_clicked();
 }
 
-// TeamType for trigger
+// TeamType for actions
 void TriggerSection::on_TeamtypeBox_activated()
 {
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cur_trig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
-		cur_trig->getAction(ui->ActionList->currentRow())->editP1(1);
-		cur_trig->getAction(ui->ActionList->currentRow())->editP2(ui->TeamtypeBox->currentText().toStdString());
+		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+			cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP1(1);
+			cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(ui->TeamtypeBox->currentText().toStdString());
+		}
 	}
-	if(ui->STTBox->isChecked()) { on_STTBox_stateChanged(); }
 }
 
-// Same team for all actions
-void TriggerSection::on_STTBox_stateChanged()
-{
-	if(ui->TriggerList->currentRow() != -1) {
-		Trigger *cur_trig = triggers[ui->TriggerList->currentItem()->text().toStdString()];
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
-			Action *cur_act = (*actionIT);
-			cur_act->editP1(1);
-			cur_act->editP2(ui->TeamtypeBox->currentText().toStdString());
-		}
+void TriggerSection::UpdateUi() {
+	ui->TriggerList->clear();
+	for(triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
+		ui->TriggerList->addItem(triggerIT->second->getName());
 	}
 }

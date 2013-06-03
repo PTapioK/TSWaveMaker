@@ -13,6 +13,8 @@ public:
 	explicit TriggerSection(QWidget *parent = 0);
 	~TriggerSection();
 
+	void UpdateUi();
+
 private slots:
 
 
@@ -47,8 +49,6 @@ private slots:
 	void on_SWaypointBox_currentIndexChanged();
 
 	void on_TeamtypeBox_activated();
-
-	void on_STTBox_stateChanged();
 
 private:
 	Ui::TriggerSection *ui;

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "triggersection.h"
+#include "teamsection.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -17,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(Info()));
 
-	TriggerSection * trgS = new TriggerSection(this);
+	trgS = new TriggerSection(this);
+	tamS = new TeamSection(this);
 
 }
 
@@ -27,7 +29,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::NewFile() {
-
+	triggers.clear();
+	tags.clear();
+	teams.clear();
 }
 
 void MainWindow::OpenFile() {
@@ -38,6 +42,10 @@ void MainWindow::OpenFile() {
 	triggers.clear();
 	tags.clear();
 	teams.clear();
+
+	ParseBuffer();
+
+	trgS->UpdateUi();
 
 }
 

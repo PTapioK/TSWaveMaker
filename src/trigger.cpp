@@ -106,8 +106,6 @@ void Trigger::addAction(Action *nAction) {
 }
 
 void Trigger::eraseAction(int32_t count) {
-	qDebug() << count;
-	qDebug() << (*(actions.begin() + count))->ID.c_str();
 	delete (*(actions.begin() + count));
 	actions.erase(actions.begin() + count);
 }

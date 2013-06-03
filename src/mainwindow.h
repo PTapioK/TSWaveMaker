@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "main.h"
+#include "triggersection.h"
+#include "teamsection.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +24,9 @@ private slots:
 private:
 
 	Ui::MainWindow *ui;
+
+	TriggerSection * trgS;
+	TeamSection * tamS;
 
 };
 

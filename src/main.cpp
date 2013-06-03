@@ -21,7 +21,6 @@ vector <Action*>::iterator actionIT;
 vector <Event*>::iterator eventIT;
 
 vector<string> filedata;
-vector<string>::iterator fileIT;
 
 vector <int32_t> waypoints;
 vector <int32_t>::iterator waypointIT;
@@ -30,6 +29,7 @@ const char alphas[26] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N
 
 uint32_t sWPoint = 8;
 
+// Find First Free ID
 string fffID() {
 	string nextID;
 	stringstream ssID;
@@ -39,7 +39,7 @@ string fffID() {
 	vector<string> IDTemp;
 	vector<string>::iterator IDIT;
 
-	if(triggers.empty() && tags.empty()) {
+	if(triggers.empty() && tags.empty() && teams.empty() && scripts.empty() && taskforces.empty()) {
 		ssID << "0" << i;
 		return string(ssID.str().c_str());
 	}
@@ -55,6 +55,15 @@ string fffID() {
 	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
 		IDTemp.push_back((*teamIT).first);
 	}
+
+	for (scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
+		IDTemp.push_back((*scriptIT).second->getID());
+	}
+
+	for (taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
+		IDTemp.push_back((*taskforceIT).second->getID());
+	}
+
 
 	sort(IDTemp.begin(), IDTemp.end());
 
@@ -104,7 +113,7 @@ void SaveAllToFile() {
 	FILE * file;
 	file = fopen(cur_file.c_str(), "wb");
 
-	for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 		fputs((*fileIT).c_str(), file);
 	}
 
@@ -119,7 +128,7 @@ void WriteToFileBuffer(string section, string ID) {
 		filedata.push_back(section);
 		filedata.push_back(ID);
 	} else {
-		for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+		for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 			string cur_line = *fileIT;
 			if(cur_line.find(";") == string::npos) {
 				if((*fileIT) == section) {
@@ -155,7 +164,7 @@ void WriteToFileBuffer(string section, string ID) {
 				}
 			}
 		}
-		for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+		for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 			if((*fileIT).find("\n") != string::npos) {
 				fileIT = filedata.insert(fileIT, "\n");
 				ID = "0=" + ID;
@@ -181,7 +190,7 @@ void WriteToFileBuffer(string section, string ID, string value) {
 		filedata.push_back(ID + "=" + value);
 	} else {
 		int i = 0;
-		for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+		for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 			i = i + 1;
 			string cur_line = *fileIT;
 			if(cur_line.find(";") == string::npos) {
@@ -213,7 +222,7 @@ void WriteToFileBuffer(string section, string ID, string value) {
 				}
 			}
 		}
-		for(fileIT = filedata.begin(); fileIT < filedata.end(); ++fileIT) {
+		for(vector<string>::iterator fileIT = filedata.begin(); fileIT < filedata.end(); ++fileIT) {
 			if(*fileIT == "\n" && fileIT != filedata.end()) {
 				fileIT = filedata.insert(fileIT, "\n");
 				fileIT = filedata.insert(fileIT+1, section);
@@ -230,7 +239,7 @@ void WriteToFileBuffer(string section, string ID, string value) {
 void AddToFileBuffer(string section, string ID, string value, int count) {
 	value += "\n";
 	int i = 0;
-	for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 		i = i + 1;
 		string cur_line = *fileIT;
 		if(cur_line.find(";") == string::npos) {
@@ -294,7 +303,7 @@ void ReadFileToBuffer() {
 
 void ParseBuffer() {
 	ReadFileToBuffer();
-	for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 		if((*fileIT).find(";") == string::npos) {
 			if((*fileIT) == "[Triggers]\n") {
 				string::size_type pos;
@@ -389,7 +398,8 @@ void ParseBuffer() {
 						string cur_line = (*fileIT);
 
 						string teamID = cur_line.substr(pos+1, cur_line.length()-3);
-						teams[teamID] = new Team();
+						Team *nTeam = FindNewTeamFromFile(teamID);
+						teams[nTeam->getName()] = nTeam;
 
 					} else {
 						break;
@@ -399,7 +409,7 @@ void ParseBuffer() {
 			}
 		}
 	}
-	for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 		if((*fileIT).find(";") == string::npos) {
 			if((*fileIT) == "[Events]\n") {
 				string::size_type pos;
@@ -495,6 +505,125 @@ void ParseBuffer() {
 	}
 }
 
+Team *FindNewTeamFromFile(string teamID) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+		if((*fileIT).find(";") == string::npos) {
+			if((*fileIT) == "[" + teamID + "]\n") {
+
+				int max = 0;
+				bool full = false;
+				string name;
+				int group = -1;
+				string house;
+				string script;
+				bool whiner = false;
+				bool droppod = false;
+				bool suicide = false;
+				bool loadable = false;
+				bool prebuild = false;
+				int priority = 1;
+				string waypoint;
+				bool annoyance = false;
+				bool ionimmune = false;
+				bool recruiter = false;
+				bool reinforce = false;
+				string taskforce;
+				int techlevel;
+				bool aggressive = false;
+				bool autocreate = false;
+				bool guardslower = false;
+				bool ontransonly = false;
+				bool avoidthreats = false;
+				bool looserecruit = false;
+				int veteranlevel = 1;
+				bool isbasedefense = false;
+				bool onlytargethousenemy = false;
+				bool transportsreturnonunload = false;
+				bool areteammembersrecruitable = true;
+
+				while(1) {
+					++fileIT;
+					if((*fileIT).find("Max=") != string::npos) {
+						max = atoi(GetValueStr((*fileIT)).c_str());
+					} else if ((*fileIT).find("Full=") != string::npos) {
+						full = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Name=") != string::npos) {
+						name = GetValueStr((*fileIT));
+					} else if ((*fileIT).find("Group=") != string::npos) {
+						group = atoi(GetValueStr((*fileIT)).c_str());
+					} else if ((*fileIT).find("House=") != string::npos) {
+						house = GetValueStr((*fileIT));
+					} else if ((*fileIT).find("Script=") != string::npos) {
+						script = GetValueStr((*fileIT));
+					} else if ((*fileIT).find("Whiner=") != string::npos) {
+						whiner = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Droppod=") != string::npos) {
+						droppod = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Suicide=") != string::npos) {
+						suicide = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Loadable=") != string::npos) {
+						loadable = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Prebuild=") != string::npos) {
+						prebuild = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Priority=") != string::npos) {
+						priority = atoi(GetValueStr((*fileIT)).c_str());
+					} else if ((*fileIT).find("Waypoint=") != string::npos) {
+						waypoint = GetValueStr((*fileIT));
+					} else if ((*fileIT).find("Annoyance=") != string::npos) {
+						annoyance = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("IonImmune=") != string::npos) {
+						ionimmune = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Recruiter=") != string::npos) {
+						recruiter = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Reinforce=") != string::npos) {
+						reinforce = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("TaskForce=") != string::npos) {
+						taskforce = GetValueStr((*fileIT));
+					} else if ((*fileIT).find("TechLevel=") != string::npos) {
+						techlevel = atoi(GetValueStr((*fileIT)).c_str());
+					} else if ((*fileIT).find("Aggressive=") != string::npos) {
+						aggressive = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("Autocreate=") != string::npos) {
+						autocreate = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("GuardSlower=") != string::npos) {
+						guardslower = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("OnTransOnly=") != string::npos) {
+						ontransonly = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("AvoidThreats=") != string::npos) {
+						avoidthreats = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("LooseRecruit=") != string::npos) {
+						looserecruit = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("VeteranLevel=") != string::npos) {
+						veteranlevel = atoi(GetValueStr((*fileIT)).c_str());
+					} else if ((*fileIT).find("IsBaseDefense=") != string::npos) {
+						isbasedefense = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("OnlyTargetHouseEnemy=") != string::npos) {
+						onlytargethousenemy = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("TransportsReturnOnUnload=") != string::npos) {
+						transportsreturnonunload = ConverToBool(GetValueStr((*fileIT)));
+					} else if ((*fileIT).find("AreTeamMembersRecruitable=") != string::npos) {
+						areteammembersrecruitable = ConverToBool(GetValueStr((*fileIT)));
+					} else {
+						break;
+					}
+				}
+				return new Team(teamID, max, full, name, group, house, script, whiner, droppod, suicide,
+									loadable, prebuild, priority, waypoint, annoyance, ionimmune, recruiter,
+									reinforce, taskforce, techlevel, aggressive, autocreate, guardslower,
+									ontransonly, avoidthreats, looserecruit, veteranlevel, isbasedefense,
+									onlytargethousenemy, transportsreturnonunload, areteammembersrecruitable);
+			}
+		}
+	}
+	return new Team(teamID);
+}
+
+string GetValueStr(string line) {
+	string::size_type pos;
+	pos = line.find("=");
+	return line.substr(pos+1);
+}
+
 bool isFirstWave(string ID) {
 	bool retVal = true;
 	triggerIT = triggers.begin();
@@ -555,7 +684,7 @@ int32_t WaypointIDToDec(string wID) {
 
 void ClearValueAtBuffer(string line) {
 	line += "\n";
-	for(fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
 		string cur_line = *fileIT;
 		if(cur_line.find(";") == string::npos) {
 			if((*fileIT) == line) {
@@ -564,6 +693,23 @@ void ClearValueAtBuffer(string line) {
 			}
 		}
 	}
+}
+
+bool ConverToBool(string str) {
+	if(str == "yes") {
+		return true;
+	}
+	if(str == "no") {
+		return false;
+	}
+	if(str == "true") {
+		return true;
+	}
+	if(str == "false") {
+		return false;
+	}
+
+	return false;
 }
 
 int main(int argc, char *argv[])
