@@ -47,3 +47,9 @@ Team::Team(string nID, string nname) {
 	transportsreturnonunload = false;
 	areteammembersrecruitable = true;
 }
+
+Team::Team(string nID, Team *nTeam)
+{
+	*this = *nTeam;
+	this->ID = nID;
+}

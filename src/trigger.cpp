@@ -40,6 +40,21 @@ Trigger::Trigger(Trigger *trig)
 
 }
 
+Trigger::Trigger(string nID, Trigger *trig)
+{
+	*this = *trig;
+	setID(nID);
+	events.clear();
+	for(eventIT = trig->events.begin(); eventIT != trig->events.end(); ++eventIT) {
+		events.push_back(new Event(*eventIT, ID));
+	}
+	actions.clear();
+	for(actionIT = trig->actions.begin(); actionIT != trig->actions.end(); ++actionIT) {
+		actions.push_back(new Action(*actionIT, ID));
+	}
+
+}
+
 Trigger::~Trigger()
 {
 	eraseEventsFromBuffer();

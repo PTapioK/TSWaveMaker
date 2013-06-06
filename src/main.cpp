@@ -340,7 +340,8 @@ void ParseBuffer() {
 						string isHard_s = cur_line.substr(0, cur_line.find("\n"));
 						bool isHard = atoi(isHard_s.c_str());
 
-						triggers[name] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard);
+						triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard);
+
 					} else {
 						break;
 					}
@@ -397,9 +398,31 @@ void ParseBuffer() {
 					if(pos != string::npos) {
 						string cur_line = (*fileIT);
 
-						string teamID = cur_line.substr(pos+1, cur_line.length()-3);
+						string teamID = cur_line.substr(pos+1, 8);
 						Team *nTeam = FindNewTeamFromFile(teamID);
-						teams[nTeam->getName()] = nTeam;
+
+						if(nTeam != NULL)
+							teams[teamID] = nTeam;
+
+					} else {
+						break;
+					}
+					if(fileIT == filedata.end()) { break; }
+				}
+			} else if ((*fileIT) == "[ScriptTypes]\n") {
+				string::size_type pos;
+				scripts.clear();
+				while(1) {
+					++fileIT;
+					pos = (*fileIT).find("=");
+					if(pos != string::npos) {
+						string cur_line = (*fileIT);
+
+						string scriptID = cur_line.substr(pos+1, 8);
+						Script *nScript = FindNewScriptFromFile(scriptID);
+
+						if(nScript != NULL)
+							scripts[scriptID] = nScript;
 
 					} else {
 						break;
@@ -440,7 +463,7 @@ void ParseBuffer() {
 								param = atoi(cur_line.substr(0, cur_line.find("\n")).c_str());
 							}
 
-							triggers[FindTriggerName(ID)]->addEvent(new Event(eType, param, ID));
+							triggers[ID]->addEvent(new Event(eType, param, ID));
 						}
 
 					} else {
@@ -493,7 +516,7 @@ void ParseBuffer() {
 								wPoint = WaypointIDToDec(cur_line.substr(0, cur_line.find("\n")).c_str());
 							}
 
-							triggers[FindTriggerName(ID)]->addAction(new Action(ID, aType, wPoint, p1, p2, p3, p4, p5, p6));
+							triggers[ID]->addAction(new Action(ID, aType, wPoint, p1, p2, p3, p4, p5, p6));
 						}
 					} else {
 						break;
@@ -503,6 +526,46 @@ void ParseBuffer() {
 			}
 		}
 	}
+}
+
+Script *FindNewScriptFromFile(string scriptID) {
+	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
+		if((*fileIT).find(";") == string::npos) {
+			if((*fileIT) == "[" + scriptID + "]\n") {
+
+				string name = "New Script";
+
+				while(1) {
+					++fileIT;
+					string cur_line = *fileIT;
+
+					Script *nScript = new Script(scriptID);
+
+					short type = 0;
+					short param = 0;
+
+					if(cur_line.substr(0, 4) == "Name") {
+						name = GetValueStr(cur_line);
+						nScript->setName(name);
+
+						return nScript;
+					} else if(cur_line != "\n") {
+
+						string val = GetValueStr(cur_line);
+						type = atoi(val.substr(0, val.find(",")).c_str());
+
+						val = val.substr(val.find(",")+1);
+						param = atoi(val.substr(0, val.find("\n")).c_str());
+
+						nScript->NewLine(type, param);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+	}
+	return NULL;
 }
 
 Team *FindNewTeamFromFile(string teamID) {
@@ -615,13 +678,14 @@ Team *FindNewTeamFromFile(string teamID) {
 			}
 		}
 	}
-	return new Team(teamID);
+	return NULL;
 }
 
 string GetValueStr(string line) {
 	string::size_type pos;
 	pos = line.find("=");
-	return line.substr(pos+1);
+	line = line.substr(pos+1);
+	return line.substr(0, line.find('\n'));
 }
 
 bool isFirstWave(string ID) {
@@ -656,11 +720,21 @@ string DecToWaypointID(int dec) {
 string FindTriggerName(string trigID) {
 	for(triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
 		if((*triggerIT).second->getID() == trigID) {
-			return (*triggerIT).first;
+			return triggerIT->second->getName().toStdString();
 		}
 	}
 	return NULL;
 }
+
+string GetTriggerIDByName(string name) {
+	for(triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
+		if((*triggerIT).second->getName().toStdString() == name) {
+			return triggerIT->second->getID();
+		}
+	}
+	return NULL;
+}
+
 
 int32_t WaypointIDToDec(string wID) {
 	int32_t value = 0;
@@ -710,6 +784,71 @@ bool ConverToBool(string str) {
 	}
 
 	return false;
+}
+
+string GetTeamNameByID(string ID) {
+	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
+		if(teamIT->second->getID() == ID) {
+			return teamIT->second->getName();
+		}
+	}
+	return string("");
+}
+
+Trigger* FindNearestTimerTrigger(string trigID) {
+	triggerIT = triggers.find(trigID);
+	while(triggerIT != triggers.begin()) {
+		--triggerIT;
+		if(triggerIT->second->hasActionType(27)) {
+			return triggerIT->second;
+		}
+	}
+
+	triggerIT = triggers.find(trigID);
+	while(triggerIT != triggers.end()) {
+		++triggerIT;
+		if(triggerIT->second->hasActionType(27)) {
+			return triggerIT->second;
+		}
+	}
+
+	return NULL;
+}
+
+Team* GetTeamByName(string name) {
+	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
+		if(teamIT->second->getName() == name) {
+			return teamIT->second;
+		}
+	}
+	return NULL;
+}
+
+string GetTeamIDByName(string name) {
+	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
+		if(teamIT->second->getName() == name) {
+			return teamIT->second->getID();
+		}
+	}
+	return string("");
+}
+
+string GetScriptNameByID(string ID) {
+	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
+		if(scriptIT->second->getID() == ID) {
+			return scriptIT->second->getName();
+		}
+	}
+	return "";
+}
+
+string GetScriptIDByName(string name) {
+	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
+		if(scriptIT->second->getName() == name) {
+			return scriptIT->second->getID();
+		}
+	}
+	return "";
 }
 
 int main(int argc, char *argv[])

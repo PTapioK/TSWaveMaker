@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	trgS = new TriggerSection(this);
 	tamS = new TeamSection(this);
+	srtS = new ScriptSection(this);
 
 }
 
@@ -46,6 +47,7 @@ void MainWindow::OpenFile() {
 	ParseBuffer();
 
 	trgS->UpdateUi();
+	tamS->UpdateUi();
 
 }
 

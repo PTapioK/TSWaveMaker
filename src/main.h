@@ -28,6 +28,7 @@ namespace Ui {
 class MainWindow;
 class TriggerSection;
 class TeamSection;
+class ScriptSection;
 }
 
 class Tag;
@@ -71,6 +72,7 @@ void AddToFileBuffer(std::string section, std::string ID, string value, int coun
 void ReadFileToBuffer();
 void ParseBuffer();
 Team* FindNewTeamFromFile(string teamID);
+Script* FindNewScriptFromFile(string scriptID);
 bool isFirstWave(string ID);
 Tag* FindTag(string trigID);
 string DecToWaypointID(int32_t dec);
@@ -79,6 +81,13 @@ int32_t WaypointIDToDec(string wID);
 void ClearValueAtBuffer(string line);
 bool ConverToBool(string str);
 string GetValueStr(string line);
+string GetTeamNameByID(string ID);
+string GetTriggerIDByName(string name);
+Trigger* FindNearestTimerTrigger(string trigID);
+Team* GetTeamByName(string name);
+string GetTeamIDByName(string name);
+string GetScriptNameByID(string ID);
+string GetScriptIDByName(string name);
 
 #define XOR(a,b) ((a)||(b) || (a) && (b))
 

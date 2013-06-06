@@ -4,6 +4,7 @@
 #include "main.h"
 #include "triggersection.h"
 #include "teamsection.h"
+#include "scriptsection.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,7 @@ private:
 
 	TriggerSection * trgS;
 	TeamSection * tamS;
+	ScriptSection * srtS;
 
 };
 

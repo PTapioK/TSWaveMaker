@@ -61,7 +61,7 @@
      <enum>QAbstractItemView::MultiSelection</enum>
     </property>
    </widget>
-   <widget class="QLineEdit" name="NameEdit">
+   <widget class="QLineEdit" name="TNameEdit">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -139,9 +139,9 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>140</x>
       <y>180</y>
-      <width>341</width>
+      <width>391</width>
       <height>101</height>
      </rect>
     </property>
@@ -191,12 +191,157 @@
        <string>AreTeamMembersRecruitable</string>
       </property>
      </widget>
+     <widget class="QCheckBox" name="isTransportsReturnOnUnload">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>10</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TransportsReturnOnUnload</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isReinforce">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>30</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Reinforce</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isDroppod">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>50</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Droppod</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Secondary Flags</string>
      </attribute>
+     <widget class="QCheckBox" name="isAutocreate">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Autocreate</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isOnlyTargetHouseEnemy">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>141</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>OnlyTargetHouseEnemy</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isAggressive">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Aggressive</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isFull">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>10</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Full</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isAvoidThreats">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>30</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AvoidThreats</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="isIsBaseDefense">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>50</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IsBaseDefense</string>
+      </property>
+     </widget>
     </widget>
+   </widget>
+   <widget class="QComboBox" name="scriptBox">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>30</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>10</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Script</string>
+    </property>
    </widget>
   </widget>
  </widget>

@@ -12,9 +12,17 @@ public:
 		 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
 		 bool nareteammemberrecruitable);
 	Team(string nID, string nname = "New Team");
+	Team(string nID, Team* nTeam);
 
 	string getName() { return name; }
+	string getID() { return ID; }
+
+	void setName(string nname) { name = nname; }
+
 private:
+
+	friend class TeamSection;
+
 	std::string ID;
 	int max;
 	bool full;
