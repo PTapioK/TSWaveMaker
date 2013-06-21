@@ -6,14 +6,254 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>600</width>
+    <height>310</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Scripts</string>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
-  <widget class="QWidget" name="dockWidgetContents"/>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>310</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>310</height>
+   </size>
+  </property>
+  <property name="floating">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>Script Section</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <widget class="QListWidget" name="ScriptList">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>141</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>10</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Scripts</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="SNameEdit">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>30</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="newS">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>60</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="delS">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="editSN">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>120</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Edit name</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cloneS">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clone</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="ScriptActionList">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>30</y>
+      <width>71</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Actions</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="newSA">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>30</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="delSA">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>60</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="SATypeBox">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>160</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>140</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Type of action</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="SATargetBox">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>220</y>
+      <width>161</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>200</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Target</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="CLastButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>361</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>Clone last script but add 1 to all action waypoints</string>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -5,6 +5,7 @@
 #include "triggersection.h"
 #include "teamsection.h"
 #include "scriptsection.h"
+#include "taskforcesection.h"
 
 class MainWindow : public QMainWindow
 {
@@ -24,11 +25,17 @@ private slots:
 
 private:
 
+	friend class TriggerSection;
+	friend class TeamSection;
+	friend class ScriptSection;
+	friend class TaskforceSection;
+
 	Ui::MainWindow *ui;
 
 	TriggerSection * trgS;
 	TeamSection * tamS;
 	ScriptSection * srtS;
+	TaskforceSection * tskS;
 
 };
 

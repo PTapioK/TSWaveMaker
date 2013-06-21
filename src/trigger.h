@@ -16,6 +16,7 @@ public:
 	Trigger(string nID, string nHouse, string nAttachID, string nName, bool nIsDis, bool nIsEas, bool nIsMed, bool nIsHar);
 	Trigger(Trigger* trig);
 	Trigger(string nID, Trigger* trig);
+	Trigger(string nID, string nName);
 	~Trigger();
 
 	std::string getID();

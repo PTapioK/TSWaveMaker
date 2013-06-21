@@ -13,44 +13,52 @@ public:
 	explicit TeamSection(QWidget *parent = 0);
 	~TeamSection();
 
+public slots:
 	void UpdateUi();
-	
-private slots:
 	void on_New_clicked();
+
+signals:
+	void NewUnit();
+
+private slots:
 
 	void on_TeamList_itemSelectionChanged();
 
 	void on_Delete_clicked();
-
-	void on_isSuicde_stateChanged(int arg1);
-
-	void on_isLoadable_stateChanged(int arg1);
-
-	void on_isTransportsReturnOnUnload_stateChanged(int arg1);
-
-	void on_isAreTeamMembersRecruitable_stateChanged(int arg1);
-
-	void on_isReinforce_stateChanged(int arg1);
-
-	void on_isDroppod_stateChanged(int arg1);
-
-	void on_isAutocreate_stateChanged(int arg1);
-
-	void on_isOnlyTargetHouseEnemy_stateChanged(int arg1);
-
-	void on_isAggressive_stateChanged(int arg1);
-
-	void on_isFull_stateChanged(int arg1);
-
-	void on_isAvoidThreats_stateChanged(int arg1);
-
-	void on_isIsBaseDefense_stateChanged(int arg1);
 
 	void on_EditName_clicked();
 
 	void on_Clone_clicked();
 
 	void on_scriptBox_activated();
+
+	void on_taskforceBox_activated();
+
+	void on_SAOButton_clicked();
+
+	void on_isSuicde_clicked();
+
+	void on_isLoadable_clicked();
+
+	void on_isAreTeamMembersRecruitable_clicked();
+
+	void on_isTransportsReturnOnUnload_clicked();
+
+	void on_isReinforce_clicked();
+
+	void on_isDroppod_clicked();
+
+	void on_isAutocreate_clicked();
+
+	void on_isOnlyTargetHouseEnemy_clicked();
+
+	void on_isAggressive_clicked();
+
+	void on_isFull_clicked();
+
+	void on_isAvoidThreats_clicked();
+
+	void on_isIsBaseDefense_clicked();
 
 private:
 	Ui::TeamSection *ui;

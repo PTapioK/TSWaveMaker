@@ -55,6 +55,18 @@ Trigger::Trigger(string nID, Trigger *trig)
 
 }
 
+Trigger::Trigger(string nID, string nName)
+{
+	name = nName;
+	ID = nID;
+	attachID = "<none>";
+	house = "Neutral";
+	isEasy = true;
+	isMedium = true;
+	isHard = true;
+	isDisabled = false;
+}
+
 Trigger::~Trigger()
 {
 	eraseEventsFromBuffer();

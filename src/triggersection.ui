@@ -149,14 +149,14 @@
    </widget>
    <widget class="QComboBox" name="TeamtypeBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>510</x>
       <y>30</y>
-      <width>141</width>
-      <height>31</height>
+      <width>181</width>
+      <height>29</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -184,7 +184,7 @@
      <bool>false</bool>
     </property>
     <property name="sizeAdjustPolicy">
-     <enum>QComboBox::AdjustToContents</enum>
+     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
     </property>
     <property name="iconSize">
      <size>
@@ -286,12 +286,12 @@
    </widget>
    <widget class="QComboBox" name="SWaypointBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>210</y>
+      <x>570</x>
+      <y>220</y>
       <width>41</width>
       <height>22</height>
      </rect>
@@ -348,8 +348,8 @@
    <widget class="QLabel" name="SWPointLabel">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>210</y>
+      <x>470</x>
+      <y>220</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -407,35 +407,53 @@
      <string>Not set</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="WPointAOBox">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
+   <widget class="QPushButton" name="WPointAOButton">
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>180</y>
-      <width>261</width>
-      <height>21</height>
+      <y>190</y>
+      <width>281</width>
+      <height>23</height>
      </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
     </property>
     <property name="text">
      <string>Make waypoints grow in ascending order in actions</string>
     </property>
-    <property name="checkable">
-     <bool>true</bool>
+   </widget>
+   <widget class="QPushButton" name="TeamAOButton">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>80</y>
+      <width>181</width>
+      <height>23</height>
+     </rect>
     </property>
-    <property name="checked">
-     <bool>false</bool>
+    <property name="text">
+     <string>TeamTypes grow as actions</string>
     </property>
-    <property name="autoExclusive">
-     <bool>false</bool>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>120</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
     </property>
-    <property name="tristate">
-     <bool>false</bool>
+    <property name="text">
+     <string>Starting</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="TeamAOBox">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>120</y>
+      <width>69</width>
+      <height>22</height>
+     </rect>
     </property>
    </widget>
   </widget>

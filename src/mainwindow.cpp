@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	trgS = new TriggerSection(this);
 	tamS = new TeamSection(this);
 	srtS = new ScriptSection(this);
+	tskS = new TaskforceSection(this);
 
 }
 
@@ -33,21 +34,26 @@ void MainWindow::NewFile() {
 	triggers.clear();
 	tags.clear();
 	teams.clear();
+	taskforces.clear();
 }
 
 void MainWindow::OpenFile() {
 	QFileDialog fDG(this);
 
-	cur_file = fDG.getOpenFileName(this, tr("Open Tiberian Sun Map Or AttackWaveFile"), ".", tr("Compatible Files (*.map *.mpr *.awf)")).toStdString();
+	cur_file = fDG.getOpenFileName(this, tr("Open File"), ".", tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 
-	triggers.clear();
-	tags.clear();
-	teams.clear();
+	if(cur_file.empty()) {
+		return;
+	}
+
+	NewFile();
 
 	ParseBuffer();
 
 	trgS->UpdateUi();
 	tamS->UpdateUi();
+	srtS->UpdateUi();
+	tskS->UpdateUi();
 
 }
 
@@ -62,6 +68,9 @@ void MainWindow::SaveFile() {
 void MainWindow::SaveFileAs() {
 	QFileDialog fDG(this);
 	cur_file = fDG.getSaveFileName(this, tr("Save Tiberian Sun Map Or AttackWaveFile"), ".", tr("Compatible Files (*.map *.mpr *.awf)")).toStdString();
+	if(cur_file.empty()) {
+		return;
+	}
 	SaveFile();
 }
 

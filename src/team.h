@@ -6,7 +6,7 @@
 class Team
 {
 public:
-	Team(string nID, int nmax, bool nfull, string nname, int ngroup, string nhouse, string nscriptID, bool nwhiner, bool ndroppod,
+	Team(string nID, int nmax, string ntagid, bool nfull, string nname, int ngroup, string nhouse, string nscriptID, bool nwhiner, bool ndroppod,
 		 bool nsuicide, bool nloadable, bool nprebuild, int nprioirity, string nwpoint, bool nannoyance, bool nionimmune,
 		 bool nrecruiter, bool nreinforce, string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
 		 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
@@ -19,12 +19,15 @@ public:
 
 	void setName(string nname) { name = nname; }
 
+	void WriteToFile();
+
 private:
 
 	friend class TeamSection;
 
 	std::string ID;
 	int max;
+	string tagID;
 	bool full;
 	string name;
 	int group;

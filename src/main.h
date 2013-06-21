@@ -4,6 +4,7 @@
 #include <QtGui/QApplication>
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <iostream>
 #include <string>
 #include <QtDebug>
@@ -12,8 +13,18 @@
 #include <cstdio>
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
+
+// Script Action Target Type
+enum SATargetType {
+	NONE = 1,
+	WAYPOINT,
+	BUILDING,
+	MISSION,
+	UNLOAD
+};
 
 #include "trigger.h"
 #include "tag.h"
@@ -29,6 +40,7 @@ class MainWindow;
 class TriggerSection;
 class TeamSection;
 class ScriptSection;
+class TaskforceSection;
 }
 
 class Tag;
@@ -65,18 +77,10 @@ extern const char alphas[26];
 extern uint32_t sWPoint;
 
 std::string fffID();
-void SaveAllToFile();
-void WriteToFileBuffer(std::string section, std::string ID);
-void WriteToFileBuffer(std::string section, std::string ID, string value);
-void AddToFileBuffer(std::string section, std::string ID, string value, int count);
-void ReadFileToBuffer();
-void ParseBuffer();
-Team* FindNewTeamFromFile(string teamID);
-Script* FindNewScriptFromFile(string scriptID);
 bool isFirstWave(string ID);
 Tag* FindTag(string trigID);
 string DecToWaypointID(int32_t dec);
-string FindTriggerName(string trigID);
+string GetTriggerNameByID(string trigID);
 int32_t WaypointIDToDec(string wID);
 void ClearValueAtBuffer(string line);
 bool ConverToBool(string str);
@@ -88,7 +92,19 @@ Team* GetTeamByName(string name);
 string GetTeamIDByName(string name);
 string GetScriptNameByID(string ID);
 string GetScriptIDByName(string name);
+Trigger* GetTriggerByName(string name);
+string GetTaskforceNameByID(string ID);
+string GetTaskforceIDByName(string name);
+Script* GetScriptByName(string name);
+QString GetScriptActionMeaning(uint8_t ID);
+SATargetType GetScriptActionTargetType(uint8_t ID);
+QStringList GetScriptActionTargetStrings(SATargetType type);
+uint32_t GetStringListMaxWidth(QStringList list, QFont font);
+string ConverBoolToYesNo(bool boolean);
+string IntToStr(int integer);
 
 #define XOR(a,b) ((a)||(b) || (a) && (b))
+
+#include "fileoperations.h"
 
 #endif // MAIN_H

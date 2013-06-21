@@ -13,6 +13,8 @@ public:
 	explicit TriggerSection(QWidget *parent = 0);
 	~TriggerSection();
 
+public slots:
+
 	void UpdateUi();
 
 private slots:
@@ -40,15 +42,17 @@ private slots:
 
 	void on_ActionList_itemClicked();
 
-	void on_isReinforcementCheck_stateChanged();
-
 	void on_WaypointBox_currentIndexChanged();
-
-	void on_WPointAOBox_clicked();
 
 	void on_SWaypointBox_currentIndexChanged();
 
 	void on_TeamtypeBox_activated();
+
+	void on_WPointAOButton_clicked();
+
+	void on_isReinforcementCheck_clicked();
+
+	void on_TeamAOButton_clicked();
 
 private:
 	Ui::TriggerSection *ui;
