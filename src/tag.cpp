@@ -29,7 +29,7 @@ Tag::~Tag()
 {
 	stringstream line;
 	line << ID << "=" << mode << "," << name << "," << triggerID;
-	ClearValueAtBuffer(line.str());
+	DeleteLineInBuffer(line.str());
 }
 
 string Tag::getID() {
@@ -44,10 +44,10 @@ string Tag::getTriggerID() {
 	return triggerID;
 }
 
-void Tag::WriteToFile() {
+void Tag::Save() {
 	stringstream valueSS;
 	valueSS << mode << "," << name << "," << triggerID;
-	WriteToFileBuffer("[Tags]", ID, valueSS.str());
+	WriteValueToBuffer("Tags", ID, valueSS.str());
 }
 
 void Tag::setName(string nName) {

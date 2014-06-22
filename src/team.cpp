@@ -54,39 +54,44 @@ Team::Team(string nID, Team *nTeam)
 	this->ID = nID;
 }
 
-void Team::WriteToFile()
+Team::~Team()
 {
-	WriteToFileBuffer("[" + ID + "]", "Max", IntToStr(max), false);
+	DeleteSectionInBuffer(ID);
+}
+
+void Team::Save()
+{
+	WriteValueToBuffer(ID, "Max", IntToStr(max), false);
 	if(!tagID.empty()) {
-		WriteToFileBuffer("[" + ID + "]", "Tag", tagID, false);
+		WriteValueToBuffer(ID, "Tag", tagID, false);
 	}
-	WriteToFileBuffer("[" + ID + "]", "Full", ConverBoolToYesNo(full), false);
-	WriteToFileBuffer("[" + ID + "]", "Name", name, false);
-	WriteToFileBuffer("[" + ID + "]", "Group", IntToStr(group), false);
-	WriteToFileBuffer("[" + ID + "]", "House", house, false);
-	WriteToFileBuffer("[" + ID + "]", "Script", scriptID, false);
-	WriteToFileBuffer("[" + ID + "]", "Whiner", ConverBoolToYesNo(whiner), false);
-	WriteToFileBuffer("[" + ID + "]", "Droppod", ConverBoolToYesNo(droppod), false);
-	WriteToFileBuffer("[" + ID + "]", "Suicide", ConverBoolToYesNo(suicide), false);
-	WriteToFileBuffer("[" + ID + "]", "Loadable", ConverBoolToYesNo(loadable), false);
-	WriteToFileBuffer("[" + ID + "]", "Prebuild", ConverBoolToYesNo(prebuild), false);
-	WriteToFileBuffer("[" + ID + "]", "Priority", IntToStr(priority), false);
-	WriteToFileBuffer("[" + ID + "]", "Waypoint", wPoint, false);
-	WriteToFileBuffer("[" + ID + "]", "Annoyance", ConverBoolToYesNo(annoyance), false);
-	WriteToFileBuffer("[" + ID + "]", "IonImmune", ConverBoolToYesNo(ionimmune), false);
-	WriteToFileBuffer("[" + ID + "]", "Recruiter", ConverBoolToYesNo(recruiter), false);
-	WriteToFileBuffer("[" + ID + "]", "Reinforce", ConverBoolToYesNo(reinforce), false);
-	WriteToFileBuffer("[" + ID + "]", "TaskForce", taskForceID, false);
-	WriteToFileBuffer("[" + ID + "]", "TechLevel", IntToStr(techlevel), false);
-	WriteToFileBuffer("[" + ID + "]", "Aggressive", ConverBoolToYesNo(aggressive), false);
-	WriteToFileBuffer("[" + ID + "]", "Autocreate", ConverBoolToYesNo(autocreate), false);
-	WriteToFileBuffer("[" + ID + "]", "GuardSlower", ConverBoolToYesNo(guardslower), false);
-	WriteToFileBuffer("[" + ID + "]", "OnTransOnly", ConverBoolToYesNo(ontransonly), false);
-	WriteToFileBuffer("[" + ID + "]", "AvoidThreats", ConverBoolToYesNo(avoidthreats), false);
-	WriteToFileBuffer("[" + ID + "]", "LooseRecruit", ConverBoolToYesNo(looserecruit), false);
-	WriteToFileBuffer("[" + ID + "]", "VeteranLevel", IntToStr(veteranlevel), false);
-	WriteToFileBuffer("[" + ID + "]", "IsBaseDefense", ConverBoolToYesNo(isbasedefense), false);
-	WriteToFileBuffer("[" + ID + "]", "OnlyTargetHouseEnemy", ConverBoolToYesNo(onlytargethousenemy), false);
-	WriteToFileBuffer("[" + ID + "]", "TransportsReturnOnUnload", ConverBoolToYesNo(transportsreturnonunload), false);
-	WriteToFileBuffer("[" + ID + "]", "AreTeamMembersRecruitable", ConverBoolToYesNo(areteammembersrecruitable), false);
+	WriteValueToBuffer(ID, "Full", ConverBoolToYesNo(full), false);
+	WriteValueToBuffer(ID, "Name", name, false);
+	WriteValueToBuffer(ID, "Group", IntToStr(group), false);
+	WriteValueToBuffer(ID, "House", house, false);
+	WriteValueToBuffer(ID, "Script", scriptID, false);
+	WriteValueToBuffer(ID, "Whiner", ConverBoolToYesNo(whiner), false);
+	WriteValueToBuffer(ID, "Droppod", ConverBoolToYesNo(droppod), false);
+	WriteValueToBuffer(ID, "Suicide", ConverBoolToYesNo(suicide), false);
+	WriteValueToBuffer(ID, "Loadable", ConverBoolToYesNo(loadable), false);
+	WriteValueToBuffer(ID, "Prebuild", ConverBoolToYesNo(prebuild), false);
+	WriteValueToBuffer(ID, "Priority", IntToStr(priority), false);
+	WriteValueToBuffer(ID, "Waypoint", wPoint, false);
+	WriteValueToBuffer(ID, "Annoyance", ConverBoolToYesNo(annoyance), false);
+	WriteValueToBuffer(ID, "IonImmune", ConverBoolToYesNo(ionimmune), false);
+	WriteValueToBuffer(ID, "Recruiter", ConverBoolToYesNo(recruiter), false);
+	WriteValueToBuffer(ID, "Reinforce", ConverBoolToYesNo(reinforce), false);
+	WriteValueToBuffer(ID, "TaskForce", taskForceID, false);
+	WriteValueToBuffer(ID, "TechLevel", IntToStr(techlevel), false);
+	WriteValueToBuffer(ID, "Aggressive", ConverBoolToYesNo(aggressive), false);
+	WriteValueToBuffer(ID, "Autocreate", ConverBoolToYesNo(autocreate), false);
+	WriteValueToBuffer(ID, "GuardSlower", ConverBoolToYesNo(guardslower), false);
+	WriteValueToBuffer(ID, "OnTransOnly", ConverBoolToYesNo(ontransonly), false);
+	WriteValueToBuffer(ID, "AvoidThreats", ConverBoolToYesNo(avoidthreats), false);
+	WriteValueToBuffer(ID, "LooseRecruit", ConverBoolToYesNo(looserecruit), false);
+	WriteValueToBuffer(ID, "VeteranLevel", IntToStr(veteranlevel), false);
+	WriteValueToBuffer(ID, "IsBaseDefense", ConverBoolToYesNo(isbasedefense), false);
+	WriteValueToBuffer(ID, "OnlyTargetHouseEnemy", ConverBoolToYesNo(onlytargethousenemy), false);
+	WriteValueToBuffer(ID, "TransportsReturnOnUnload", ConverBoolToYesNo(transportsreturnonunload), false);
+	WriteValueToBuffer(ID, "AreTeamMembersRecruitable", ConverBoolToYesNo(areteammembersrecruitable), false);
 }

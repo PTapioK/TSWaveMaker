@@ -1,10 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <QtGui/QApplication>
-#include <QMainWindow>
-#include <QFileDialog>
-#include <QMessageBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 #include <iostream>
 #include <string>
 #include <QtDebug>
@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <vector>
 #include <algorithm>
+#include "CDataFile/CDataFile.h"
 
 using namespace std;
 
@@ -65,6 +66,7 @@ extern std::map <std::string, Taskforce*>::iterator taskforceIT;
 extern std::map <std::string, std::string>::iterator aitriggerIT;
 
 extern std::vector<std::string> filedata;
+extern CDataFile curdata;
 
 extern std::vector <Action*>::iterator actionIT;
 extern std::vector <Event*>::iterator eventIT;
@@ -82,7 +84,6 @@ Tag* FindTag(string trigID);
 string DecToWaypointID(int32_t dec);
 string GetTriggerNameByID(string trigID);
 int32_t WaypointIDToDec(string wID);
-void ClearValueAtBuffer(string line);
 bool ConverToBool(string str);
 string GetValueStr(string line);
 string GetTeamNameByID(string ID);

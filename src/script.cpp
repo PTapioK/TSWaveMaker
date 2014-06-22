@@ -32,6 +32,11 @@ Script::Script(string nID, Script *cS)
 	}
 }
 
+Script::~Script()
+{
+	DeleteSectionInBuffer(ID);
+}
+
 void Script::NewLine(short type, short param) {
 	ScriptLine *nLine = new ScriptLine();
 	nLine->param = param;
@@ -64,16 +69,16 @@ void Script::DeleteLine(short ID)
 
 }
 
-void Script::WriteToFile()
+void Script::Save()
 {
 	for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
 		stringstream IDss;
 		IDss << (*slineIT)->ID;
 		stringstream valueSS;
 		valueSS << (*slineIT)->type << "," << (*slineIT)->param;
-		WriteToFileBuffer("[" + ID + "]", IDss.str(), valueSS.str());
+		WriteValueToBuffer(ID, IDss.str(), valueSS.str());
 	}
-	WriteToFileBuffer("[" + ID + "]", "Name", name);
+	WriteValueToBuffer(ID, "Name", name);
 }
 
 std::string Script::getID() {

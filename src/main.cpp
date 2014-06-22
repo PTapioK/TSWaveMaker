@@ -21,6 +21,7 @@ vector <Action*>::iterator actionIT;
 vector <Event*>::iterator eventIT;
 
 vector<string> filedata;
+CDataFile curdata;
 
 vector <int32_t> waypoints;
 vector <int32_t>::iterator waypointIT;
@@ -157,7 +158,6 @@ string GetTriggerIDByName(string name) {
 			return triggerIT->second->getID();
 		}
 	}
-	cout << "asd" << endl;
 	return string("");
 }
 
@@ -188,19 +188,6 @@ int32_t WaypointIDToDec(string wID) {
 		value = value + (multip * p);
 	}
 	return value-1;
-}
-
-void ClearValueAtBuffer(string line) {
-	line += "\n";
-	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
-		string cur_line = *fileIT;
-		if(cur_line.find(";") == string::npos) {
-			if((*fileIT) == line) {
-				filedata.erase(fileIT);
-				return;
-			}
-		}
-	}
 }
 
 bool ConverToBool(string str) {
@@ -448,7 +435,8 @@ uint32_t GetStringListMaxWidth(QStringList list, QFont font) {
 
 int main(int argc, char *argv[])
 {
-	filedata.clear();
+	curdata.m_Flags |= AUTOCREATE_KEYS;
+	curdata.m_Flags |= AUTOCREATE_SECTIONS;
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();

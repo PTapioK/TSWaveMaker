@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets
 
 TARGET = TSWaveMaker
 TEMPLATE = app
@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     teamsection.cpp \
 	scriptsection.cpp \
 	taskforcesection.cpp \
-    fileoperations.cpp
+	fileoperations.cpp \
+	CDataFile/CDataFile.cpp
 
 HEADERS  += mainwindow.h \
     main.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     teamsection.h \
     scriptsection.h \
     taskforcesection.h \
-    fileoperations.h
+	fileoperations.h \
+	CDataFile/CDataFile.h
 
 FORMS    += mainwindow.ui \
     infodialog.ui \

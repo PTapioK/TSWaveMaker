@@ -48,7 +48,8 @@ void MainWindow::OpenFile() {
 
 	NewFile();
 
-	ParseBuffer();
+	ReadFileToBuffer();
+	ParseSections();
 
 	trgS->UpdateUi();
 	tamS->UpdateUi();
@@ -62,7 +63,10 @@ void MainWindow::SaveFile() {
 		SaveFileAs();
 		return;
 	}
-	SaveAllToFile();
+	curdata.SetFileName(cur_file);
+	curdata.Load(cur_file);
+	SaveAllToBuffer();
+	curdata.Save();
 }
 
 void MainWindow::SaveFileAs() {

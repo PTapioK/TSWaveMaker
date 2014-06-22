@@ -1,7 +1,7 @@
 #ifndef TASKFORCESECTION_H
 #define TASKFORCESECTION_H
 
-#include <QDockWidget>
+#include <QtWidgets/QDockWidget>
 
 #include "main.h"
 

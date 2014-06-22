@@ -47,7 +47,7 @@ Action::Action(Action *oAct, string nID)
 	ID = nID;
 }
 
-void Action::WriteToFile(int32_t count) {
+void Action::Save(int32_t count) {
 	if(count == 1) {
 		stringstream vSS;
 		vSS << count
@@ -67,7 +67,7 @@ void Action::WriteToFile(int32_t count) {
 			<< p6
 			<< ","
 			<< wPoint;
-		WriteToFileBuffer("[Actions]", ID, vSS.str());
+		WriteValueToBuffer("Actions", ID, vSS.str());
 	} else if (count > 1) {
 		stringstream vSS;
 		vSS	<< aType
@@ -85,7 +85,7 @@ void Action::WriteToFile(int32_t count) {
 			<< p6
 			<< ","
 			<< wPoint;
-		AddToFileBuffer("[Actions]", ID, vSS.str(), count);
+		EditValueInBuffer("Actions", ID, vSS.str(), count);
 	}
 }
 

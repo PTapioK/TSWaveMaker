@@ -22,14 +22,14 @@ Event::Event(int32_t neType, int32_t nparam, string nID)
 	ID = nID;
 }
 
-void Event::WriteToFile(int32_t count) {
+void Event::Save(int32_t count) {
 	if(count == 1) {
 		stringstream vSS;
 		vSS << count << "," << eType << "," << "0" << "," << param;
-		WriteToFileBuffer("[Events]", ID, vSS.str());
+		WriteValueToBuffer("Events", ID, vSS.str());
 	} else if (count > 1) {
 		stringstream vSS;
 		vSS << eType << "," << "0" << "," << param;
-		AddToFileBuffer("[Events]", ID, vSS.str(), count);
+		EditValueInBuffer("Events", ID, vSS.str(), count);
 	}
 }

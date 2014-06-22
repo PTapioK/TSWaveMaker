@@ -1,7 +1,7 @@
 #ifndef TRIGGERSECTION_H
 #define TRIGGERSECTION_H
 
-#include <QDockWidget>
+#include <QtWidgets/QDockWidget>
 
 #include "main.h"
 

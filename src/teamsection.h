@@ -1,7 +1,7 @@
 #ifndef TEAMSECTION_H
 #define TEAMSECTION_H
 
-#include <QDockWidget>
+#include <QtWidgets/QDockWidget>
 
 #include "main.h"
 

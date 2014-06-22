@@ -3,12 +3,15 @@
 
 #include "main.h"
 
-void SaveAllToFile();
-void WriteToFileBuffer(std::string section, std::string ID);
-void WriteToFileBuffer(std::string section, std::string ID, string value, bool sorting = true);
-void AddToFileBuffer(std::string section, std::string ID, string value, int count);
+void SaveAllToBuffer();
+void WriteValueToBuffer(std::string section, std::string ID);
+void WriteValueToBuffer(std::string section, std::string ID, string value, bool sorting = true);
+void EditValueInBuffer(std::string section, std::string ID, string value, int count);
 void ReadFileToBuffer();
-void ParseBuffer();
+void DeleteLineInBuffer(string line);
+void DeleteSectionInBuffer(string section);
+void DeleteIDInBuffer(string ID);
+void ParseSections();
 
 Team* FindNewTeamFromFile(string teamID);
 Script* FindNewScriptFromFile(string scriptID);

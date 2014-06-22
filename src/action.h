@@ -10,7 +10,7 @@ struct Action
 	Action(string nID, int32_t naType, int32_t nwPoint, int32_t pa1, string pa2, int32_t pa3, int32_t pa4, int32_t pa5, int32_t pa6);
 	Action(Action *oAct, string nID);
 
-	void WriteToFile(int32_t count);
+	void Save(int32_t count);
 
 	void editType(int32_t type);
 	void editWPoint(int32_t wayP);

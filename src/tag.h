@@ -15,7 +15,7 @@ public:
 	void setID(string nID);
 	string getTriggerID();
 
-	void WriteToFile();
+	void Save();
 
 	void setName(string nName);
 

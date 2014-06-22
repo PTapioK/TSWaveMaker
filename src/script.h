@@ -9,6 +9,7 @@ public:
 	Script(string nID);
 	Script(string nID, string nName);
 	Script(string nID, Script *cS);
+	~Script();
 
 	void NewLine(short type, short param);
 	void DeleteLine(short ID);
@@ -19,7 +20,7 @@ public:
 
 	std::string getID();
 
-	void WriteToFile();
+	void Save();
 
 private:
 

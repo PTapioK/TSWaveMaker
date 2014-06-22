@@ -1,7 +1,7 @@
 #ifndef SCRIPTSECTION_H
 #define SCRIPTSECTION_H
 
-#include <QDockWidget>
+#include <QtWidgets/QDockWidget>
 
 #include "main.h"
 

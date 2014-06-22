@@ -13,13 +13,14 @@ public:
 		 bool nareteammemberrecruitable);
 	Team(string nID, string nname = "New Team");
 	Team(string nID, Team* nTeam);
+	~Team();
 
 	string getName() { return name; }
 	string getID() { return ID; }
 
 	void setName(string nname) { name = nname; }
 
-	void WriteToFile();
+	void Save();
 
 private:
 

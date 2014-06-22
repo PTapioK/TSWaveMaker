@@ -22,7 +22,7 @@ public:
 	std::string getID();
 	void setID(std::string nID);
 
-	void WriteToFile();
+	void Save();
 
 	bool isDis();
 	void setDis(bool dis);

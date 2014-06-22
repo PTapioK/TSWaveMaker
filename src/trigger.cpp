@@ -82,7 +82,7 @@ Trigger::~Trigger()
 
 	stringstream line;
 	line << ID << "=" << house << "," << attachID << "," << name << "," << isDisabled << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
-	ClearValueAtBuffer(line.str());
+	DeleteLineInBuffer(line.str());
 }
 
 std::string Trigger::getID() {
@@ -93,21 +93,21 @@ void Trigger::setID(std::string nID) {
 	ID = nID;
 }
 
-void Trigger::WriteToFile() {
+void Trigger::Save() {
 
 	stringstream valueSS;
 	valueSS << house << "," << attachID << "," << name << "," << isDisabled << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
-	WriteToFileBuffer("[Triggers]", ID, valueSS.str());
+	WriteValueToBuffer("Triggers", ID, valueSS.str());
 
 	int i = 0;
 	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
 		i = i + 1;
-		(*eventIT)->WriteToFile(i);
+		(*eventIT)->Save(i);
 	}
 	i = 0;
 	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
 		i = i + 1;
-		(*actionIT)->WriteToFile(i);
+		(*actionIT)->Save(i);
 	}
 
 }
@@ -163,7 +163,7 @@ void Trigger::eraseActionsFromBuffer() {
 				<< ","
 				<< (*actionIT)->wPoint;
 	}
-	ClearValueAtBuffer(line.str());
+	DeleteLineInBuffer(line.str());
 }
 
 void Trigger::eraseEventsFromBuffer() {
@@ -178,7 +178,7 @@ void Trigger::eraseEventsFromBuffer() {
 				<< ","
 				<< (*eventIT)->param;
 	}
-	ClearValueAtBuffer(line.str());
+	DeleteLineInBuffer(line.str());
 }
 
 bool Trigger::hasEventType(int32_t type) {

@@ -13,7 +13,7 @@ struct Event
 	string param;
 	string ID;
 
-	void WriteToFile(int32_t count);
+	void Save(int32_t count);
 };
 
 #endif // EVENT_H
