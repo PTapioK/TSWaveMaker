@@ -26,7 +26,8 @@ SOURCES += main.cpp\
 	scriptsection.cpp \
 	taskforcesection.cpp \
 	fileoperations.cpp \
-	CDataFile/CDataFile.cpp
+	CDataFile/CDataFile.cpp \
+    utils.cpp
 
 HEADERS  += mainwindow.h \
     main.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     scriptsection.h \
     taskforcesection.h \
 	fileoperations.h \
-	CDataFile/CDataFile.h
+	CDataFile/CDataFile.h \
+    utils.h
 
 FORMS    += mainwindow.ui \
     infodialog.ui \

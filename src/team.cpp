@@ -61,37 +61,37 @@ Team::~Team()
 
 void Team::Save()
 {
-	WriteValueToBuffer(ID, "Max", IntToStr(max), false);
+	WriteValueToBuffer(ID, "Max", IntToStr(max));
 	if(!tagID.empty()) {
-		WriteValueToBuffer(ID, "Tag", tagID, false);
+		WriteValueToBuffer(ID, "Tag", tagID);
 	}
-	WriteValueToBuffer(ID, "Full", ConverBoolToYesNo(full), false);
-	WriteValueToBuffer(ID, "Name", name, false);
-	WriteValueToBuffer(ID, "Group", IntToStr(group), false);
-	WriteValueToBuffer(ID, "House", house, false);
-	WriteValueToBuffer(ID, "Script", scriptID, false);
-	WriteValueToBuffer(ID, "Whiner", ConverBoolToYesNo(whiner), false);
-	WriteValueToBuffer(ID, "Droppod", ConverBoolToYesNo(droppod), false);
-	WriteValueToBuffer(ID, "Suicide", ConverBoolToYesNo(suicide), false);
-	WriteValueToBuffer(ID, "Loadable", ConverBoolToYesNo(loadable), false);
-	WriteValueToBuffer(ID, "Prebuild", ConverBoolToYesNo(prebuild), false);
-	WriteValueToBuffer(ID, "Priority", IntToStr(priority), false);
-	WriteValueToBuffer(ID, "Waypoint", wPoint, false);
-	WriteValueToBuffer(ID, "Annoyance", ConverBoolToYesNo(annoyance), false);
-	WriteValueToBuffer(ID, "IonImmune", ConverBoolToYesNo(ionimmune), false);
-	WriteValueToBuffer(ID, "Recruiter", ConverBoolToYesNo(recruiter), false);
-	WriteValueToBuffer(ID, "Reinforce", ConverBoolToYesNo(reinforce), false);
-	WriteValueToBuffer(ID, "TaskForce", taskForceID, false);
-	WriteValueToBuffer(ID, "TechLevel", IntToStr(techlevel), false);
-	WriteValueToBuffer(ID, "Aggressive", ConverBoolToYesNo(aggressive), false);
-	WriteValueToBuffer(ID, "Autocreate", ConverBoolToYesNo(autocreate), false);
-	WriteValueToBuffer(ID, "GuardSlower", ConverBoolToYesNo(guardslower), false);
-	WriteValueToBuffer(ID, "OnTransOnly", ConverBoolToYesNo(ontransonly), false);
-	WriteValueToBuffer(ID, "AvoidThreats", ConverBoolToYesNo(avoidthreats), false);
-	WriteValueToBuffer(ID, "LooseRecruit", ConverBoolToYesNo(looserecruit), false);
-	WriteValueToBuffer(ID, "VeteranLevel", IntToStr(veteranlevel), false);
-	WriteValueToBuffer(ID, "IsBaseDefense", ConverBoolToYesNo(isbasedefense), false);
-	WriteValueToBuffer(ID, "OnlyTargetHouseEnemy", ConverBoolToYesNo(onlytargethousenemy), false);
-	WriteValueToBuffer(ID, "TransportsReturnOnUnload", ConverBoolToYesNo(transportsreturnonunload), false);
-	WriteValueToBuffer(ID, "AreTeamMembersRecruitable", ConverBoolToYesNo(areteammembersrecruitable), false);
+	WriteValueToBuffer(ID, "Full", ConverBoolToYesNo(full));
+	WriteValueToBuffer(ID, "Name", name);
+	WriteValueToBuffer(ID, "Group", IntToStr(group));
+	WriteValueToBuffer(ID, "House", house);
+	WriteValueToBuffer(ID, "Script", scriptID);
+	WriteValueToBuffer(ID, "Whiner", ConverBoolToYesNo(whiner));
+	WriteValueToBuffer(ID, "Droppod", ConverBoolToYesNo(droppod));
+	WriteValueToBuffer(ID, "Suicide", ConverBoolToYesNo(suicide));
+	WriteValueToBuffer(ID, "Loadable", ConverBoolToYesNo(loadable));
+	WriteValueToBuffer(ID, "Prebuild", ConverBoolToYesNo(prebuild));
+	WriteValueToBuffer(ID, "Priority", IntToStr(priority));
+	WriteValueToBuffer(ID, "Waypoint", wPoint);
+	WriteValueToBuffer(ID, "Annoyance", ConverBoolToYesNo(annoyance));
+	WriteValueToBuffer(ID, "IonImmune", ConverBoolToYesNo(ionimmune));
+	WriteValueToBuffer(ID, "Recruiter", ConverBoolToYesNo(recruiter));
+	WriteValueToBuffer(ID, "Reinforce", ConverBoolToYesNo(reinforce));
+	WriteValueToBuffer(ID, "TaskForce", taskForceID);
+	WriteValueToBuffer(ID, "TechLevel", IntToStr(techlevel));
+	WriteValueToBuffer(ID, "Aggressive", ConverBoolToYesNo(aggressive));
+	WriteValueToBuffer(ID, "Autocreate", ConverBoolToYesNo(autocreate));
+	WriteValueToBuffer(ID, "GuardSlower", ConverBoolToYesNo(guardslower));
+	WriteValueToBuffer(ID, "OnTransOnly", ConverBoolToYesNo(ontransonly));
+	WriteValueToBuffer(ID, "AvoidThreats", ConverBoolToYesNo(avoidthreats));
+	WriteValueToBuffer(ID, "LooseRecruit", ConverBoolToYesNo(looserecruit));
+	WriteValueToBuffer(ID, "VeteranLevel", IntToStr(veteranlevel));
+	WriteValueToBuffer(ID, "IsBaseDefense", ConverBoolToYesNo(isbasedefense));
+	WriteValueToBuffer(ID, "OnlyTargetHouseEnemy", ConverBoolToYesNo(onlytargethousenemy));
+	WriteValueToBuffer(ID, "TransportsReturnOnUnload", ConverBoolToYesNo(transportsreturnonunload));
+	WriteValueToBuffer(ID, "AreTeamMembersRecruitable", ConverBoolToYesNo(areteammembersrecruitable));
 }

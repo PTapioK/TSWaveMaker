@@ -27,9 +27,7 @@ Tag::Tag(string nID, string nName, string nTrigID, int32_t nmode)
 
 Tag::~Tag()
 {
-	stringstream line;
-	line << ID << "=" << mode << "," << name << "," << triggerID;
-	DeleteLineInBuffer(line.str());
+	DeleteValueInBuffer("Tags", ID);
 }
 
 string Tag::getID() {

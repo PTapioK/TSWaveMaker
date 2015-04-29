@@ -60,6 +60,8 @@ private:
 	void clearTriggerList();
 	void clearActionList();
 
+	uint32_t sWPoint;
+
 };
 
 #endif // TRIGGERSECTION_H

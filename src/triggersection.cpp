@@ -6,6 +6,7 @@ TriggerSection::TriggerSection(QWidget *parent) :
 	ui(new Ui::TriggerSection)
 {
 	ui->setupUi(this);
+	sWPoint = 8; // Starting waypoint for "Make waypoints grow in ascending order in all actions"
 }
 
 TriggerSection::~TriggerSection()
@@ -32,7 +33,7 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		ui->NEdit->setText(ui->TriggerList->currentItem()->text());
 		ui->isDisabledCheck->setChecked(cur_trig->isDis());
 
-		if(!isFirstWave(cur_trig->getID()) && cur_trig->hasEventType(14)) {
+		if(!isFirstTrigger(cur_trig->getID()) && cur_trig->hasEventType(14)) {
 			Trigger* prev_trig = FindNearestTimerTrigger(cur_trig->getID());
 			if(prev_trig != NULL) {
 				int32_t secs = atoi(prev_trig->getActionByType(27)->p2.c_str());
@@ -153,16 +154,22 @@ void TriggerSection::on_WaveTimer_editingFinished()
 
 		Trigger *cur_trig = GetTriggerByName(trig_name);
 
-		if(isFirstWave(trig_ID)) {
+		if(isFirstTrigger(trig_ID)) {
 
 			if(GetTriggerByName("TimerFor1stWave") == NULL) {
 
-				triggers["01000000"] = new Trigger("01000000", "Neutral", "<none>", "TimerFor1stWave", false, true, true, true);
-				tags["TimerFor1stWave 1"] = new Tag("01000001", "TimerFor1stWave 1", triggers["01000000"]->getID(), 0);
-				Event *nEvent = new Event(8, 0, triggers["01000000"]->getID());
-				triggers["01000000"]->addEvent(nEvent);
-				Action *nAction = new Action(triggers["01000000"]->getID(), 27, 0, 0, secs, 0, 0, 0, 0);
-				triggers["01000000"]->addAction(nAction);
+				int32_t curTrigID = atoi(trig_ID.c_str());
+				stringstream idForNewTrig;
+				idForNewTrig << "0" << (curTrigID-2);
+				stringstream idForNewTag;
+				idForNewTag << "0" << (curTrigID-1);
+
+				triggers[idForNewTrig.str().c_str()] = new Trigger(idForNewTrig.str().c_str(), "Neutral", "<none>", "TimerFor1stWave", false, true, true, true);
+				tags["TimerFor1stWave 1"] = new Tag(idForNewTag.str().c_str(), "TimerFor1stWave 1", triggers[idForNewTrig.str().c_str()]->getID(), 0);
+				Event *nEvent = new Event(8, 0, triggers[idForNewTrig.str().c_str()]->getID());
+				triggers[idForNewTrig.str().c_str()]->addEvent(nEvent);
+				Action *nAction = new Action(triggers[idForNewTrig.str().c_str()]->getID(), 27, 0, 0, secs, 0, 0, 0, 0);
+				triggers[idForNewTrig.str().c_str()]->addAction(nAction);
 
 				if(!cur_trig->hasEventType(14)) {
 
@@ -286,8 +293,10 @@ void TriggerSection::on_ActionList_itemClicked()
 		ui->TeamAOBox->addItem(teamIT->second->getName().c_str());
 		teamList << teamIT->second->getName().c_str();
 	}
-	ui->TeamtypeBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamtypeBox->font())+50);
-	ui->TeamAOBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamAOBox->font())+50);
+	if(!teamList.empty()) {
+		ui->TeamtypeBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamtypeBox->font())+50);
+		ui->TeamAOBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamAOBox->font())+50);
+	}
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		Action *cAct = cTrig->getAction(ui->ActionList->currentRow());
@@ -322,7 +331,7 @@ void TriggerSection::on_isReinforcementCheck_clicked()
 	}
 }
 
-// Action waypoint
+// Action's waypoint
 void TriggerSection::on_WaypointBox_currentIndexChanged()
 {
 	if(ui->ActionList->currentItem() != NULL) {
@@ -348,7 +357,7 @@ void TriggerSection::clearActionList() {
 // Make waypoints grow in ascending order in selected actions
 void TriggerSection::on_WPointAOButton_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
+	if(ui->TriggerList->currentRow() != -1 && !waypoints.empty()) {
 
 		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 
@@ -378,7 +387,7 @@ void TriggerSection::on_WPointAOButton_clicked()
 }
 
 
-// Starting waypoint to "Make waypoints grow in ascending order in all actions"
+// Starting waypoint control for "Make waypoints grow in ascending order in all actions"
 void TriggerSection::on_SWaypointBox_currentIndexChanged()
 {
 	sWPoint = atoi(ui->SWaypointBox->currentText().toStdString().c_str());

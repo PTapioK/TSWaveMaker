@@ -30,6 +30,7 @@ void SaveAllToBuffer() {
 
 }
 
+// 0 = value1, 1 = value2 etc...
 void WriteValueToBuffer(string section, string ID) {
 
 	for(int idC = 0; idC < 1000; ++idC) {
@@ -43,103 +44,16 @@ void WriteValueToBuffer(string section, string ID) {
 
 }
 
-void WriteValueToBuffer(string section, string ID, string value, bool sorting) {
-	section += "\n";
-	value += "\n";
-	if(filedata.empty()) {
-		filedata.push_back(section);
-		filedata.push_back(ID + "=" + value);
-	} else {
-		int i = 0;
-		for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
-			i = i + 1;
-			string cur_line = *fileIT;
-			if(cur_line.find(";") == string::npos) {
-				if((*fileIT) == section) {
-					string::size_type pos;
-					int b = i;
-					while(1) {
-						++fileIT;
-						i = i + 1;
-						if(fileIT == filedata.end()) { break; }
-						cur_line = *fileIT;
-						pos = cur_line.find('=');
-						string idpart = cur_line.substr(0, pos);
-						if(pos != string::npos) {
-							if(ID == idpart) {
-								(*fileIT) = ID + "=" + value;
-								return;
-							}
-						} else {
-							break;
-						}
-
-					}
-
-					filedata.insert(fileIT, ID + "=" + value);
-
-					if(sorting) {
-						sort(filedata.begin()+b, filedata.begin()+i);
-					}
-
-					return;
-				}
-			}
-		}
-		for(vector<string>::iterator fileIT = filedata.begin(); fileIT < filedata.end(); ++fileIT) {
-			if(*fileIT == "\n" && fileIT != filedata.end()) {
-				fileIT = filedata.insert(fileIT, "\n");
-				fileIT = filedata.insert(fileIT+1, section);
-				fileIT = filedata.insert(fileIT+1, ID + "=" + value);
-				return;
-			}
-		}
-		filedata.push_back("\n");
-		filedata.push_back(section);
-		filedata.push_back(ID + "=" + value);
-	}
+void WriteValueToBuffer(string section, string ID, string value) {
+	curdata.SetValue(ID, value, "", section);
 }
 
 void EditValueInBuffer(string section, string ID, string value, int count) {
-	value += "\n";
-	int i = 0;
-	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
-		i = i + 1;
-		string cur_line = *fileIT;
-		if(cur_line.find(";") == string::npos) {
-			if((*fileIT) == section + "\n") {
-				string::size_type pos;
-				int b = i;
-				while(1) {
-					++fileIT;
-					i = i + 1;
-					if(fileIT == filedata.end()) { break; }
-					cur_line = *fileIT;
-					pos = cur_line.find('=');
-					if(pos != string::npos) {
-						if(cur_line.find(ID) != string::npos) {
-							stringstream countSS;
-							countSS << count;
-							string exvalue = cur_line.substr(cur_line.find(",")+1);
-							exvalue = exvalue.substr(0, exvalue.length()-1);
 
-							(*fileIT) = ID + "=" + countSS.str() + "," + exvalue + "," + value;
-							return;
-						}
-					} else {
-						break;
-					}
-
-				}
-
-				filedata.insert(fileIT, ID + "=" + value);
-
-				sort(filedata.begin()+b, filedata.begin()+i);
-
-				return;
-			}
-		}
-	}
+	string rawEx = curdata.GetValue(ID, section);
+	string exvalue = rawEx.substr(rawEx.find(",")+1);
+	string newVal = IntToStr(count) + "," + exvalue + "," + value;
+	curdata.SetValue(ID, newVal, "", section);
 
 }
 
@@ -147,34 +61,12 @@ void ReadFileToBuffer() {
 	curdata.Load(cur_file);
 }
 
-void DeleteLineInBuffer(string line) {
-	line += "\n";
-	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
-		string cur_line = *fileIT;
-		if(cur_line.find(";") == string::npos) {
-			if((*fileIT) == line) {
-				filedata.erase(fileIT);
-				return;
-			}
-		}
-	}
+void DeleteValueInBuffer(string section, string ID) {
+	curdata.DeleteKey(ID, section);
 }
 
 void DeleteSectionInBuffer(string section) {
 	curdata.DeleteSection(section);
-}
-
-void DeleteIDInBuffer(string ID) {
-	for(vector<string>::iterator fileIT = filedata.begin(); fileIT != filedata.end(); ++fileIT) {
-		string cur_line = *fileIT;
-		if(cur_line.find(";") == string::npos) {
-			string cur_ID = cur_line.substr(cur_line.find("=")+1, 8);
-			if(cur_ID == ID) {
-				filedata.erase(fileIT);
-				return;
-			}
-		}
-	}
 }
 
 void ParseSections() {

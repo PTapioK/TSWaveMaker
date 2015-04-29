@@ -117,6 +117,7 @@ void CDataFile::SetFileName(t_Str szFileName)
 // are saved so that they can be rewritten to the file later.
 bool CDataFile::Load(t_Str szFileName)
 {
+	m_szFileName = szFileName;
 	// We dont want to create a new file here.  If it doesn't exist, just
 	// return false and report the failure.
 	fstream File(szFileName.c_str(), ios::in|ios::_Nocreate);

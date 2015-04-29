@@ -74,38 +74,11 @@ extern std::vector <Event*>::iterator eventIT;
 extern std::vector <int32_t> waypoints;
 extern std::vector <int32_t>::iterator waypointIT;
 
-extern const char alphas[26];
-
-extern uint32_t sWPoint;
-
-std::string fffID();
-bool isFirstWave(string ID);
-Tag* FindTag(string trigID);
-string DecToWaypointID(int32_t dec);
-string GetTriggerNameByID(string trigID);
-int32_t WaypointIDToDec(string wID);
-bool ConverToBool(string str);
-string GetValueStr(string line);
-string GetTeamNameByID(string ID);
-string GetTriggerIDByName(string name);
-Trigger* FindNearestTimerTrigger(string trigID);
-Team* GetTeamByName(string name);
-string GetTeamIDByName(string name);
-string GetScriptNameByID(string ID);
-string GetScriptIDByName(string name);
-Trigger* GetTriggerByName(string name);
-string GetTaskforceNameByID(string ID);
-string GetTaskforceIDByName(string name);
-Script* GetScriptByName(string name);
-QString GetScriptActionMeaning(uint8_t ID);
-SATargetType GetScriptActionTargetType(uint8_t ID);
-QStringList GetScriptActionTargetStrings(SATargetType type);
-uint32_t GetStringListMaxWidth(QStringList list, QFont font);
-string ConverBoolToYesNo(bool boolean);
-string IntToStr(int integer);
-
 #define XOR(a,b) ((a)||(b) || (a) && (b))
 
+const char alphas[26] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+
 #include "fileoperations.h"
+#include "utils.h"
 
 #endif // MAIN_H

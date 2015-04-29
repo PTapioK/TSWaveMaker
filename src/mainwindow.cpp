@@ -35,6 +35,7 @@ void MainWindow::NewFile() {
 	tags.clear();
 	teams.clear();
 	taskforces.clear();
+	scripts.clear();
 }
 
 void MainWindow::OpenFile() {

@@ -58,7 +58,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Time after previous action</string>
+     <string>Time after previous wave</string>
     </property>
     <property name="wordWrap">
      <bool>false</bool>

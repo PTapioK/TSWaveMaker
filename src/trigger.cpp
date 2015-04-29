@@ -82,7 +82,7 @@ Trigger::~Trigger()
 
 	stringstream line;
 	line << ID << "=" << house << "," << attachID << "," << name << "," << isDisabled << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
-	DeleteLineInBuffer(line.str());
+	DeleteValueInBuffer("Triggers", ID);
 }
 
 std::string Trigger::getID() {
@@ -142,43 +142,11 @@ Action* Trigger::getAction(int32_t count) {
 }
 
 void Trigger::eraseActionsFromBuffer() {
-	stringstream line;
-	line << ID << "=";
-	line << actions.size();
-	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
-		line	<< ","
-				<< (*actionIT)->aType
-				<< ","
-				<< (*actionIT)->p1
-				<< ","
-				<< (*actionIT)->p2
-				<< ","
-				<< (*actionIT)->p3
-				<< ","
-				<< (*actionIT)->p4
-				<< ","
-				<< (*actionIT)->p5
-				<< ","
-				<< (*actionIT)->p6
-				<< ","
-				<< (*actionIT)->wPoint;
-	}
-	DeleteLineInBuffer(line.str());
+	DeleteValueInBuffer("Actions", ID);
 }
 
 void Trigger::eraseEventsFromBuffer() {
-	stringstream line;
-	line << ID << "=";
-	line << events.size();
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
-		line	<< ","
-				<< (*eventIT)->eType
-				<< ","
-				<< "0"
-				<< ","
-				<< (*eventIT)->param;
-	}
-	DeleteLineInBuffer(line.str());
+	DeleteValueInBuffer("Events", ID);
 }
 
 bool Trigger::hasEventType(int32_t type) {
