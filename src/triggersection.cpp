@@ -33,15 +33,12 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		ui->NEdit->setText(ui->TriggerList->currentItem()->text());
 		ui->isDisabledCheck->setChecked(cur_trig->isDis());
 
-		if(!isFirstTrigger(cur_trig->getID()) && cur_trig->hasEventType(14)) {
-			Trigger* prev_trig = FindNearestTimerTrigger(cur_trig->getID());
-			if(prev_trig != NULL) {
-				int32_t secs = atoi(prev_trig->getActionByType(27)->p2.c_str());
-				QTime time(0, 0, 0);
-				time = time.addSecs(secs);
-				ui->WaveTimer->setTime(time);
-				ui->TimerSetLabel->setText("Set");
-			}
+		if(cur_trig->hasActionType(27)) {
+			int32_t secs = atoi(cur_trig->getActionByType(27)->p2.c_str());
+			QTime time(0, 0, 0);
+			time = time.addSecs(secs);
+			ui->WaveTimer->setTime(time);
+			ui->TimerSetLabel->setText("Set");
 		}
 
 		int i = 0;
@@ -54,6 +51,8 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 
 			ui->ActionList->addItem(text);
 		}
+		ui->isTimedWave->setChecked(cur_trig->hasEventType(14));
+		ui->anyEventWave->setChecked(cur_trig->hasEventType(8));
 
 	} else {
 		ui->NEdit->setText("");
@@ -148,64 +147,32 @@ void TriggerSection::on_WaveTimer_editingFinished()
 {
 	if(ui->TriggerList->currentRow() != -1) {
 		string trig_name = ui->TriggerList->currentItem()->text().toStdString();
-		string trig_ID = GetTriggerIDByName(trig_name);
 		int32_t secs = 0;
-		secs = abs(ui->WaveTimer->time().secsTo(QTime(0, 0)));
+		secs = abs(ui->WaveTimer->time().secsTo(QTime(0, 0, 0)));
 
 		Trigger *cur_trig = GetTriggerByName(trig_name);
 
-		if(isFirstTrigger(trig_ID)) {
-
-			if(GetTriggerByName("TimerFor1stWave") == NULL) {
-
-				int32_t curTrigID = atoi(trig_ID.c_str());
-				stringstream idForNewTrig;
-				idForNewTrig << "0" << (curTrigID-2);
-				stringstream idForNewTag;
-				idForNewTag << "0" << (curTrigID-1);
-
-				triggers[idForNewTrig.str().c_str()] = new Trigger(idForNewTrig.str().c_str(), "Neutral", "<none>", "TimerFor1stWave", false, true, true, true);
-				tags["TimerFor1stWave 1"] = new Tag(idForNewTag.str().c_str(), "TimerFor1stWave 1", triggers[idForNewTrig.str().c_str()]->getID(), 0);
-				Event *nEvent = new Event(8, 0, triggers[idForNewTrig.str().c_str()]->getID());
-				triggers[idForNewTrig.str().c_str()]->addEvent(nEvent);
-				Action *nAction = new Action(triggers[idForNewTrig.str().c_str()]->getID(), 27, 0, 0, secs, 0, 0, 0, 0);
-				triggers[idForNewTrig.str().c_str()]->addAction(nAction);
-
-				if(!cur_trig->hasEventType(14)) {
-
-					Event *nEvent = new Event(14, 0, cur_trig->getID());
-					cur_trig->addEvent(nEvent);
-				}
-
-				ui->TriggerList->addItem("TimerFor1stWave");
-				ui->TimerSetLabel->setText("Set");
-				UpdateUi();
-			}
+		if(!cur_trig->hasActionType(27)) {
+			Action *nAction = new Action(cur_trig->getID(), 27, 0, 0, secs, 0, 0, 0, 0);
+			cur_trig->addAction(nAction);
 		} else {
-
-			map <string, Trigger*>::iterator triggerIT = triggers.find(trig_ID);
-			if(triggerIT == triggers.end()) {
-				if(QMessageBox::question(this, "Fatal Error!", "Fatal Error occured! Continue?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::No) {
-					exit(EXIT_FAILURE);
-				}
-			}
-			--triggerIT;
-			Trigger *prev_trig = (*triggerIT).second;
-
-			if(!cur_trig->hasEventType(14)) {
-
-				Event *nEvent = new Event(14, 0, cur_trig->getID());
-				cur_trig->addEvent(nEvent);
-			}
-			if(!prev_trig->hasActionType(27)) {
-				Action *nAction = new Action(prev_trig->getID(), 27, 0, 0, secs, 0, 0, 0, 0);
-				prev_trig->addAction(nAction);
-			} else {
-				prev_trig->getActionByType(27)->editP2(secs);
-			}
-
-			ui->TimerSetLabel->setText("Set");
+			cur_trig->getActionByType(27)->editP2(secs);
 		}
+
+		ui->TimerSetLabel->setText("Set");
+
+		ui->ActionList->clear();
+		int i = 0;
+		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+			++i;
+			stringstream iSS;
+			iSS << i;
+			QString text = "Action ";
+			text += iSS.str().c_str();
+
+			ui->ActionList->addItem(text);
+		}
+
 	}
 
 }
@@ -422,6 +389,42 @@ void TriggerSection::on_TeamAOButton_clicked()
 				if(i == ui->ActionList->selectedItems().size()) {
 					break;
 				}
+			}
+		}
+	}
+}
+
+// Trigger has "Mission timer expired" -event
+void TriggerSection::on_isTimedWave_pressed()
+{
+	if(ui->TriggerList->currentRow() != -1) {
+		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isTimedWave->isChecked()) {
+			if(!cur_trig->hasEventType(14)) {
+				Event *nEvent = new Event(14, 0, cur_trig->getID());
+				cur_trig->addEvent(nEvent);
+			}
+		} else {
+			if(cur_trig->hasEventType(14)) {
+				delete cur_trig->getEventByType(14);
+			}
+		}
+	}
+}
+
+// Trigger has "Any event" -event
+void TriggerSection::on_anyEventWave_clicked()
+{
+	if(ui->TriggerList->currentRow() != -1) {
+		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isTimedWave->isChecked()) {
+			if(!cur_trig->hasEventType(8)) {
+				Event *nEvent = new Event(8, 0, cur_trig->getID());
+				cur_trig->addEvent(nEvent);
+			}
+		} else {
+			if(cur_trig->hasEventType(8)) {
+				delete cur_trig->getEventByType(8);
 			}
 		}
 	}

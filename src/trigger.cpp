@@ -175,3 +175,12 @@ Action* Trigger::getActionByType(int32_t type) {
 	}
 	return NULL;
 }
+
+Event *Trigger::getEventByType(int32_t type) {
+	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
+		if((*eventIT)->eType == type) {
+			return *eventIT;
+		}
+	}
+	return NULL;
+}

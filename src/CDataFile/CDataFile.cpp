@@ -191,6 +191,8 @@ bool CDataFile::Load(t_Str szFileName)
 
 	File.close();
 
+	m_bDirty = false;
+
 	return true;
 }
 
@@ -720,7 +722,7 @@ void Trim(t_Str& szStr)
 {
 	t_Str szTrimChars = WhiteSpace;
 	
-	szTrimChars += EqualIndicators;
+	//szTrimChars += EqualIndicators;
 	int nPos, rPos;
 
 	// trim left

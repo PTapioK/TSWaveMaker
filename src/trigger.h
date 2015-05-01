@@ -44,6 +44,8 @@ public:
 	bool hasEventType(int32_t type);
 	bool hasActionType(int32_t type);
 
+	Event* getEventByType(int32_t type);
+
 private:
 	std::string name;
 	std::string house;

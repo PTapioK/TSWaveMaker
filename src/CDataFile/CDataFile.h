@@ -83,7 +83,7 @@ const t_Str CommentIndicators = t_Str(";#");
 // ability of CDataFile to read/write to .ini files.  Also, note that the
 // first character in this constant is the one that is used when writing the
 // values to the file. (EqualIndicators[0])
-const t_Str EqualIndicators   = t_Str("=:"); 
+const t_Str EqualIndicators   = t_Str("=");
 
 // WhiteSpace
 // This constant contains the characters that the Trim() function removes from
