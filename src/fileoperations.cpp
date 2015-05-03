@@ -289,6 +289,20 @@ void ParseSections() {
 		}
 	}
 
+	t_Section * aiTrigSec = curdata.GetSection("AITriggerTypes");
+	if(aiTrigSec != NULL) {
+		KeyList * aiTrigl = aiTrigSec->GetKeyList();
+		for(KeyItor keyIT = aiTrigl->begin(); keyIT < aiTrigl->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string cur_line = curdata.GetString(Key, "Actions");
+
+			string ID = Key;
+
+			aitriggers[ID] = cur_line;
+		}
+	}
+
 }
 
 Taskforce* FindNewTaskforceFromFile(string taskforceID) {

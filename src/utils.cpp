@@ -11,7 +11,7 @@ string fffID() {
 	vector<string> IDTemp;
 	vector<string>::iterator IDIT;
 
-	if(triggers.empty() && tags.empty() && teams.empty() && scripts.empty() && taskforces.empty()) {
+	if(triggers.empty() && tags.empty() && teams.empty() && scripts.empty() && taskforces.empty() && aitriggers.empty()) {
 		ssID << "0" << i;
 		return string(ssID.str().c_str());
 	}
@@ -34,6 +34,10 @@ string fffID() {
 
 	for (taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		IDTemp.push_back((*IT).second->getID());
+	}
+
+	for (aitriggerIT IT = aitriggers.begin(); IT != aitriggers.end(); ++IT) {
+		IDTemp.push_back((*IT).first);
 	}
 
 	sort(IDTemp.begin(), IDTemp.end());

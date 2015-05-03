@@ -2,10 +2,11 @@
 
 Script::Script(string nID)
 {
+	name = string("");
+
 	ID = nID;
 
 	lineCounter = 0;
-
 }
 
 Script::Script(string nID, string nName)
@@ -19,8 +20,9 @@ Script::Script(string nID, string nName)
 
 Script::Script(string nID, Script *cS)
 {
-	*this = *cS;
 	ID = nID;
+
+	lineCounter = 0;
 
 	slines.clear();
 	for(slineIT IT = cS->slines.begin(); IT != cS->slines.end(); ++IT) {
@@ -29,6 +31,7 @@ Script::Script(string nID, Script *cS)
 		sline->type = (*IT)->type;
 		sline->ID = (*IT)->ID;
 		slines.push_back(sline);
+		++lineCounter;
 	}
 }
 

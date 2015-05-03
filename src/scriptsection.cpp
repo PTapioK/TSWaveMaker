@@ -24,6 +24,11 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 	if(ui->ScriptList->currentRow() != -1) {
 
 		Script *cur_script = GetScriptByName(ui->ScriptList->currentItem()->text().toStdString());
+		if(cur_script == NULL) {
+			if(QMessageBox::question(this, "Fatal Error!", "Fatal Error occured! Continue?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::No) {
+				exit(EXIT_FAILURE);
+			}
+		}
 
 		ui->SNameEdit->setText(ui->ScriptList->currentItem()->text());
 
@@ -89,7 +94,7 @@ void ScriptSection::on_CLastButton_clicked()
 			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 
-		Script *cur_script = scripts[GetScriptIDByName(ui->ScriptList->currentItem()->text().toStdString())];
+		Script *cur_script = GetScriptByName(ui->ScriptList->currentItem()->text().toStdString());
 
 		string newID = fffID();
 		scripts[newID] = new Script(newID, cur_script);
@@ -156,7 +161,7 @@ void ScriptSection::on_cloneS_clicked()
 			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 		string newID = fffID();
-		scripts[newID] = new Script(newID, scripts[GetScriptIDByName(ui->ScriptList->currentItem()->text().toStdString())]);
+		scripts[newID] = new Script(newID, GetScriptByName(ui->ScriptList->currentItem()->text().toStdString()));
 		scripts[newID]->setName(newName);
 		ui->ScriptList->addItem(newName.c_str());
 	}
