@@ -17,22 +17,22 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 {
 
 	ui->scriptBox->clear();
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		ui->scriptBox->addItem(scriptIT->second->getName().c_str());
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->scriptBox->addItem(IT->second->getName().c_str());
 	}
 
 	ui->AOSBox->clear();
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		ui->AOSBox->addItem(scriptIT->second->getName().c_str());
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->AOSBox->addItem(IT->second->getName().c_str());
 	}
 	ui->AOEBox->clear();
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		ui->AOEBox->addItem(scriptIT->second->getName().c_str());
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->AOEBox->addItem(IT->second->getName().c_str());
 	}
 
 	ui->taskforceBox->clear();
-	for(taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
-		ui->taskforceBox->addItem(taskforceIT->second->getName().c_str());
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		ui->taskforceBox->addItem(IT->second->getName().c_str());
 	}
 
 	ui->TNameEdit->setText(ui->TeamList->currentItem()->text());
@@ -101,9 +101,7 @@ void TeamSection::on_Clone_clicked()
 		int i = 0;
 		while(ui->TeamList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 			++i;
-			stringstream ssI;
-			ssI << i;
-			newName = "Clone Of " + ui->TeamList->currentItem()->text().toStdString() + " " + ssI.str();
+			newName = "Clone Of " + ui->TeamList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 		string newID = fffID();
 		teams[newID] = new Team(newID, teams[GetTeamIDByName(ui->TeamList->currentItem()->text().toStdString())]);
@@ -215,11 +213,11 @@ void TeamSection::on_SAOButton_clicked()
 		vector<Script*> temp;
 		vector<Script*>::iterator tempIT;
 
-		map<string, Script*>::iterator scriptI = scripts.find(GetScriptIDByName(ui->AOSBox->currentText().toStdString()));
+		scriptIT IT = scripts.find(GetScriptIDByName(ui->AOSBox->currentText().toStdString()));
 		do {
-			temp.push_back(scriptI->second);
-			if(scriptI == scripts.find(GetScriptIDByName(ui->AOEBox->currentText().toStdString()))) { break; }
-			++scriptI;
+			temp.push_back(IT->second);
+			if(IT == scripts.find(GetScriptIDByName(ui->AOEBox->currentText().toStdString()))) { break; }
+			++IT;
 		} while (1);
 
 		tempIT = temp.begin();
@@ -241,7 +239,7 @@ void TeamSection::on_SAOButton_clicked()
 
 void TeamSection::UpdateUi() {
 	ui->TeamList->clear();
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		ui->TeamList->addItem(teamIT->second->getName().c_str());
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		ui->TeamList->addItem(IT->second->getName().c_str());
 	}
 }

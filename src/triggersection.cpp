@@ -42,7 +42,7 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		}
 
 		int i = 0;
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+		for(actionIT IT = cur_trig->actions.begin(); IT != cur_trig->actions.end(); ++IT) {
 			++i;
 			stringstream iSS;
 			iSS << i;
@@ -60,9 +60,9 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 
 	ui->WaypointBox->clear();
 	ui->SWaypointBox->clear();
-	for(waypointIT = waypoints.begin(); waypointIT != waypoints.end(); ++waypointIT) {
+	for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
 		stringstream wSS;
-		wSS << (*waypointIT);
+		wSS << (*IT);
 		ui->WaypointBox->addItem(wSS.str().c_str());
 		ui->SWaypointBox->addItem(wSS.str().c_str());
 	}
@@ -128,9 +128,7 @@ void TriggerSection::on_CloneTrigger_clicked()
 		int i = 0;
 		while(ui->TriggerList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 			++i;
-			stringstream ssI;
-			ssI << i;
-			newName = "Clone Of " + ui->TriggerList->currentItem()->text().toStdString() + " " + ssI.str();
+			newName = "Clone Of " + ui->TriggerList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 		string newID = fffID();
 		triggers[newID] = new Trigger(newID, GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString()));
@@ -163,12 +161,10 @@ void TriggerSection::on_WaveTimer_editingFinished()
 
 		ui->ActionList->clear();
 		int i = 0;
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+		for(actionIT IT = cur_trig->actions.begin(); IT != cur_trig->actions.end(); ++IT) {
 			++i;
-			stringstream iSS;
-			iSS << i;
 			QString text = "Action ";
-			text += iSS.str().c_str();
+			text += IntToStr(i).c_str();
 
 			ui->ActionList->addItem(text);
 		}
@@ -188,12 +184,10 @@ void TriggerSection::on_NewAction_clicked()
 
 		ui->ActionList->clear();
 		int i = 0;
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+		for(actionIT IT = cur_trig->actions.begin(); IT != cur_trig->actions.end(); ++IT) {
 			++i;
-			stringstream iSS;
-			iSS << i;
 			QString text = "Action ";
-			text += iSS.str().c_str();
+			text += IntToStr(i).c_str();
 
 			ui->ActionList->addItem(text);
 		}
@@ -212,12 +206,10 @@ void TriggerSection::on_DeleteAction_clicked()
 
 		clearActionList();
 		int i = 0;
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+		for(actionIT IT = cur_trig->actions.begin(); IT != cur_trig->actions.end(); ++IT) {
 			++i;
-			stringstream iSS;
-			iSS << i;
 			QString text = "Action ";
-			text += iSS.str().c_str();
+			text += IntToStr(i).c_str();
 
 			ui->ActionList->addItem(text);
 		}
@@ -230,7 +222,7 @@ void TriggerSection::on_CloneAction_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		int i = 1;
 		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		for(actionIT = cur_trig->actions.begin(); actionIT != cur_trig->actions.end(); ++actionIT) {
+		for(actionIT IT = cur_trig->actions.begin(); IT != cur_trig->actions.end(); ++IT) {
 			++i;
 		}
 
@@ -238,10 +230,8 @@ void TriggerSection::on_CloneAction_clicked()
 			Action *nAct = new Action(cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a))), cur_trig->getID());
 			cur_trig->addAction(nAct);
 
-			stringstream iSS;
-			iSS << i;
 			QString text = "Action ";
-			text += iSS.str().c_str();
+			text += IntToStr(i).c_str();
 
 			ui->ActionList->addItem(text);
 
@@ -255,10 +245,10 @@ void TriggerSection::on_ActionList_itemClicked()
 	ui->TeamtypeBox->clear();
 	ui->TeamAOBox->clear();
 	QStringList teamList;
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		ui->TeamtypeBox->addItem(teamIT->second->getName().c_str());
-		ui->TeamAOBox->addItem(teamIT->second->getName().c_str());
-		teamList << teamIT->second->getName().c_str();
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		ui->TeamtypeBox->addItem(IT->second->getName().c_str());
+		ui->TeamAOBox->addItem(IT->second->getName().c_str());
+		teamList << IT->second->getName().c_str();
 	}
 	if(!teamList.empty()) {
 		ui->TeamtypeBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamtypeBox->font())+50);
@@ -335,8 +325,8 @@ void TriggerSection::on_WPointAOButton_clicked()
 		unsigned int j = 0;
 		unsigned int i = 0;
 
-		for(waypointIT = waypoints.begin(); waypointIT != waypoints.end(); ++waypointIT) {
-			if((*waypointIT) == sWPoint) {
+		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
+			if((*IT) == sWPoint) {
 				i = j;
 				break;
 			}
@@ -385,10 +375,10 @@ void TriggerSection::on_TeamAOButton_clicked()
 		Team *sTeam = GetTeamByName(ui->TeamAOBox->currentText().toStdString());
 		if(sTeam != NULL) {
 			int i = 0;
-			for(std::map <std::string, Team*>::iterator teamIT = teams.find(sTeam->getID()); teamIT != teams.end(); ++teamIT) {
+			for(teamIT IT = teams.find(sTeam->getID()); IT != teams.end(); ++IT) {
 				cur_trig->getAction(i)->editType(80);
 				cur_trig->getAction(i)->editP1(1);
-				cur_trig->getAction(i)->editP2(teamIT->second->getID());
+				cur_trig->getAction(i)->editP2(IT->second->getID());
 				++i;
 				if(i == ui->ActionList->selectedItems().size()) {
 					break;
@@ -436,8 +426,8 @@ void TriggerSection::on_anyEventWave_clicked()
 
 void TriggerSection::UpdateUi() {
 	ui->TriggerList->clear();
-	for(map <string, Trigger*>::iterator triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		ui->TriggerList->addItem(triggerIT->second->getName());
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		ui->TriggerList->addItem(IT->second->getName());
 	}
 }
 

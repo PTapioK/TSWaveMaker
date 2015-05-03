@@ -1,4 +1,4 @@
-#include "main.h"
+#include "utils.h"
 
 
 // Find First Free ID
@@ -16,24 +16,24 @@ string fffID() {
 		return string(ssID.str().c_str());
 	}
 
-	for(triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		IDTemp.push_back((*triggerIT).second->getID());
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for(tagIT = tags.begin(); tagIT != tags.end(); ++tagIT) {
-		IDTemp.push_back((*tagIT).second->getID());
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		IDTemp.push_back((*teamIT).first);
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		IDTemp.push_back((*IT).first);
 	}
 
-	for (scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		IDTemp.push_back((*scriptIT).second->getID());
+	for (scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for (taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
-		IDTemp.push_back((*taskforceIT).second->getID());
+	for (taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		IDTemp.push_back((*IT).second->getID());
 	}
 
 	sort(IDTemp.begin(), IDTemp.end());
@@ -87,17 +87,17 @@ string GetValueStr(string line) {
 
 bool isFirstTrigger(string ID) {
 	bool retVal = true;
-	map <string, Trigger*>::iterator triggerIT = triggers.begin();
-	if((*triggerIT).second->getID() != ID) {
+	triggerIT IT = triggers.begin();
+	if((*IT).second->getID() != ID) {
 		retVal = false;
 	}
 	return retVal;
 }
 
 Tag* FindTag(string trigID) {
-	for(tagIT = tags.begin(); tagIT != tags.end(); ++tagIT) {
-		if((*tagIT).second->getTriggerID() == trigID) {
-			return (*tagIT).second;
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		if((*IT).second->getTriggerID() == trigID) {
+			return (*IT).second;
 		}
 	}
 	return NULL;
@@ -115,27 +115,27 @@ string DecToWaypointID(int dec) {
 }
 
 string GetTriggerNameByID(string trigID) {
-	for(map <string, Trigger*>::iterator triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		if((*triggerIT).second->getID() == trigID) {
-			return triggerIT->second->getName().toStdString();
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		if((*IT).second->getID() == trigID) {
+			return IT->second->getName().toStdString();
 		}
 	}
 	return NULL;
 }
 
 string GetTriggerIDByName(string name) {
-	for(map <string, Trigger*>::iterator triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		if((*triggerIT).second->getName().toStdString() == name) {
-			return triggerIT->second->getID();
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		if((*IT).second->getName().toStdString() == name) {
+			return IT->second->getID();
 		}
 	}
 	return string("");
 }
 
 Trigger* GetTriggerByName(string name) {
-	for(map <string, Trigger*>::iterator triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		if((*triggerIT).second->getName().toStdString() == name) {
-			return triggerIT->second;
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		if((*IT).second->getName().toStdString() == name) {
+			return IT->second;
 		}
 	}
 	return NULL;
@@ -193,28 +193,28 @@ string IntToStr(int integer) {
 }
 
 string GetTeamNameByID(string ID) {
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		if(teamIT->second->getID() == ID) {
-			return teamIT->second->getName();
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		if(IT->second->getID() == ID) {
+			return IT->second->getName();
 		}
 	}
 	return string("");
 }
 
 Trigger* FindNearestTimerTrigger(string trigID) {
-	map <string, Trigger*>::iterator triggerIT = triggers.find(trigID);
-	while(triggerIT != triggers.begin()) {
-		--triggerIT;
-		if(triggerIT->second->hasActionType(27)) {
-			return triggerIT->second;
+	triggerIT IT = triggers.find(trigID);
+	while(IT != triggers.begin()) {
+		--IT;
+		if(IT->second->hasActionType(27)) {
+			return IT->second;
 		}
 	}
 
-	triggerIT = triggers.find(trigID);
-	while(triggerIT != triggers.end()) {
-		++triggerIT;
-		if(triggerIT->second->hasActionType(27)) {
-			return triggerIT->second;
+	IT = triggers.find(trigID);
+	while(IT != triggers.end()) {
+		++IT;
+		if(IT->second->hasActionType(27)) {
+			return IT->second;
 		}
 	}
 
@@ -222,63 +222,63 @@ Trigger* FindNearestTimerTrigger(string trigID) {
 }
 
 Team* GetTeamByName(string name) {
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		if(teamIT->second->getName() == name) {
-			return teamIT->second;
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second;
 		}
 	}
 	return NULL;
 }
 
 string GetTeamIDByName(string name) {
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		if(teamIT->second->getName() == name) {
-			return teamIT->second->getID();
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second->getID();
 		}
 	}
 	return string("");
 }
 
 string GetScriptNameByID(string ID) {
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		if(scriptIT->second->getID() == ID) {
-			return scriptIT->second->getName();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		if(IT->second->getID() == ID) {
+			return IT->second->getName();
 		}
 	}
 	return "";
 }
 
 string GetScriptIDByName(string name) {
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		if(scriptIT->second->getName() == name) {
-			return scriptIT->second->getID();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second->getID();
 		}
 	}
 	return "";
 }
 
 string GetTaskforceNameByID(string ID) {
-	for(taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
-		if(taskforceIT->second->getID() == ID) {
-			return taskforceIT->second->getName();
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		if(IT->second->getID() == ID) {
+			return IT->second->getName();
 		}
 	}
 	return "";
 }
 
 string GetTaskforceIDByName(string name) {
-	for(taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
-		if(taskforceIT->second->getName() == name) {
-			return taskforceIT->second->getID();
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second->getID();
 		}
 	}
 	return "";
 }
 
 Script* GetScriptByName(string name) {
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		if(scriptIT->second->getName() == name) {
-			return scriptIT->second;
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second;
 		}
 	}
 	return NULL;
@@ -343,9 +343,9 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		list << "Conquer buildings";
 		break;
 	case WAYPOINT:
-		for(waypointIT = waypoints.begin(); waypointIT != waypoints.end(); ++waypointIT) {
+		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
 			stringstream ss;
-			ss << (*waypointIT);
+			ss << (*IT);
 			list << ss.str().c_str();
 		}
 		break;

@@ -27,10 +27,8 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 
 		ui->SNameEdit->setText(ui->ScriptList->currentItem()->text());
 
-		for(std::vector <Script::ScriptLine*>::iterator slineIT = cur_script->slines.begin(); slineIT != cur_script->slines.end(); ++slineIT) {
-			stringstream ID;
-			ID << (*slineIT)->ID;
-			ui->ScriptActionList->addItem(ID.str().c_str());
+		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->slines.begin(); IT != cur_script->slines.end(); ++IT) {
+			ui->ScriptActionList->addItem(IntToStr((*IT)->ID).c_str());
 		}
 	}
 }
@@ -88,9 +86,7 @@ void ScriptSection::on_CLastButton_clicked()
 		int i = 0;
 		while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 			++i;
-			stringstream ssI;
-			ssI << i;
-			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + ssI.str();
+			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 
 		Script *cur_script = scripts[GetScriptIDByName(ui->ScriptList->currentItem()->text().toStdString())];
@@ -101,12 +97,11 @@ void ScriptSection::on_CLastButton_clicked()
 		ui->ScriptList->addItem(newName.c_str());
 
 		vector<Script::ScriptLine*> slines;
-		vector<Script::ScriptLine*>::iterator slineIT;
 
 		slines = scripts[newID]->GetLinesByType(WAYPOINT);
 
-		for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
-			(*slineIT)->param = (*slineIT)->param + 1;
+		for(vector<Script::ScriptLine*>::iterator IT = slines.begin(); IT != slines.end(); ++IT) {
+			(*IT)->param = (*IT)->param + 1;
 		}
 
 	}
@@ -158,9 +153,7 @@ void ScriptSection::on_cloneS_clicked()
 		int i = 0;
 		while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 			++i;
-			stringstream ssI;
-			ssI << i;
-			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + ssI.str();
+			newName = "Clone Of " + ui->ScriptList->currentItem()->text().toStdString() + " " + IntToStr(i);
 		}
 		string newID = fffID();
 		scripts[newID] = new Script(newID, scripts[GetScriptIDByName(ui->ScriptList->currentItem()->text().toStdString())]);
@@ -175,9 +168,9 @@ void ScriptSection::on_newSA_clicked()
 	if(ui->ScriptList->currentRow() != -1) {
 		Script *cur_script = scripts[GetScriptIDByName(ui->ScriptList->currentItem()->text().toStdString())];
 		cur_script->NewLine(0, 0);
-		stringstream ID;
-		ID << (*(cur_script->slines.end()-1))->ID;
-		ui->ScriptActionList->addItem(ID.str().c_str());
+		string ID;
+		ID = IntToStr((*(cur_script->slines.end()-1))->ID);
+		ui->ScriptActionList->addItem(ID.c_str());
 	}
 }
 
@@ -194,17 +187,15 @@ void ScriptSection::on_delSA_clicked()
 		cur_script->DeleteLine(row);
 
 		ui->ScriptActionList->clear();
-		for(std::vector <Script::ScriptLine*>::iterator slineIT = cur_script->slines.begin(); slineIT != cur_script->slines.end(); ++slineIT) {
-			stringstream ID;
-			ID << (*slineIT)->ID;
-			ui->ScriptActionList->addItem(ID.str().c_str());
+		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->slines.begin(); IT != cur_script->slines.end(); ++IT) {
+			ui->ScriptActionList->addItem(IntToStr((*IT)->ID).c_str());
 		}
 	}
 }
 
 void ScriptSection::UpdateUi() {
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		ui->ScriptList->addItem(scriptIT->second->getName().c_str());
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->ScriptList->addItem(IT->second->getName().c_str());
 	}
 	for(int i = 0; i != 54; ++i) {
 		ui->SATypeBox->addItem(GetScriptActionMeaning(i));

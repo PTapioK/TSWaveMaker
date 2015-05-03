@@ -39,7 +39,7 @@ private:
 	};
 
 	std::vector <ScriptLine*> slines;
-	std::vector <ScriptLine*>::iterator slineIT;
+	typedef std::vector <ScriptLine*>::iterator slineIT;
 
 	short lineCounter;
 

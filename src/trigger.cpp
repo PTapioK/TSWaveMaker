@@ -30,12 +30,12 @@ Trigger::Trigger(Trigger *trig)
 	*this = *trig;
 	setID(fffID());
 	events.clear();
-	for(eventIT = trig->events.begin(); eventIT != trig->events.end(); ++eventIT) {
-		events.push_back(new Event(*eventIT, ID));
+	for(eventIT IT = trig->events.begin(); IT != trig->events.end(); ++IT) {
+		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT = trig->actions.begin(); actionIT != trig->actions.end(); ++actionIT) {
-		actions.push_back(new Action(*actionIT, ID));
+	for(actionIT IT = trig->actions.begin(); IT != trig->actions.end(); ++IT) {
+		actions.push_back(new Action(*IT, ID));
 	}
 
 }
@@ -45,12 +45,12 @@ Trigger::Trigger(string nID, Trigger *trig)
 	*this = *trig;
 	setID(nID);
 	events.clear();
-	for(eventIT = trig->events.begin(); eventIT != trig->events.end(); ++eventIT) {
-		events.push_back(new Event(*eventIT, ID));
+	for(eventIT IT = trig->events.begin(); IT != trig->events.end(); ++IT) {
+		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT = trig->actions.begin(); actionIT != trig->actions.end(); ++actionIT) {
-		actions.push_back(new Action(*actionIT, ID));
+	for(actionIT IT = trig->actions.begin(); IT != trig->actions.end(); ++IT) {
+		actions.push_back(new Action(*IT, ID));
 	}
 
 }
@@ -71,12 +71,12 @@ Trigger::~Trigger()
 {
 	eraseEventsFromBuffer();
 	eraseActionsFromBuffer();
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
-		delete (*eventIT);
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+		delete (*IT);
 	}
 	events.clear();
-	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
-		delete (*actionIT);
+	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+		delete (*IT);
 	}
 	actions.clear();
 
@@ -100,14 +100,14 @@ void Trigger::Save() {
 	WriteValueToBuffer("Triggers", ID, valueSS.str());
 
 	int i = 0;
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
 		i = i + 1;
-		(*eventIT)->Save(i);
+		(*IT)->Save(i);
 	}
 	i = 0;
-	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
+	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
 		i = i + 1;
-		(*actionIT)->Save(i);
+		(*IT)->Save(i);
 	}
 
 }
@@ -139,10 +139,10 @@ void Trigger::eraseAction(int32_t count) {
 
 void Trigger::eraseEventByType(int32_t type)
 {
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
-		if((*eventIT)->eType == type) {
-			delete *eventIT;
-			events.erase(eventIT);
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+		if((*IT)->eType == type) {
+			delete *IT;
+			events.erase(IT);
 			return;
 		}
 	}
@@ -161,8 +161,8 @@ void Trigger::eraseEventsFromBuffer() {
 }
 
 bool Trigger::hasEventType(int32_t type) {
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
-		if((*eventIT)->eType == type) {
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+		if((*IT)->eType == type) {
 			return true;
 		}
 	}
@@ -170,8 +170,8 @@ bool Trigger::hasEventType(int32_t type) {
 }
 
 bool Trigger::hasActionType(int32_t type) {
-	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
-		if((*actionIT)->aType == type) {
+	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+		if((*IT)->aType == type) {
 			return true;
 		}
 	}
@@ -179,18 +179,18 @@ bool Trigger::hasActionType(int32_t type) {
 }
 
 Action* Trigger::getActionByType(int32_t type) {
-	for(actionIT = actions.begin(); actionIT != actions.end(); ++actionIT) {
-		if((*actionIT)->aType == type) {
-			return *actionIT;
+	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+		if((*IT)->aType == type) {
+			return *IT;
 		}
 	}
 	return NULL;
 }
 
 Event* Trigger::getEventByType(int32_t type) {
-	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
-		if((*eventIT)->eType == type) {
-			return *eventIT;
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+		if((*IT)->eType == type) {
+			return *IT;
 		}
 	}
 	return NULL;

@@ -15,7 +15,7 @@ TaskforceSection::~TaskforceSection()
 
 void TaskforceSection::UpdateUi()
 {
-	for(taskforceIT = taskforces.begin(); taskforceIT != taskforces.end(); ++taskforceIT) {
-		ui->TaskforceList->addItem(taskforceIT->second->getName().c_str());
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		ui->TaskforceList->addItem(IT->second->getName().c_str());
 	}
 }

@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <vector>
 #include <algorithm>
+
 #include "CDataFile/CDataFile.h"
 
 using namespace std;
@@ -50,29 +51,7 @@ class Team;
 class Taskforce;
 class Script;
 
-extern std::string cur_file;
-extern std::map <std::string, Trigger*> triggers;
-extern std::map <std::string, Tag*> tags;
-extern std::map <std::string, Team*> teams;
-extern std::map <std::string, Script*> scripts;
-extern std::map <std::string, Taskforce*> taskforces;
-extern std::map <std::string, std::string> aitriggers;
-
-extern std::map <std::string, Trigger*>::iterator triggerIT;
-extern std::map <std::string, Tag*>::iterator tagIT;
-extern std::map <std::string, Team*>::iterator teamIT;
-extern std::map <std::string, Script*>::iterator scriptIT;
-extern std::map <std::string, Taskforce*>::iterator taskforceIT;
-extern std::map <std::string, std::string>::iterator aitriggerIT;
-
-extern std::vector<std::string> filedata;
-extern CDataFile curdata;
-
-extern std::vector <Action*>::iterator actionIT;
-extern std::vector <Event*>::iterator eventIT;
-
-extern std::vector <int32_t> waypoints;
-extern std::vector <int32_t>::iterator waypointIT;
+#include "containers.h"
 
 #define XOR(a,b) ((a)||(b) || (a) && (b))
 

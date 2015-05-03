@@ -2,30 +2,30 @@
 
 
 void SaveAllToBuffer() {
-	for(triggerIT = triggers.begin(); triggerIT != triggers.end(); ++triggerIT) {
-		(*triggerIT).second->Save();
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		(*IT).second->Save();
 	}
-	for(tagIT = tags.begin(); tagIT != tags.end(); ++tagIT) {
-		(*tagIT).second->Save();
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		(*IT).second->Save();
 	}
 
 	int i = 0;
 	DeleteSectionInBuffer("TeamTypes");
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		WriteValueToBuffer("TeamTypes", IntToStr(i), teamIT->second->getID());
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		WriteValueToBuffer("TeamTypes", IntToStr(i), IT->second->getID());
 		++i;
 	}
-	for(teamIT = teams.begin(); teamIT != teams.end(); ++teamIT) {
-		(*teamIT).second->Save();
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		(*IT).second->Save();
 	}
 	i = 0;
 	DeleteSectionInBuffer("ScriptTypes");
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		WriteValueToBuffer("ScriptTypes", IntToStr(i), scriptIT->second->getID());
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		WriteValueToBuffer("ScriptTypes", IntToStr(i), IT->second->getID());
 		++i;
 	}
-	for(scriptIT = scripts.begin(); scriptIT != scripts.end(); ++scriptIT) {
-		(*scriptIT).second->Save();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		(*IT).second->Save();
 	}
 
 }

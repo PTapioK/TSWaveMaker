@@ -23,11 +23,11 @@ Script::Script(string nID, Script *cS)
 	ID = nID;
 
 	slines.clear();
-	for(slineIT = cS->slines.begin(); slineIT != cS->slines.end(); ++slineIT) {
+	for(slineIT IT = cS->slines.begin(); IT != cS->slines.end(); ++IT) {
 		ScriptLine *sline = new ScriptLine();
-		sline->param = (*slineIT)->param;
-		sline->type = (*slineIT)->type;
-		sline->ID = (*slineIT)->ID;
+		sline->param = (*IT)->param;
+		sline->type = (*IT)->type;
+		sline->ID = (*IT)->ID;
 		slines.push_back(sline);
 	}
 }
@@ -52,18 +52,18 @@ void Script::NewLine(short type, short param) {
 void Script::DeleteLine(short ID)
 {
 
-	for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
-		if((*slineIT)->ID == ID) {
-			delete (*slineIT);
-			slines.erase(slineIT);
+	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+		if((*IT)->ID == ID) {
+			delete (*IT);
+			slines.erase(IT);
 			break;
 		}
 	}
 
 	lineCounter = 0;
 
-	for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
-		(*slineIT)->ID = lineCounter;
+	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
 
@@ -71,12 +71,10 @@ void Script::DeleteLine(short ID)
 
 void Script::Save()
 {
-	for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
-		stringstream IDss;
-		IDss << (*slineIT)->ID;
+	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
 		stringstream valueSS;
-		valueSS << (*slineIT)->type << "," << (*slineIT)->param;
-		WriteValueToBuffer(ID, IDss.str(), valueSS.str());
+		valueSS << (*IT)->type << "," << (*IT)->param;
+		WriteValueToBuffer(ID, IntToStr((*IT)->ID), valueSS.str());
 	}
 	WriteValueToBuffer(ID, "Name", name);
 }
@@ -88,9 +86,9 @@ std::string Script::getID() {
 vector<Script::ScriptLine *> Script::GetLinesByType(SATargetType type)
 {
 	vector<ScriptLine*> lines;
-	for(slineIT = slines.begin(); slineIT != slines.end(); ++slineIT) {
-		if(GetScriptActionTargetType((*slineIT)->type) == type) {
-			lines.push_back((*slineIT));
+	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+		if(GetScriptActionTargetType((*IT)->type) == type) {
+			lines.push_back((*IT));
 		}
 	}
 	return lines;
