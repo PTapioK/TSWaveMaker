@@ -137,6 +137,17 @@ void Trigger::eraseAction(int32_t count) {
 	actions.erase(actions.begin() + count);
 }
 
+void Trigger::eraseEventByType(int32_t type)
+{
+	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
+		if((*eventIT)->eType == type) {
+			delete *eventIT;
+			events.erase(eventIT);
+			return;
+		}
+	}
+}
+
 Action* Trigger::getAction(int32_t count) {
 	return *(actions.begin()+count);
 }
@@ -176,7 +187,7 @@ Action* Trigger::getActionByType(int32_t type) {
 	return NULL;
 }
 
-Event *Trigger::getEventByType(int32_t type) {
+Event* Trigger::getEventByType(int32_t type) {
 	for(eventIT = events.begin(); eventIT != events.end(); ++eventIT) {
 		if((*eventIT)->eType == type) {
 			return *eventIT;

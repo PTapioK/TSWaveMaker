@@ -54,9 +54,9 @@ private slots:
 
 	void on_TeamAOButton_clicked();
 
-	void on_isTimedWave_pressed();
-
 	void on_anyEventWave_clicked();
+
+	void on_isTimedWave_clicked();
 
 	private:
 	Ui::TriggerSection *ui;

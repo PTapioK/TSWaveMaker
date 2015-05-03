@@ -34,8 +34,10 @@ public:
 	void addAction(Action *nAction);
 
 	void eraseAction(int32_t count);
-	void eraseActionsFromBuffer();
 
+	void eraseEventByType(int32_t type);
+
+	void eraseActionsFromBuffer();
 	void eraseEventsFromBuffer();
 
 	Action* getAction(int32_t count);

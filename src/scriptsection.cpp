@@ -18,15 +18,20 @@ ScriptSection::~ScriptSection()
 void ScriptSection::on_ScriptList_itemSelectionChanged()
 {
 	ui->ScriptActionList->setCurrentRow(-1);
-
 	ui->ScriptActionList->clear();
+	ui->SATargetBox->setCurrentIndex(-1);
 
-	Script *cur_script = GetScriptByName(ui->ScriptList->currentItem()->text().toStdString());
+	if(ui->ScriptList->currentRow() != -1) {
 
-	for(std::vector <Script::ScriptLine*>::iterator slineIT = cur_script->slines.begin(); slineIT != cur_script->slines.end(); ++slineIT) {
-		stringstream ID;
-		ID << (*slineIT)->ID;
-		ui->ScriptActionList->addItem(ID.str().c_str());
+		Script *cur_script = GetScriptByName(ui->ScriptList->currentItem()->text().toStdString());
+
+		ui->SNameEdit->setText(ui->ScriptList->currentItem()->text());
+
+		for(std::vector <Script::ScriptLine*>::iterator slineIT = cur_script->slines.begin(); slineIT != cur_script->slines.end(); ++slineIT) {
+			stringstream ID;
+			ID << (*slineIT)->ID;
+			ui->ScriptActionList->addItem(ID.str().c_str());
+		}
 	}
 }
 
@@ -74,7 +79,7 @@ void ScriptSection::on_SATargetBox_activated()
 	}
 }
 
-// Clone script but add 1 for all waypoints of actions of script
+// Clone script and add 1 for all waypoints of actions of script
 void ScriptSection::on_CLastButton_clicked()
 {
 	if(ui->ScriptList->currentRow() != -1) {

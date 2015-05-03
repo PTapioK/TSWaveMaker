@@ -276,6 +276,10 @@ void TriggerSection::on_ActionList_itemClicked()
 		stringstream wSS;
 		wSS << cAct->getWaypoint();
 		ui->WaypointBox->setEditText(wSS.str().c_str());
+
+		ui->TeamAOBox->setEnabled(cAct->getType() == 80);
+		ui->TeamAOButton->setEnabled(cAct->getType() == 80);
+		ui->TeamtypeBox->setEnabled(cAct->getType() == 80);
 	} else {
 		ui->isReinforcementCheck->setChecked(false);
 	}
@@ -395,7 +399,7 @@ void TriggerSection::on_TeamAOButton_clicked()
 }
 
 // Trigger has "Mission timer expired" -event
-void TriggerSection::on_isTimedWave_pressed()
+void TriggerSection::on_isTimedWave_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
 		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
@@ -406,7 +410,7 @@ void TriggerSection::on_isTimedWave_pressed()
 			}
 		} else {
 			if(cur_trig->hasEventType(14)) {
-				delete cur_trig->getEventByType(14);
+				cur_trig->eraseEventByType(14);
 			}
 		}
 	}
@@ -417,14 +421,14 @@ void TriggerSection::on_anyEventWave_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
 		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		if(ui->isTimedWave->isChecked()) {
+		if(ui->anyEventWave->isChecked()) {
 			if(!cur_trig->hasEventType(8)) {
 				Event *nEvent = new Event(8, 0, cur_trig->getID());
 				cur_trig->addEvent(nEvent);
 			}
 		} else {
 			if(cur_trig->hasEventType(8)) {
-				delete cur_trig->getEventByType(8);
+				cur_trig->eraseEventByType(8);
 			}
 		}
 	}
@@ -436,3 +440,4 @@ void TriggerSection::UpdateUi() {
 		ui->TriggerList->addItem(triggerIT->second->getName());
 	}
 }
+

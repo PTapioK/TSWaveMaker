@@ -250,7 +250,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>Clone last script but add 1 to all action waypoints</string>
+     <string>Clone last script and add 1 to all action waypoints</string>
     </property>
    </widget>
   </widget>
