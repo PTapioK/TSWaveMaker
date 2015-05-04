@@ -261,14 +261,14 @@
    <widget class="QLabel" name="WPointLabel">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>150</y>
-      <width>46</width>
-      <height>13</height>
+      <x>420</x>
+      <y>140</y>
+      <width>51</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Waypoint</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Target&lt;br&gt;waypoint&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="NewAction">
@@ -314,13 +314,14 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>150</y>
+      <y>140</y>
       <width>101</width>
-      <height>17</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Is reinforcement</string>
+     <string>Is reinforcement 
+at waypoint</string>
     </property>
    </widget>
    <widget class="QLabel" name="ActionLabel">
@@ -473,7 +474,7 @@ expired</string>
       </rect>
      </property>
      <property name="text">
-      <string>Make waypoints grow in ascending order in actions</string>
+      <string>Make target waypoints grow in ascending order</string>
      </property>
     </widget>
     <widget class="QLabel" name="SWPointLabel">

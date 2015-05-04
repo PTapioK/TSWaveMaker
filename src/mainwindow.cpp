@@ -31,11 +31,12 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::NewFile() {
-	triggers.clear();
-	tags.clear();
-	teams.clear();
-	taskforces.clear();
-	scripts.clear();
+	ClearContainers();
+
+	trgS->UpdateUi();
+	tamS->UpdateUi();
+	srtS->UpdateUi();
+	tskS->UpdateUi();
 }
 
 void MainWindow::OpenFile() {

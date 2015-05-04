@@ -407,3 +407,30 @@ uint32_t GetStringListMaxWidth(QStringList list, QFont font) {
 	sort(widths.begin(), widths.end());
 	return *(widths.end()-1);
 }
+
+
+void ClearContainers()
+{
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		delete (*IT).second;
+	}
+	triggers.clear();
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		delete (*IT).second;
+	}
+	teams.clear();
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		delete (*IT).second;
+	}
+	tags.clear();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		delete (*IT).second;
+	}
+	scripts.clear();
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		delete (*IT).second;
+	}
+	taskforces.clear();
+	aitriggers.clear();
+	waypoints.clear();
+}

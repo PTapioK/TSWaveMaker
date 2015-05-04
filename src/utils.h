@@ -28,5 +28,6 @@ extern QStringList GetScriptActionTargetStrings(SATargetType type);
 extern uint32_t GetStringListMaxWidth(QStringList list, QFont font);
 extern string ConverBoolToYesNo(bool boolean);
 extern string IntToStr(int integer);
+extern void ClearContainers();
 
 #endif // UTILS_H

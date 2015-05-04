@@ -15,6 +15,8 @@ TaskforceSection::~TaskforceSection()
 
 void TaskforceSection::UpdateUi()
 {
+	ui->TaskforceList->setCurrentRow(-1);
+	ui->TaskforceList->clear();
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		ui->TaskforceList->addItem(IT->second->getName().c_str());
 	}

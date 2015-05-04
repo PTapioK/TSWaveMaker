@@ -20,6 +20,8 @@ public:
 
 	std::string getID();
 
+	uint32_t getLineAmount() { return lineCounter; }
+
 	void Save();
 
 private:

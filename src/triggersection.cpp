@@ -425,6 +425,8 @@ void TriggerSection::on_anyEventWave_clicked()
 }
 
 void TriggerSection::UpdateUi() {
+	ui->TriggerList->setCurrentRow(-1);
+	ui->ActionList->setCurrentRow(-1);
 	ui->TriggerList->clear();
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		ui->TriggerList->addItem(IT->second->getName());

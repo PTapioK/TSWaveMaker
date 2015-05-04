@@ -15,43 +15,44 @@ TeamSection::~TeamSection()
 
 void TeamSection::on_TeamList_itemSelectionChanged()
 {
+	if(ui->TeamList->selectedItems().size() != 0) {
+		ui->scriptBox->clear();
+		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+			ui->scriptBox->addItem(IT->second->getName().c_str());
+		}
 
-	ui->scriptBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->scriptBox->addItem(IT->second->getName().c_str());
+		ui->AOSBox->clear();
+		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+			ui->AOSBox->addItem(IT->second->getName().c_str());
+		}
+		ui->AOEBox->clear();
+		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+			ui->AOEBox->addItem(IT->second->getName().c_str());
+		}
+
+		ui->taskforceBox->clear();
+		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+			ui->taskforceBox->addItem(IT->second->getName().c_str());
+		}
+
+		ui->TNameEdit->setText(ui->TeamList->currentItem()->text());
+
+		ui->isSuicde->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->suicide);
+		ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->loadable);
+		ui->isAreTeamMembersRecruitable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->areteammembersrecruitable);
+		ui->isAggressive->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->aggressive);
+		ui->isAutocreate->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->autocreate);
+		ui->isAvoidThreats->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->avoidthreats);
+		ui->isDroppod->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->droppod);
+		ui->isFull->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->full);
+		ui->isIsBaseDefense->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->isbasedefense);
+		ui->isOnlyTargetHouseEnemy->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->onlytargethousenemy);
+		ui->isReinforce->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->reinforce);
+		ui->isTransportsReturnOnUnload->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->transportsreturnonunload);
+
+		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->scriptID).c_str()));
+		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->taskForceID).c_str()));
 	}
-
-	ui->AOSBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->AOSBox->addItem(IT->second->getName().c_str());
-	}
-	ui->AOEBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->AOEBox->addItem(IT->second->getName().c_str());
-	}
-
-	ui->taskforceBox->clear();
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		ui->taskforceBox->addItem(IT->second->getName().c_str());
-	}
-
-	ui->TNameEdit->setText(ui->TeamList->currentItem()->text());
-
-	ui->isSuicde->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->suicide);
-	ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->loadable);
-	ui->isAreTeamMembersRecruitable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->areteammembersrecruitable);
-	ui->isAggressive->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->aggressive);
-	ui->isAutocreate->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->autocreate);
-	ui->isAvoidThreats->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->avoidthreats);
-	ui->isDroppod->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->droppod);
-	ui->isFull->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->full);
-	ui->isIsBaseDefense->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->isbasedefense);
-	ui->isOnlyTargetHouseEnemy->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->onlytargethousenemy);
-	ui->isReinforce->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->reinforce);
-	ui->isTransportsReturnOnUnload->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->transportsreturnonunload);
-
-	ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->scriptID).c_str()));
-	ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->taskForceID).c_str()));
 }
 
 // New team
@@ -238,6 +239,7 @@ void TeamSection::on_SAOButton_clicked()
 }
 
 void TeamSection::UpdateUi() {
+	ui->TeamList->clearSelection();
 	ui->TeamList->clear();
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		ui->TeamList->addItem(IT->second->getName().c_str());
