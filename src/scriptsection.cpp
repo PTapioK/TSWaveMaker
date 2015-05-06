@@ -143,7 +143,7 @@ void ScriptSection::on_newS_clicked()
 	}
 }
 
-// Delete script
+// Delete script(s)
 void ScriptSection::on_delS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
@@ -153,9 +153,7 @@ void ScriptSection::on_delS_clicked()
 			delete GetScriptByName(name);
 			scripts.erase(ID);
 		}
-		for (int a = 0; a < ui->ScriptList->selectedItems().size(); ++a) {
-			delete ui->ScriptList->selectedItems().at(a);
-		}
+		UpdateUi();
 	}
 }
 
@@ -172,7 +170,7 @@ void ScriptSection::on_editSN_clicked()
 	}
 }
 
-// Clone script
+// Clone script(s)
 void ScriptSection::on_cloneS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {

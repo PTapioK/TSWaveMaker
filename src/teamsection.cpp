@@ -35,7 +35,7 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 			ui->taskforceBox->addItem(IT->second->getName().c_str());
 		}
 
-		ui->TNameEdit->setText(ui->TeamList->currentItem()->text());
+		ui->TNameEdit->setText(ui->TeamList->selectedItems().last()->text());
 
 		ui->isSuicde->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->suicide);
 		ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->loadable);
@@ -67,16 +67,17 @@ void TeamSection::on_New_clicked()
 	}
 }
 
-// Delete team
+// Delete team(s)
 void TeamSection::on_Delete_clicked()
 {
-	if(ui->TeamList->currentRow() != -1) {
-		string name = ui->TeamList->currentItem()->text().toStdString();
-		string ID = GetTeamIDByName(name);
-		delete GetTeamByName(name);
-		teams.erase(ID);
-
-		delete ui->TeamList->item(ui->TeamList->currentRow());
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			string name = ui->TeamList->selectedItems().at(a)->text().toStdString();
+			string ID = GetTeamIDByName(name);
+			delete GetTeamByName(name);
+			teams.erase(ID);
+		}
+		UpdateUi();
 	}
 }
 
@@ -84,16 +85,16 @@ void TeamSection::on_Delete_clicked()
 void TeamSection::on_EditName_clicked()
 {
 	if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string cur_name = ui->TeamList->currentItem()->text().toStdString();
+		string cur_name = ui->TeamList->selectedItems().last()->text().toStdString();
 		string cur_ID = GetTeamIDByName(cur_name);
 
 		teams[cur_ID]->setName(ui->TNameEdit->text().toStdString());
 
-		ui->TeamList->currentItem()->setText(ui->TNameEdit->text());
+		ui->TeamList->selectedItems().last()->setText(ui->TNameEdit->text());
 	}
 }
 
-// Clone team
+// Clone team(s)
 void TeamSection::on_Clone_clicked()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
