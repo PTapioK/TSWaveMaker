@@ -361,7 +361,7 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		break;
 	case MISSION:
 		list << "Deaktivate the taskforce. Further commands do not work";
-		list << "Attack nearest enemy";
+		list << "Attack the nearest enemy";
 		list << "Move";
 		list << "QMove";
 		list << "Retreat. The units may leave the map";

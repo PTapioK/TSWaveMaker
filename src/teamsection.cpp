@@ -96,18 +96,20 @@ void TeamSection::on_EditName_clicked()
 // Clone team
 void TeamSection::on_Clone_clicked()
 {
-	if(ui->TeamList->currentRow() != -1) {
-		string newName = "Clone Of " + ui->TeamList->currentItem()->text().toStdString();
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			string newName = "Clone Of " + ui->TeamList->selectedItems().at(a)->text().toStdString();
 
-		int i = 0;
-		while(ui->TeamList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
-			++i;
-			newName = "Clone Of " + ui->TeamList->currentItem()->text().toStdString() + " " + IntToStr(i);
+			int i = 0;
+			while(ui->TeamList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
+				++i;
+				newName = "Clone Of " + ui->TeamList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+			}
+			string newID = fffID();
+			teams[newID] = new Team(newID, GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString()));
+			teams[newID]->setName(newName);
+			ui->TeamList->addItem(newName.c_str());
 		}
-		string newID = fffID();
-		teams[newID] = new Team(newID, teams[GetTeamIDByName(ui->TeamList->currentItem()->text().toStdString())]);
-		teams[newID]->setName(newName);
-		ui->TeamList->addItem(newName.c_str());
 	}
 }
 

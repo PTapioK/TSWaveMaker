@@ -49,10 +49,10 @@ void ScriptSection::on_ScriptActionList_itemSelectionChanged()
 	}
 }
 
+// Script Action type - box activated
 void ScriptSection::on_SATypeBox_activated()
 {
 	ui->SATargetBox->clear();
-	cout <<  ui->ScriptActionList->currentRow() << endl;
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
 			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
@@ -77,6 +77,7 @@ void ScriptSection::on_SATypeBox_activated()
 	}
 }
 
+// Script Action target - box activated
 void ScriptSection::on_SATargetBox_activated()
 {
 	if(ui->ScriptActionList->currentRow() != -1 && ui->SATargetBox->currentIndex() != -1 && ui->ScriptList->selectedItems().size() != 0) {
@@ -103,27 +104,29 @@ void ScriptSection::on_SATargetBox_activated()
 void ScriptSection::on_CLastButton_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
-		string newName = "Clone Of " + ui->ScriptList->selectedItems().last()->text().toStdString();
+		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			string newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString();
 
-		int i = 0;
-		while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
-			++i;
-			newName = "Clone Of " + ui->ScriptList->selectedItems().last()->text().toStdString() + " " + IntToStr(i);
-		}
+			int i = 0;
+			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
+				++i;
+				newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+			}
 
-		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
 
-		string newID = fffID();
-		scripts[newID] = new Script(newID, cur_script);
-		scripts[newID]->setName(newName);
-		ui->ScriptList->addItem(newName.c_str());
+			string newID = fffID();
+			scripts[newID] = new Script(newID, cur_script);
+			scripts[newID]->setName(newName);
+			ui->ScriptList->addItem(newName.c_str());
 
-		vector<Script::ScriptLine*> slines;
+			vector<Script::ScriptLine*> slines;
 
-		slines = scripts[newID]->GetLinesByType(WAYPOINT);
+			slines = scripts[newID]->GetLinesByType(WAYPOINT);
 
-		for(vector<Script::ScriptLine*>::iterator IT = slines.begin(); IT != slines.end(); ++IT) {
-			(*IT)->param = (*IT)->param + 1;
+			for(vector<Script::ScriptLine*>::iterator IT = slines.begin(); IT != slines.end(); ++IT) {
+				(*IT)->param = (*IT)->param + short(ui->ScriptList->selectedItems().size() + 1);
+			}
 		}
 
 	}
@@ -173,29 +176,33 @@ void ScriptSection::on_editSN_clicked()
 void ScriptSection::on_cloneS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
-		string newName = "Clone Of " + ui->ScriptList->selectedItems().last()->text().toStdString();
+		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			string newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString();
 
-		int i = 0;
-		while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
-			++i;
-			newName = "Clone Of " + ui->ScriptList->selectedItems().last()->text().toStdString() + " " + IntToStr(i);
+			int i = 0;
+			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
+				++i;
+				newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+			}
+			string newID = fffID();
+			scripts[newID] = new Script(newID, GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString()));
+			scripts[newID]->setName(newName);
+			ui->ScriptList->addItem(newName.c_str());
 		}
-		string newID = fffID();
-		scripts[newID] = new Script(newID, GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString()));
-		scripts[newID]->setName(newName);
-		ui->ScriptList->addItem(newName.c_str());
 	}
 }
 
 // New script action
 void ScriptSection::on_newSA_clicked()
 {
-	if(ui->ScriptList->currentRow() != -1) {
-		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
-		cur_script->NewLine(0, 0);
-		string ID;
-		ID = IntToStr((*(cur_script->slines.end()-1))->ID);
-		ui->ScriptActionList->addItem(ID.c_str());
+	if(ui->ScriptList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			cur_script->NewLine(0, 0);
+			string ID;
+			ID = IntToStr((*(cur_script->slines.end()-1))->ID);
+			ui->ScriptActionList->addItem(ID.c_str());
+		}
 	}
 }
 
@@ -203,14 +210,16 @@ void ScriptSection::on_newSA_clicked()
 void ScriptSection::on_delSA_clicked()
 {
 	if(ui->ScriptActionList->currentRow() != -1) {
+		uint32_t rowNum = ui->ScriptActionList->currentRow();
+		delete ui->ScriptActionList->item(rowNum);
+		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
 
-		int row = ui->ScriptActionList->currentRow();
-
-		delete ui->ScriptActionList->item(ui->ScriptActionList->currentRow());
-
+			if(cur_script->getLineAmount() >= rowNum) {
+				cur_script->DeleteLine(rowNum);
+			}
+		}
 		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
-		cur_script->DeleteLine(row);
-
 		ui->ScriptActionList->clear();
 		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->slines.begin(); IT != cur_script->slines.end(); ++IT) {
 			ui->ScriptActionList->addItem(IntToStr((*IT)->ID).c_str());
@@ -222,6 +231,8 @@ void ScriptSection::UpdateUi() {
 	ui->ScriptList->clearSelection();
 	ui->ScriptActionList->setCurrentRow(-1);
 	ui->ScriptList->clear();
+	ui->SATypeBox->clear();
+	ui->SATargetBox->clear();
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		ui->ScriptList->addItem(IT->second->getName().c_str());
 	}

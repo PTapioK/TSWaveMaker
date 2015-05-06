@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	srtS = new ScriptSection(this);
 	tskS = new TaskforceSection(this);
 
+	NewFile();
 }
 
 MainWindow::~MainWindow()
