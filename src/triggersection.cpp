@@ -6,6 +6,7 @@ TriggerSection::TriggerSection(QWidget *parent) :
 	ui(new Ui::TriggerSection)
 {
 	ui->setupUi(this);
+
 	sWPoint = 8; // Starting waypoint for "Make waypoints grow in ascending order in all actions"
 }
 

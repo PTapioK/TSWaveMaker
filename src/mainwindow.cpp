@@ -23,6 +23,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	srtS = new ScriptSection(this);
 	tskS = new TaskforceSection(this);
 
+	addDockWidget(Qt::LeftDockWidgetArea, trgS);
+	addDockWidget(Qt::RightDockWidgetArea, tamS);
+	addDockWidget(Qt::BottomDockWidgetArea, srtS);
+	addDockWidget(Qt::BottomDockWidgetArea, tskS);
+
+	trgS->setFloating(false);
+	tamS->setFloating(false);
+	srtS->setFloating(false);
+	tskS->setFloating(false);
+
 	NewFile();
 }
 
@@ -38,6 +48,8 @@ void MainWindow::NewFile() {
 	tamS->UpdateUi();
 	srtS->UpdateUi();
 	tskS->UpdateUi();
+
+	ParseRules();
 }
 
 void MainWindow::OpenFile() {

@@ -294,18 +294,112 @@ QString GetScriptActionMeaning(uint8_t ID) {
 		return "Attack a kind of target";
 	case 1:
 		return "Attack the waypoint";
+	case 2:
+		return "Go berzerk";
 	case 3:
 		return "Move to the waypoint";
+	case 4:
+		return "Move to coordinates...";
+	case 5:
+		return "Guard area for timer ticks...";
+	case 6:
+		return "Jump to line...";
+	case 7:
+		return "Player wins";
 	case 8:
 		return "Transport releases freight";
 	case 9:
 		return "Deploy";
+	case 10:
+		return "Follow friendlies";
 	case 11:
 		return "Execute mission";
+	case 12:
+		return "Set a global variable";
+	case 13:
+		return "Idle anim...";
+	case 14:
+		return "Transporter loads freight";
+	case 15:
+		return "Attack building at waypoint";
 	case 16:
 		return "Patrol to waypoint";
+	case 17:
+		return "Change to another script";
+	case 18:
+		return "Join with other Taskforce";
+	case 19:
+		return "Panic";
+	case 20:
+		return "Change the house";
+	case 21:
+		return "Scatter";
+	case 22:
+		return "Run into shroud";
+	case 23:
+		return "Player looses";
+	case 24:
+		return "Voice message";
+	case 25:
+		return "Play sound";
+	case 26:
+		return "Play movie";
+	case 27:
+		return "Play a song";
+	case 28:
+		return "Reduce tiberium";
+	case 29:
+		return "Begin production";
+	case 30:
+		return "Fire sale";
+	case 31:
+		return "Commit suicide";
+	case 32:
+		return "Ion storm...";
+	case 33:
+		return "Ion storm end";
+	case 34:
+		return "Center view on team (speed)...";
+	case 35:
+		return "Shroud map";
+	case 36:
+		return "Reveal map";
 	case 37:
 		return "Delete team members";
+	case 38:
+		return "Clear a global variable";
+	case 39:
+		return "Set a local variable";
+	case 40:
+		return "Clear a local variable";
+	case 41:
+		return "End panic";
+	case 42:
+		return "Change unit facing";
+	case 43:
+		return "Transport waits until fully loaded";
+	case 44:
+		return "Unload truck";
+	case 45:
+		return "Load truck";
+	case 46:
+		return "Attack enemy building";
+	case 47:
+		return "Move to enemy building";
+	case 48:
+		return "Scout";
+	case 49:
+		return "Success";
+	case 50:
+		return "Flash taskforce";
+	case 51:
+		return "Animate taskforce...";
+	case 52:
+		return "Talk bubble";
+	case 53:
+		return "Gather at enemy";
+	case 54:
+		return "Gather at base";
 	default:
 		return "Not Implemented!";
 	}
@@ -314,17 +408,52 @@ QString GetScriptActionMeaning(uint8_t ID) {
 SATargetType GetScriptActionTargetType(uint8_t ID) {
 	switch(ID) {
 	case 0:
-		return BUILDING;
+		return TARGET;
 	case 1:
-		return WAYPOINT;
 	case 3:
 		return WAYPOINT;
+	case 4:
+	case 5:
+	case 6:
+		return EDITABLE;
 	case 8:
 		return UNLOAD;
 	case 11:
 		return MISSION;
+	case 12:
+		return GLOBAL;
+	case 13:
+		return EDITABLE;
+	case 15:
 	case 16:
 		return WAYPOINT;
+	case 17:
+		return SCRIPT;
+	case 18:
+		return TASKFORCE;
+	case 20:
+		return HOUSE;
+	case 24:
+	case 25:
+	case 26:
+	case 27:
+	case 32:
+	case 34:
+		return EDITABLE;
+	case 38:
+		return GLOBAL;
+	case 39:
+	case 40:
+		return LOCAL;
+	case 42:
+		return FACING;
+	case 46:
+	case 47:
+		return BUILDING;
+	case 51:
+		return EDITABLE;
+	case 52:
+		return BALLOON;
 	default:
 		return NONE;
 	}
@@ -333,7 +462,7 @@ SATargetType GetScriptActionTargetType(uint8_t ID) {
 QStringList GetScriptActionTargetStrings(SATargetType type) {
 	QStringList list;
 	switch(type) {
-	case BUILDING:
+	case TARGET:
 		list << "Cancel attack";
 		list << "Everything";
 		list << "Buildings";
@@ -391,6 +520,10 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		list << "Wait";
 		list << "Attack move";
 		break;
+	case BUILDING:
+		for(std::map<uint16_t, unitContainer>::iterator IT = buildingnames.begin(); IT != buildingnames.end(); ++IT) {
+			list << (*IT).second.name.c_str();
+		}
 	default:
 		list << "";
 	}
@@ -431,6 +564,14 @@ void ClearContainers()
 		delete (*IT).second;
 	}
 	taskforces.clear();
+
 	aitriggers.clear();
+
+	buildingnames.clear();
+	vehiclenames.clear();
+	infantrynames.clear();
+
+	localvariables.clear();
+
 	waypoints.clear();
 }

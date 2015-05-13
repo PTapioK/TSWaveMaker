@@ -11,9 +11,12 @@ void ReadFileToBuffer();
 void DeleteValueInBuffer(string section, string ID);
 void DeleteSectionInBuffer(string section);
 void ParseSections();
+void ParseRules();
 
 Team* FindNewTeamFromFile(string teamID);
 Script* FindNewScriptFromFile(string scriptID);
 Taskforce* FindNewTaskforceFromFile(string taskforceID);
+
+string GetUnitNameFromFile(string unitID, CDataFile *file);
 
 #endif // FILEOPERATIONS_H

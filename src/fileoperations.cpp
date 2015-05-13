@@ -303,6 +303,102 @@ void ParseSections() {
 		}
 	}
 
+	// Rules inside map
+	t_Section * buildSec = curdata.GetSection("BuildingTypes");
+
+	if (buildSec != NULL) {
+		KeyList * buildl = buildSec->GetKeyList();
+		for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string buildingSec = curdata.GetString(Key, "BuildingTypes");
+			string name = GetUnitNameFromFile(buildingSec, &curdata);
+
+			unitContainer cont;
+			cont.unitID = buildingSec;
+			cont.name = name;
+
+			buildingnames[atoi(Key.c_str())] = cont;
+		}
+	}
+
+
+	t_Section * vehSec = curdata.GetSection("VehicleTypes");
+
+	if (vehSec != NULL) {
+		KeyList * vehl = vehSec->GetKeyList();
+		for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string vehicleID = curdata.GetString(Key, "VehicleTypes");
+			string name = GetUnitNameFromFile(vehicleID, &curdata);
+
+			unitContainer cont;
+			cont.unitID = vehicleID;
+			cont.name = name;
+
+			vehiclenames[atoi(Key.c_str())] = cont;
+		}
+	}
+
+	t_Section * infSec = curdata.GetSection("InfantryTypes");
+
+	if (infSec != NULL) {
+		KeyList * infl = infSec->GetKeyList();
+		for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string infID = curdata.GetString(Key, "InfantryTypes");
+			string name = GetUnitNameFromFile(infID, &curdata);
+
+			unitContainer cont;
+			cont.unitID = infID;
+			cont.name = name;
+
+			infantrynames[atoi(Key.c_str())] = cont;
+		}
+	}
+
+	t_Section * airSec = curdata.GetSection("AircraftTypes");
+
+	if (airSec != NULL) {
+		KeyList * airl = airSec->GetKeyList();
+		for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string airID = curdata.GetString(Key, "AircraftTypes");
+			string name = GetUnitNameFromFile(airID, &curdata);
+
+			unitContainer cont;
+			cont.unitID = airID;
+			cont.name = name;
+
+			aircraftnames[atoi(Key.c_str())] = cont;
+		}
+	}
+
+	t_Section * localSec = curdata.GetSection("VariableNames");
+
+	if (localSec != NULL) {
+		KeyList * locall = localSec->GetKeyList();
+		for(KeyItor keyIT = locall->begin(); keyIT < locall->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string localstr = curdata.GetString(Key, "VariableNames");
+
+			string name = localstr.substr(0, localstr.find(","));
+			localstr = localstr.substr(localstr.find(",")+1);
+
+			bool set = atoi(localstr.c_str());
+
+			variableContainer cont;
+			cont.set = set;
+			cont.name = name;
+
+			localvariables[atoi(Key.c_str())] = cont;
+		}
+	}
+
 }
 
 Taskforce* FindNewTaskforceFromFile(string taskforceID) {
@@ -336,7 +432,7 @@ Taskforce* FindNewTaskforceFromFile(string taskforceID) {
 				amount = atoi(val.substr(0, val.find(",")).c_str());
 
 				val = val.substr(val.find(",")+1);
-				type = val.substr(0, val.find("\n"));
+				type = val;
 
 				nTaskforce->NewLine(type, amount);
 			}
@@ -494,3 +590,207 @@ Team *FindNewTeamFromFile(string teamID) {
 	return NULL;
 }
 
+
+
+void ParseRules()
+{
+
+	uint16_t i = 0;
+
+	// Tiberian Sun rules
+	CDataFile ts_rules_data("rules.ini");
+	{
+		t_Section * buildSec = ts_rules_data.GetSection("BuildingTypes");
+
+		if (buildSec != NULL) {
+			KeyList * buildl = buildSec->GetKeyList();
+			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string buildingID = ts_rules_data.GetString(Key, "BuildingTypes");
+				string name = GetUnitNameFromFile(buildingID, &ts_rules_data);
+
+				unitContainer cont;
+				cont.unitID = buildingID;
+				cont.name = name;
+
+				buildingnames[i] = cont;
+
+				++i;
+			}
+		}
+
+
+		t_Section * vehSec = ts_rules_data.GetSection("VehicleTypes");
+
+		if (vehSec != NULL) {
+			KeyList * vehl = vehSec->GetKeyList();
+			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string vehicleID = ts_rules_data.GetString(Key, "VehicleTypes");
+				string name = GetUnitNameFromFile(vehicleID, &ts_rules_data);
+
+				unitContainer cont;
+				cont.unitID = vehicleID;
+				cont.name = name;
+
+				vehiclenames[atoi(Key.c_str())] = cont;
+			}
+		}
+
+		t_Section * infSec = ts_rules_data.GetSection("InfantryTypes");
+
+		if (infSec != NULL) {
+			KeyList * infl = infSec->GetKeyList();
+			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string infID = ts_rules_data.GetString(Key, "InfantryTypes");
+				string name = GetUnitNameFromFile(infID, &ts_rules_data);
+
+				unitContainer cont;
+				cont.unitID = infID;
+				cont.name = name;
+
+				infantrynames[atoi(Key.c_str())] = cont;
+			}
+		}
+
+		t_Section * airSec = ts_rules_data.GetSection("AircraftTypes");
+
+		if (airSec != NULL) {
+			KeyList * airl = airSec->GetKeyList();
+			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string airID = ts_rules_data.GetString(Key, "AircraftTypes");
+				string name = GetUnitNameFromFile(airID, &ts_rules_data);
+
+				unitContainer cont;
+				cont.unitID = airID;
+				cont.name = name;
+
+				aircraftnames[atoi(Key.c_str())] = cont;
+			}
+		}
+
+		t_Section * globalSec = ts_rules_data.GetSection("VariableNames");
+
+		if (globalSec != NULL) {
+			KeyList * globall = globalSec->GetKeyList();
+			for(KeyItor keyIT = globall->begin(); keyIT < globall->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string globalstr = ts_rules_data.GetString(Key, "VariableNames");
+
+				string name = globalstr.substr(0, globalstr.find(","));
+				globalstr = globalstr.substr(globalstr.find(",")+1);
+
+				bool set = atoi(globalstr.c_str());
+
+				variableContainer cont;
+				cont.set = set;
+				cont.name = name;
+
+				globalvariables[atoi(Key.c_str())] = cont;
+			}
+		}
+	}
+
+	ts_rules_data.~CDataFile();
+
+	i = 0;
+
+	// Tiberian Sun Firestorm rules
+	CDataFile fs_rules_data("firestrm.ini");
+	{
+		t_Section * buildSec = fs_rules_data.GetSection("BuildingTypes");
+
+		if (buildSec != NULL) {
+			KeyList * buildl = buildSec->GetKeyList();
+			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string buildingSec = fs_rules_data.GetString(Key, "BuildingTypes");
+				string name = GetUnitNameFromFile(buildingSec, &fs_rules_data);
+
+				unitContainer cont;
+				cont.unitID = buildingSec;
+				cont.name = name;
+
+				buildingnames[170+i] = cont;
+				++i;
+			}
+		}
+
+
+		t_Section * vehSec = fs_rules_data.GetSection("VehicleTypes");
+
+		if (vehSec != NULL) {
+			KeyList * vehl = vehSec->GetKeyList();
+			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string vehicleID = fs_rules_data.GetString(Key, "VehicleTypes");
+				string name = GetUnitNameFromFile(vehicleID, &fs_rules_data);
+
+				unitContainer cont;
+				cont.unitID = vehicleID;
+				cont.name = name;
+
+				vehiclenames[atoi(Key.c_str())] = cont;
+			}
+		}
+
+		t_Section * infSec = fs_rules_data.GetSection("InfantryTypes");
+
+		if (infSec != NULL) {
+			KeyList * infl = infSec->GetKeyList();
+			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string infID = fs_rules_data.GetString(Key, "InfantryTypes");
+				string name = GetUnitNameFromFile(infID, &fs_rules_data);
+
+				unitContainer cont;
+				cont.unitID = infID;
+				cont.name = name;
+
+				infantrynames[atoi(Key.c_str())] = cont;
+			}
+		}
+
+		t_Section * airSec = fs_rules_data.GetSection("AircraftTypes");
+
+		if (airSec != NULL) {
+			KeyList * airl = airSec->GetKeyList();
+			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string airID = fs_rules_data.GetString(Key, "AircraftTypes");
+				string name = GetUnitNameFromFile(airID, &fs_rules_data);
+
+				unitContainer cont;
+				cont.unitID = airID;
+				cont.name = name;
+
+				aircraftnames[atoi(Key.c_str())] = cont;
+			}
+		}
+	}
+
+	fs_rules_data.~CDataFile();
+
+}
+
+
+string GetUnitNameFromFile(string unitID, CDataFile *file)
+{
+	t_Section * cUnit = file->GetSection(unitID);
+	if(cUnit != NULL) {
+		return file->GetString("Name", unitID);
+	}
+
+	return "";
+}

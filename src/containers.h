@@ -3,8 +3,21 @@
 
 #include "main.h"
 
+struct unitContainer {
+		string unitID;
+		string name;
+};
+
+struct variableContainer {
+		bool set;
+		string name;
+};
+
 extern std::string cur_file;
 extern CDataFile curdata;
+
+extern std::string ts_rules;
+extern std::string fs_rules;
 
 extern std::map <std::string, Trigger*> triggers;
 extern std::map <std::string, Tag*> tags;
@@ -12,6 +25,15 @@ extern std::map <std::string, Team*> teams;
 extern std::map <std::string, Script*> scripts;
 extern std::map <std::string, Taskforce*> taskforces;
 extern std::map <std::string, std::string> aitriggers;
+
+extern std::map <uint16_t, unitContainer> buildingnames;
+extern std::map <uint16_t, unitContainer> vehiclenames;
+extern std::map <uint16_t, unitContainer> infantrynames;
+extern std::map <uint16_t, unitContainer> aircraftnames;
+
+extern std::map <uint16_t, variableContainer> localvariables;
+extern std::map <uint16_t, variableContainer> globalvariables;
+
 extern std::vector <int32_t> waypoints;
 
 typedef std::map <std::string, Trigger*>::iterator triggerIT;

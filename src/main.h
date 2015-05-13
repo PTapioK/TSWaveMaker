@@ -23,9 +23,18 @@ using namespace std;
 enum SATargetType {
 	NONE = 1,
 	WAYPOINT,
-	BUILDING,
+	TARGET,
 	MISSION,
-	UNLOAD
+	UNLOAD,
+	EDITABLE,
+	GLOBAL,
+	SCRIPT,
+	TASKFORCE,
+	HOUSE,
+	LOCAL,
+	FACING,
+	BUILDING,
+	BALLOON
 };
 
 #include "trigger.h"
