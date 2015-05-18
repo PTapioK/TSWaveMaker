@@ -195,7 +195,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>160</y>
+      <y>120</y>
       <width>161</width>
       <height>20</height>
      </rect>
@@ -208,7 +208,7 @@
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>140</y>
+      <y>100</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -221,26 +221,13 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>220</y>
+      <y>170</y>
       <width>161</width>
       <height>22</height>
      </rect>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>200</y>
-      <width>46</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Target</string>
     </property>
    </widget>
    <widget class="QPushButton" name="CLastButton">
@@ -262,6 +249,106 @@
      <string>Clone last script and add 1 to all action waypoints</string>
     </property>
    </widget>
+   <widget class="QRadioButton" name="lowThreat">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>200</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lowest threat</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="bigThreat">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>220</y>
+      <width>161</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Biggest threat</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="nearTarget">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>240</y>
+      <width>161</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nearest target</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="farTarget">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>260</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Farthest target</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="defaultTarget">
+    <property name="geometry">
+     <rect>
+      <x>501</x>
+      <y>230</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Default</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>150</y>
+      <width>211</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Target</string>
+    </property>
+   </widget>
+   <zorder>ScriptList</zorder>
+   <zorder>label</zorder>
+   <zorder>SNameEdit</zorder>
+   <zorder>label_2</zorder>
+   <zorder>newS</zorder>
+   <zorder>delS</zorder>
+   <zorder>editSN</zorder>
+   <zorder>cloneS</zorder>
+   <zorder>ScriptActionList</zorder>
+   <zorder>label_3</zorder>
+   <zorder>newSA</zorder>
+   <zorder>delSA</zorder>
+   <zorder>SATypeBox</zorder>
+   <zorder>label_4</zorder>
+   <zorder>CLastButton</zorder>
+   <zorder>groupBox</zorder>
+   <zorder>farTarget</zorder>
+   <zorder>nearTarget</zorder>
+   <zorder>lowThreat</zorder>
+   <zorder>bigThreat</zorder>
+   <zorder>defaultTarget</zorder>
+   <zorder>SATargetBox</zorder>
   </widget>
  </widget>
  <resources/>

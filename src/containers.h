@@ -6,6 +6,7 @@
 struct unitContainer {
 		string unitID;
 		string name;
+		uint16_t key;
 };
 
 struct variableContainer {
@@ -30,6 +31,8 @@ extern std::map <uint16_t, unitContainer> buildingnames;
 extern std::map <uint16_t, unitContainer> vehiclenames;
 extern std::map <uint16_t, unitContainer> infantrynames;
 extern std::map <uint16_t, unitContainer> aircraftnames;
+
+extern std::map <uint16_t, std::string> houses;
 
 extern std::map <uint16_t, variableContainer> localvariables;
 extern std::map <uint16_t, variableContainer> globalvariables;

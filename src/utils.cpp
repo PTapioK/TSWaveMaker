@@ -288,6 +288,30 @@ Script* GetScriptByName(string name) {
 	return NULL;
 }
 
+
+string GetScriptNameByPosition(uint16_t pos) {
+	int i = 0;
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return 0;
+}
+
+string GetTaskforceNameByPosition(uint16_t pos)
+{
+	int i = 0;
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return 0;
+}
+
 QString GetScriptActionMeaning(uint8_t ID) {
 	switch(ID) {
 	case 0:
@@ -524,6 +548,48 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		for(std::map<uint16_t, unitContainer>::iterator IT = buildingnames.begin(); IT != buildingnames.end(); ++IT) {
 			list << (*IT).second.name.c_str();
 		}
+		break;
+	case BALLOON:
+		list << "'*'";
+		list << "'?'";
+		list << "'!'";
+		break;
+	case FACING:
+		list << "North";
+		list << "North-East";
+		list << "East";
+		list << "South-East";
+		list << "South";
+		list << "South-West";
+		list << "West";
+		list << "North-West";
+		break;
+	case LOCAL:
+		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+			list << (*IT).second.name.c_str();
+		}
+		break;
+	case GLOBAL:
+		for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
+			list << (*IT).second.name.c_str();
+		}
+		break;
+	case SCRIPT:
+		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+			list << (*IT).second->getName().c_str();
+		}
+		break;
+	case TASKFORCE:
+		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+			list << (*IT).second->getName().c_str();
+		}
+		break;
+	case HOUSE:
+		for(std::map<uint16_t, string>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+			list << (*IT).second.c_str();
+		}
+		break;
+	case EDITABLE:
 	default:
 		list << "";
 	}
@@ -531,16 +597,28 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 }
 
 uint32_t GetStringListMaxWidth(QStringList list, QFont font) {
-	vector <uint32_t> widths;
-	QFontMetrics metr(font);
-	for(QStringList::Iterator listIT = list.begin(); listIT != list.end(); ++listIT) {
-		QString str;
-		widths.push_back(metr.width(*listIT));
+	if(!list.empty()) {
+		vector <uint32_t> widths;
+		QFontMetrics metr(font);
+		for(QStringList::Iterator listIT = list.begin(); listIT != list.end(); ++listIT) {
+			widths.push_back(metr.width(*listIT));
+		}
+		sort(widths.begin(), widths.end());
+		return *(widths.end()-1);
 	}
-	sort(widths.begin(), widths.end());
-	return *(widths.end()-1);
+	return 0;
 }
 
+
+uint16_t GetBuildingTypePosByKey(int key)
+{
+	for(std::map<uint16_t, unitContainer>::iterator IT = buildingnames.begin(); IT != buildingnames.end(); ++IT) {
+		if((*IT).second.key == key) {
+			return (*IT).first;
+		}
+	}
+	return 0;
+}
 
 void ClearContainers()
 {

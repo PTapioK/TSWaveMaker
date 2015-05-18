@@ -52,7 +52,16 @@ void ScriptSection::on_ScriptActionList_itemSelectionChanged()
 // Script Action type - box activated
 void ScriptSection::on_SATypeBox_activated()
 {
+	ui->SATargetBox->setEditable(false);
 	ui->SATargetBox->clear();
+
+	ui->lowThreat->setDisabled(true);
+	ui->bigThreat->setDisabled(true);
+	ui->nearTarget->setDisabled(true);
+	ui->farTarget->setDisabled(true);
+	ui->defaultTarget->setDisabled(true);
+	ui->defaultTarget->toggle();
+
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
 			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
@@ -62,17 +71,61 @@ void ScriptSection::on_SATypeBox_activated()
 			}
 		}
 
-		QStringList targetList = GetScriptActionTargetStrings(GetScriptActionTargetType(GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type));
+		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
+		short type = cur_script->slines[ui->ScriptActionList->currentRow()]->type;
+		int param = cur_script->slines[ui->ScriptActionList->currentRow()]->param;
+
+		QStringList targetList = GetScriptActionTargetStrings(GetScriptActionTargetType(type));
 		ui->SATargetBox->addItems(targetList);
 		ui->SATargetBox->view()->setMinimumWidth(GetStringListMaxWidth(targetList, ui->SATargetBox->font())+50);
 
-		short type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
-		if(GetScriptActionTargetType(type) == WAYPOINT) {
-			stringstream ss;
-			ss << GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->param;
-			ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(ss.str().c_str()));
-		} else {
-			ui->SATargetBox->setCurrentIndex(GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->param);
+		switch(GetScriptActionTargetType(type)) {
+			case NONE:
+			case WAYPOINT:
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(IntToStr(param).c_str()));
+				break;
+			case EDITABLE:
+				ui->SATargetBox->setEditable(true);
+				ui->SATargetBox->setCurrentText(IntToStr(param).c_str());
+				break;
+			case SCRIPT:
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(GetScriptNameByPosition(param).c_str()));
+				break;
+			case TASKFORCE:
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(GetTaskforceNameByPosition(param).c_str()));
+				break;
+			case BUILDING:
+				ui->lowThreat->setDisabled(false);
+				ui->bigThreat->setDisabled(false);
+				ui->nearTarget->setDisabled(false);
+				ui->farTarget->setDisabled(false);
+				ui->defaultTarget->setDisabled(false);
+
+				if(param < 65536) {
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildingnames[GetBuildingTypePosByKey(param)].name.c_str()));
+					ui->defaultTarget->toggle();
+				} else if (param >= 65536 && param < 131072) {
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildingnames[param-65536].name.c_str()));
+					ui->lowThreat->toggle();
+				} else if (param >= 131072 && param < 196608) {
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildingnames[param-131072].name.c_str()));
+					ui->bigThreat->toggle();
+				} else if (param >= 196608 && param < 262144) {
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildingnames[param-196608].name.c_str()));
+					ui->nearTarget->toggle();
+				} else if (param >= 262144) {
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildingnames[param-262144].name.c_str()));
+					ui->farTarget->toggle();
+				}
+				break;
+			case BALLOON:
+				ui->SATargetBox->setCurrentIndex(param-1);
+				break;
+			case HOUSE:
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(houses[param].c_str()));
+				break;
+			default:
+				ui->SATargetBox->setCurrentIndex(param);
 		}
 	}
 }
@@ -89,10 +142,158 @@ void ScriptSection::on_SATargetBox_activated()
 				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
 				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					if(GetScriptActionTargetType(type) == WAYPOINT) {
-						GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->param = waypoints[ui->SATargetBox->currentIndex()];
-					} else {
-						GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->param = ui->SATargetBox->currentIndex();
+					switch(GetScriptActionTargetType(type)) {
+						case NONE:
+							cur_script->slines[rowNum]->param = 0;
+							break;
+						case WAYPOINT:
+							cur_script->slines[rowNum]->param = waypoints[ui->SATargetBox->currentIndex()];
+							break;
+						case EDITABLE:
+							cur_script->slines[rowNum]->param = atoi(ui->SATargetBox->currentText().toStdString().c_str());
+							break;
+						case BUILDING:
+							if(ui->defaultTarget->isChecked()) {
+								cur_script->slines[rowNum]->param = buildingnames[uint16_t(ui->SATargetBox->currentIndex())].key;
+							} else if(ui->lowThreat->isChecked()) {
+								cur_script->slines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
+							} else if (ui->bigThreat->isChecked()) {
+								cur_script->slines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
+							} else if (ui->nearTarget->isChecked()) {
+								cur_script->slines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
+							} else if (ui->farTarget->isChecked()) {
+								cur_script->slines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
+							}
+							break;
+						case BALLOON:
+							cur_script->slines[rowNum]->param = ui->SATargetBox->currentIndex()+1;
+							break;
+						case HOUSE:
+							for(std::map<uint16_t, string>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+								if((*IT).second == ui->SATargetBox->currentText().toStdString()) {
+									cur_script->slines[rowNum]->param = (*IT).first;
+									break;
+								}
+							}
+							break;
+						default:
+							cur_script->slines[rowNum]->param = ui->SATargetBox->currentIndex();
+					}
+				}
+			}
+		}
+	}
+}
+
+// Lowest threat target for BUILDING target type
+void ScriptSection::on_lowThreat_clicked()
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					cur_script->slines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
+				}
+			}
+		}
+	}
+}
+
+// Biggest threat target for BUILDING target type
+void ScriptSection::on_bigThreat_clicked()
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					cur_script->slines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
+				}
+			}
+		}
+	}
+}
+
+// Nearest target for BUILDING target type
+void ScriptSection::on_nearTarget_clicked()
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					cur_script->slines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
+				}
+			}
+		}
+	}
+}
+
+// Farthest target for BUILDING target type
+void ScriptSection::on_farTarget_clicked()
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					cur_script->slines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
+				}
+			}
+		}
+	}
+}
+
+// Default target
+void ScriptSection::on_defaultTarget_clicked()
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					cur_script->slines[rowNum]->param = buildingnames[uint16_t(ui->SATargetBox->currentIndex())].key;
+				}
+			}
+		}
+	}
+}
+
+// Type of EDITABLE param editing
+void ScriptSection::on_SATargetBox_editTextChanged(const QString &arg1)
+{
+	if(ui->ScriptActionList->currentRow() != -1 && ui->SATargetBox->currentIndex() != -1 && ui->ScriptList->selectedItems().size() != 0) {
+		short type, curtype;
+		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			uint32_t rowNum = ui->ScriptActionList->currentRow();
+			if(cur_script->getLineAmount() >= rowNum+1) {
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				if(curtype == type) {
+					if(GetScriptActionTargetType(type) == EDITABLE) {
+						cur_script->slines[rowNum]->param = atoi(arg1.toStdString().c_str());
 					}
 				}
 			}

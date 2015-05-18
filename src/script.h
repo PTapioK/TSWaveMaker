@@ -35,7 +35,7 @@ private:
 	struct ScriptLine
 	{
 		short type;
-		short param;
+		int param;
 
 		short ID;
 	};

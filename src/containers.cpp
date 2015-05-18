@@ -15,6 +15,8 @@ map <uint16_t, unitContainer> vehiclenames;
 map <uint16_t, unitContainer> infantrynames;
 map <uint16_t, unitContainer> aircraftnames;
 
+map <uint16_t, string> houses;
+
 map <uint16_t, variableContainer> localvariables;
 map <uint16_t, variableContainer> globalvariables;
 

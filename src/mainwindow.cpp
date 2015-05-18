@@ -55,7 +55,7 @@ void MainWindow::NewFile() {
 void MainWindow::OpenFile() {
 	QFileDialog fDG(this);
 
-	cur_file = fDG.getOpenFileName(this, tr("Open File"), ".", tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	cur_file = fDG.getOpenFileName(this, tr("Open file"), ".", tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 
 	if(cur_file.empty()) {
 		return;
@@ -86,7 +86,7 @@ void MainWindow::SaveFile() {
 
 void MainWindow::SaveFileAs() {
 	QFileDialog fDG(this);
-	cur_file = fDG.getSaveFileName(this, tr("Save Tiberian Sun Map Or AttackWaveFile"), ".", tr("Compatible Files (*.map *.mpr *.awf)")).toStdString();
+	cur_file = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), ".", tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 	if(cur_file.empty()) {
 		return;
 	}

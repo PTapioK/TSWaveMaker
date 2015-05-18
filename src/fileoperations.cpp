@@ -317,6 +317,7 @@ void ParseSections() {
 			unitContainer cont;
 			cont.unitID = buildingSec;
 			cont.name = name;
+			cont.key = atoi(Key.c_str());
 
 			buildingnames[atoi(Key.c_str())] = cont;
 		}
@@ -396,6 +397,19 @@ void ParseSections() {
 			cont.name = name;
 
 			localvariables[atoi(Key.c_str())] = cont;
+		}
+	}
+
+	t_Section * houseSec = curdata.GetSection("Houses");
+
+	if (houseSec != NULL) {
+		KeyList * housel = houseSec->GetKeyList();
+		for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
+			string Key = keyIT->szKey;
+
+			string housename = curdata.GetString(Key, "Houses");
+
+			houses[atoi(Key.c_str())] = housename;
 		}
 	}
 
@@ -595,6 +609,7 @@ Team *FindNewTeamFromFile(string teamID) {
 void ParseRules()
 {
 
+	// Structure ID counter
 	uint16_t i = 0;
 
 	// Tiberian Sun rules
@@ -613,13 +628,13 @@ void ParseRules()
 				unitContainer cont;
 				cont.unitID = buildingID;
 				cont.name = name;
+				cont.key = atoi(Key.c_str());
 
 				buildingnames[i] = cont;
 
 				++i;
 			}
 		}
-
 
 		t_Section * vehSec = ts_rules_data.GetSection("VehicleTypes");
 
@@ -696,11 +711,23 @@ void ParseRules()
 				globalvariables[atoi(Key.c_str())] = cont;
 			}
 		}
+
+		t_Section * houseSec = ts_rules_data.GetSection("Houses");
+
+		if (houseSec != NULL) {
+			KeyList * housel = houseSec->GetKeyList();
+			for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
+				string Key = keyIT->szKey;
+
+				string housename = ts_rules_data.GetString(Key, "Houses");
+
+				houses[atoi(Key.c_str())] = housename;
+			}
+		}
+
 	}
 
 	ts_rules_data.~CDataFile();
-
-	i = 0;
 
 	// Tiberian Sun Firestorm rules
 	CDataFile fs_rules_data("firestrm.ini");
@@ -718,8 +745,9 @@ void ParseRules()
 				unitContainer cont;
 				cont.unitID = buildingSec;
 				cont.name = name;
+				cont.key = atoi(Key.c_str()) + 169;
 
-				buildingnames[170+i] = cont;
+				buildingnames[i] = cont;
 				++i;
 			}
 		}
@@ -778,6 +806,7 @@ void ParseRules()
 				aircraftnames[atoi(Key.c_str())] = cont;
 			}
 		}
+
 	}
 
 	fs_rules_data.~CDataFile();

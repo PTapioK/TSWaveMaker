@@ -41,7 +41,19 @@ private slots:
 
 	void on_delSA_clicked();
 
-private:
+	void on_SATargetBox_editTextChanged(const QString &arg1);
+
+	void on_lowThreat_clicked();
+
+	void on_bigThreat_clicked();
+
+	void on_nearTarget_clicked();
+
+	void on_farTarget_clicked();
+
+	void on_defaultTarget_clicked();
+
+	private:
 	Ui::ScriptSection *ui;
 };
 
