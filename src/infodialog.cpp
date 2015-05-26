@@ -12,3 +12,7 @@ InfoDialog::~InfoDialog()
 {
 	delete ui;
 }
+
+void InfoDialog::closeEvent(QCloseEvent *event) {
+	this->deleteLater();
+}

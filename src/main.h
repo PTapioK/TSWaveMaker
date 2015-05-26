@@ -45,6 +45,7 @@ enum SATargetType {
 #include "taskforce.h"
 #include "script.h"
 #include "infodialog.h"
+#include "settingsdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -52,6 +53,8 @@ class TriggerSection;
 class TeamSection;
 class ScriptSection;
 class TaskforceSection;
+class InfoDialog;
+class SettingsDialog;
 }
 
 class Tag;

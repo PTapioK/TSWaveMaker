@@ -56,9 +56,16 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionInfo"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNew_file">
@@ -86,9 +93,14 @@
     <string>Save file as</string>
    </property>
   </action>
-  <action name="actionInfo">
+  <action name="actionAbout">
    <property name="text">
-    <string>Info</string>
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

@@ -192,7 +192,7 @@ void TeamSection::on_isIsBaseDefense_clicked()
 // Script for teams
 void TeamSection::on_scriptBox_activated()
 {
-	if(ui->TeamList->currentRow() != -1) {
+	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
 			GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->scriptID = GetScriptIDByName(ui->scriptBox->currentText().toStdString());
 		}
@@ -202,7 +202,7 @@ void TeamSection::on_scriptBox_activated()
 // Taskforce for teams
 void TeamSection::on_taskforceBox_activated()
 {
-	if(ui->TeamList->currentRow() != -1) {
+	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
 			GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->taskForceID = GetTaskforceIDByName(ui->taskforceBox->currentText().toStdString());
 		}
@@ -212,7 +212,7 @@ void TeamSection::on_taskforceBox_activated()
 // Make Teams use scripts in ascending order
 void TeamSection::on_SAOButton_clicked()
 {
-	if(ui->TeamList->currentRow() != -1) {
+	if(ui->TeamList->selectedItems().size() != 0) {
 
 		vector<Script*> temp;
 		vector<Script*>::iterator tempIT;

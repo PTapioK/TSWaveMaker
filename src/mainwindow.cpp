@@ -1,12 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "triggersection.h"
-#include "teamsection.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
+	LoadSettings();
+
 	ui->setupUi(this);
 
 	connect(ui->actionNew_file, SIGNAL(triggered()), this, SLOT(NewFile()));
@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
-	connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(Info()));
+	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(Info()));
+	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(Settings()));
 
 	trgS = new TriggerSection(this);
 	tamS = new TeamSection(this);
@@ -95,6 +96,12 @@ void MainWindow::SaveFileAs() {
 
 void MainWindow::Info() {
 	InfoDialog * dlg = new InfoDialog;
+	dlg->show();
+}
+
+void MainWindow::Settings()
+{
+	SettingsDialog * dlg = new SettingsDialog;
 	dlg->show();
 }
 

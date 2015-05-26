@@ -14,6 +14,9 @@ struct variableContainer {
 		string name;
 };
 
+extern const std::string settings_ini;
+extern CDataFile settings_data;
+
 extern std::string cur_file;
 extern CDataFile curdata;
 

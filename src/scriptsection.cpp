@@ -81,6 +81,7 @@ void ScriptSection::on_SATypeBox_activated()
 
 		switch(GetScriptActionTargetType(type)) {
 			case NONE:
+				break;
 			case WAYPOINT:
 				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(IntToStr(param).c_str()));
 				break;

@@ -1,7 +1,13 @@
 #include "containers.h"
 
+const string settings_ini = "settings.ini";
+CDataFile settings_data(settings_ini);
+
 string cur_file;
 CDataFile curdata;
+
+string ts_rules;
+string fs_rules;
 
 map <string, Trigger*> triggers;
 map <string, Tag*> tags;

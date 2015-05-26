@@ -653,3 +653,47 @@ void ClearContainers()
 
 	waypoints.clear();
 }
+
+
+void LoadSettings(bool ask)
+{
+	string ts_rules_path = settings_data.GetString("rules_path");
+	string fs_rules_path = settings_data.GetString("firestrm_path");
+
+	if(ask) {
+		if(ts_rules_path.empty()) {
+			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+				ts_rules_path = TSRulesPath(ts_rules_path);
+			}
+		}
+		if(fs_rules_path.empty()) {
+			if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+				fs_rules_path = FSRulesPath(fs_rules_path);
+			}
+		}
+	}
+
+	settings_data.SetValue("rules_path", ts_rules_path);
+	settings_data.SetValue("firestrm_path", fs_rules_path);
+
+	ts_rules = ts_rules_path + "/rules.ini";
+	fs_rules = fs_rules_path + "/firestrm.ini";
+
+	settings_data.Save();
+}
+
+string TSRulesPath(string path)
+{
+	QFileDialog fDG(NULL);
+	fDG.setFileMode(QFileDialog::Directory);
+	fDG.setOption(QFileDialog::ShowDirsOnly, true);
+	return fDG.getExistingDirectory(NULL, "Select directory containing rules.ini", path.c_str()).toStdString();
+}
+
+string FSRulesPath(string path)
+{
+	QFileDialog fDG(NULL);
+	fDG.setFileMode(QFileDialog::Directory);
+	fDG.setOption(QFileDialog::ShowDirsOnly, true);
+	return fDG.getExistingDirectory(NULL, "Select directory containing firestrm.ini", path.c_str()).toStdString();
+}

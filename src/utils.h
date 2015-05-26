@@ -32,5 +32,8 @@ extern uint16_t GetBuildingTypePosByKey(int key);
 extern string ConverBoolToYesNo(bool boolean);
 extern string IntToStr(int integer);
 extern void ClearContainers();
+extern void LoadSettings(bool ask = true);
+extern string TSRulesPath(string path);
+extern string FSRulesPath(string path);
 
 #endif // UTILS_H

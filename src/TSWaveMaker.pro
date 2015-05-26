@@ -28,7 +28,8 @@ SOURCES += main.cpp\
 	fileoperations.cpp \
 	CDataFile/CDataFile.cpp \
     utils.cpp \
-    containers.cpp
+    containers.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     main.h \
@@ -47,11 +48,13 @@ HEADERS  += mainwindow.h \
 	fileoperations.h \
 	CDataFile/CDataFile.h \
     utils.h \
-    containers.h
+    containers.h \
+    settingsdialog.h
 
 FORMS    += mainwindow.ui \
     infodialog.ui \
     triggersection.ui \
 	teamsection.ui \
 	scriptsection.ui \
-	taskforcesection.ui
+	taskforcesection.ui \
+    settingsdialog.ui

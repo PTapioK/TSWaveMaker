@@ -22,6 +22,7 @@ private slots:
 	void SaveFileAs();
 
 	void Info();
+	void Settings();
 
 private:
 
@@ -29,6 +30,7 @@ private:
 	friend class TeamSection;
 	friend class ScriptSection;
 	friend class TaskforceSection;
+	friend class Settings;
 
 	Ui::MainWindow *ui;
 

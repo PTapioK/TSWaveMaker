@@ -613,7 +613,7 @@ void ParseRules()
 	uint16_t i = 0;
 
 	// Tiberian Sun rules
-	CDataFile ts_rules_data("rules.ini");
+	CDataFile ts_rules_data(ts_rules);
 	{
 		t_Section * buildSec = ts_rules_data.GetSection("BuildingTypes");
 
@@ -730,7 +730,7 @@ void ParseRules()
 	ts_rules_data.~CDataFile();
 
 	// Tiberian Sun Firestorm rules
-	CDataFile fs_rules_data("firestrm.ini");
+	CDataFile fs_rules_data(fs_rules);
 	{
 		t_Section * buildSec = fs_rules_data.GetSection("BuildingTypes");
 
