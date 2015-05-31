@@ -15,9 +15,12 @@ TaskforceSection::~TaskforceSection()
 
 void TaskforceSection::UpdateUi()
 {
-	ui->TaskforceList->setCurrentRow(-1);
+	ui->TaskforceList->clearSelection();
 	ui->TaskforceList->clear();
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		ui->TaskforceList->addItem(IT->second->getName().c_str());
+		QListWidgetItem * newItem = new QListWidgetItem(ui->TaskforceList);
+		newItem->setText(IT->second->getName().c_str());
+		newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
+		ui->TaskforceList->addItem(newItem);
 	}
 }

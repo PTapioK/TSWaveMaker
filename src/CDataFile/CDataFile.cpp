@@ -100,7 +100,7 @@ void CDataFile::Clear()
 // object by hand (-vs- loading it from a file
 void CDataFile::SetFileName(t_Str szFileName)
 {
-	if (m_szFileName.size() != 0 && CompareNoCase(szFileName, m_szFileName) != 0)
+	if (m_szFileName.size() != 0 && CompareCase(szFileName, m_szFileName) != 0)
 	{
 		m_bDirty = true;
 
@@ -287,7 +287,7 @@ bool CDataFile::SetKeyComment(t_Str szKey, t_Str szComment, t_Str szSection)
 
 	for (k_pos = pSection->Keys.begin(); k_pos != pSection->Keys.end(); k_pos++)
 	{
-		if ( CompareNoCase( (*k_pos).szKey, szKey ) == 0 )
+		if ( CompareCase( (*k_pos).szKey, szKey ) == 0 )
 		{
 			(*k_pos).szComment = szComment;
 			m_bDirty = true;
@@ -308,7 +308,7 @@ bool CDataFile::SetSectionComment(t_Str szSection, t_Str szComment)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareNoCase( (*s_pos).szName, szSection ) == 0 ) 
+		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
 		{
 		    (*s_pos).szComment = szComment;
 			m_bDirty = true;
@@ -455,10 +455,7 @@ bool CDataFile::GetBool(t_Str szKey, t_Str szSection)
 {
 	bool bValue = false;
 	t_Str szValue = GetValue(szKey, szSection);
-
-	if ( szValue.find("1") == 0 
-		|| CompareNoCase(szValue, "true") 
-		|| CompareNoCase(szValue, "yes") )
+	if ( !CompareCase(szValue, "1") || !CompareCase(szValue, "True") || !CompareCase(szValue, "Yes") )
 	{
 		bValue = true;
 	}
@@ -475,7 +472,7 @@ bool CDataFile::DeleteSection(t_Str szSection)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareNoCase( (*s_pos).szName, szSection ) == 0 ) 
+		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
 		{
 			m_Sections.erase(s_pos);
 			return true;
@@ -498,7 +495,7 @@ bool CDataFile::DeleteKey(t_Str szKey, t_Str szFromSection)
 
 	for (k_pos = pSection->Keys.begin(); k_pos != pSection->Keys.end(); k_pos++)
 	{
-		if ( CompareNoCase( (*k_pos).szKey, szKey ) == 0 )
+		if ( CompareCase( (*k_pos).szKey, szKey ) == 0 )
 		{
 			pSection->Keys.erase(k_pos);
 			return true;
@@ -629,7 +626,7 @@ t_Key*	CDataFile::GetKey(t_Str szKey, t_Str szSection)
 
 	for (k_pos = pSection->Keys.begin(); k_pos != pSection->Keys.end(); k_pos++)
 	{
-		if ( CompareNoCase( (*k_pos).szKey, szKey ) == 0 )
+		if ( CompareCase( (*k_pos).szKey, szKey ) == 0 )
 			return (t_Key*)&(*k_pos);
 	}
 
@@ -645,7 +642,7 @@ t_Section* CDataFile::GetSection(t_Str szSection)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareNoCase( (*s_pos).szName, szSection ) == 0 ) 
+		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
 			return (t_Section*)&(*s_pos);
 	}
 
@@ -707,12 +704,12 @@ t_Str GetNextWord(t_Str& CommandLine)
 // !it's amazing what features std::string lacks.  This function simply
 // !does a lowercase compare against the two strings, returning 0 if they
 // !match.
-int CompareNoCase(t_Str str1, t_Str str2) // Just compare
+bool CompareCase(t_Str str1, t_Str str2) // Just compare
 {
 #ifdef WIN32
-	return strcmp(str1.c_str(), str2.c_str());
+	return (strcmp(str1.c_str(), str2.c_str()) != 0);
 #else
-	return strcmp(str1.c_str(), str2.c_str());
+	return (strcmp(str1.c_str(), str2.c_str()) != 0);
 #endif
 }
 

@@ -99,12 +99,12 @@ void TeamSection::on_Clone_clicked()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-			string newName = "Clone Of " + ui->TeamList->selectedItems().at(a)->text().toStdString();
+			string newName = GetNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), a);
 
 			int i = 0;
 			while(ui->TeamList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = "Clone Of " + ui->TeamList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+				newName = GetNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), i);
 			}
 			string newID = fffID();
 			teams[newID] = new Team(newID, GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString()));

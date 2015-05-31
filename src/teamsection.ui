@@ -90,9 +90,9 @@
    <widget class="QPushButton" name="New">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>144</x>
       <y>60</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -103,9 +103,9 @@
    <widget class="QPushButton" name="Delete">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>144</x>
       <y>90</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -116,9 +116,9 @@
    <widget class="QPushButton" name="EditName">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>144</x>
       <y>120</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -129,9 +129,9 @@
    <widget class="QPushButton" name="Clone">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>144</x>
       <y>150</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>

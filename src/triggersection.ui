@@ -67,9 +67,9 @@
    <widget class="QPushButton" name="CloneTrigger">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>164</x>
       <y>150</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -80,9 +80,9 @@
    <widget class="QPushButton" name="EditTriggerName">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>164</x>
       <y>120</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -106,9 +106,9 @@
    <widget class="QPushButton" name="DeleteTrigger">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>164</x>
       <y>90</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -199,9 +199,9 @@
    <widget class="QPushButton" name="NewTrigger">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>164</x>
       <y>60</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>

@@ -15,8 +15,11 @@ public:
 
 	void UpdateUi();
 	
-private:
+	private slots:
+
+	private:
 	Ui::TaskforceSection *ui;
+
 };
 
 #endif // TASKFORCESECTION_H

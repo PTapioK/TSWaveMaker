@@ -26,6 +26,12 @@ class SettingsDialog : public QDialog
 
 		void on_saveButton_clicked();
 
+		void on_cloneOfBox_clicked();
+
+		void on_ascNumBox_clicked();
+
+		void on_alphaOrdBox_clicked();
+
 	private:
 		Ui::SettingsDialog *ui;
 };

@@ -27,3 +27,5 @@ map <uint16_t, variableContainer> localvariables;
 map <uint16_t, variableContainer> globalvariables;
 
 vector <int32_t> waypoints;
+
+bool cloneOfNaming, ascNumNaming, alphabetNaming;

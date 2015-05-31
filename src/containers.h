@@ -42,6 +42,8 @@ extern std::map <uint16_t, variableContainer> globalvariables;
 
 extern std::vector <int32_t> waypoints;
 
+extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
+
 typedef std::map <std::string, Trigger*>::iterator triggerIT;
 typedef std::map <std::string, Tag*>::iterator tagIT;
 typedef std::map <std::string, Team*>::iterator teamIT;

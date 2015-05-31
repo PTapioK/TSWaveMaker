@@ -144,7 +144,7 @@ typedef SectionList::iterator SectionItor;
 /////////////////////////////////////////////////////////////////////////////////
 void	Report(e_DebugLevel DebugLevel, char *fmt, ...);
 t_Str	GetNextWord(t_Str& CommandLine);
-int		CompareNoCase(t_Str str1, t_Str str2);
+bool CompareCase(t_Str str1, t_Str str2);
 void	Trim(t_Str& szStr);
 int		WriteLn(std::fstream& stream, char* fmt, ...);
 

@@ -5,6 +5,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QLineEdit>
+#include <QCloseEvent>
 #include <iostream>
 #include <string>
 #include <QtDebug>

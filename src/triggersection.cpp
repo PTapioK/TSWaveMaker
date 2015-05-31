@@ -124,13 +124,14 @@ void TriggerSection::on_DeleteTrigger_clicked()
 void TriggerSection::on_CloneTrigger_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
-		string newName = "Clone Of " + ui->TriggerList->currentItem()->text().toStdString();
+		string newName = GetNameWithNextMark(ui->TriggerList->currentItem()->text().toStdString());
 
 		int i = 0;
 		while(ui->TriggerList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 			++i;
-			newName = "Clone Of " + ui->TriggerList->currentItem()->text().toStdString() + " " + IntToStr(i);
+			newName = GetNameWithNextMark(ui->TriggerList->currentItem()->text().toStdString(), i);
 		}
+
 		string newID = fffID();
 		triggers[newID] = new Trigger(newID, GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString()));
 		triggers[newID]->setName(newName);

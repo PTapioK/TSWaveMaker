@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Settings</string>
   </property>
   <widget class="QLineEdit" name="rulesFileEdit">
    <property name="enabled">
@@ -24,6 +24,9 @@
      <width>621</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="whatsThis">
+    <string>Path to folder containing rules.ini</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -64,6 +67,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="whatsThis">
+    <string>Path to folder containing firestrm.ini</string>
+   </property>
   </widget>
   <widget class="QPushButton" name="firestrmFind">
    <property name="geometry">
@@ -103,6 +109,76 @@
    <property name="text">
     <string>Save</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>201</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Cloned unit naming</string>
+   </property>
+   <widget class="QCheckBox" name="cloneOfBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>181</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When cloning item with name &amp;quot;Wave&amp;quot; with this setting enabled the cloned item will be named as &amp;quot;Clone of Wave&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Add &quot;Clone of&quot; -prefix</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="ascNumBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>161</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Increase number inside name when naming cloned items. For example when cloning 'Wave 1' with this setting enabled the cloned item will be named as 'Wave 2'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Increase number</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="alphaOrdBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>181</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use capital alphabets in order when naming cloned items. For example when cloning 'Wave A' with this setting enabled the cloned item will be named as 'Wave B'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Use alphabets in order</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

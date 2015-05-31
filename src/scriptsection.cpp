@@ -307,12 +307,12 @@ void ScriptSection::on_CLastButton_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			string newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString();
+			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a);
 
 			int i = 0;
 			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+				newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), i);
 			}
 
 			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
@@ -377,12 +377,12 @@ void ScriptSection::on_cloneS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			string newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString();
+			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a);
 
 			int i = 0;
 			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = "Clone Of " + ui->ScriptList->selectedItems().at(a)->text().toStdString() + " " + IntToStr(i);
+				newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), i);
 			}
 			string newID = fffID();
 			scripts[newID] = new Script(newID, GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString()));

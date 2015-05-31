@@ -35,5 +35,6 @@ extern void ClearContainers();
 extern void LoadSettings(bool ask = true);
 extern string TSRulesPath(string path);
 extern string FSRulesPath(string path);
+extern string GetNameWithNextMark(string name, int iter = 0);
 
 #endif // UTILS_H

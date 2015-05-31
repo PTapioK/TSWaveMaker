@@ -660,6 +660,10 @@ void LoadSettings(bool ask)
 	string ts_rules_path = settings_data.GetString("rules_path");
 	string fs_rules_path = settings_data.GetString("firestrm_path");
 
+	cloneOfNaming = settings_data.GetBool("cloneOfNaming");
+	ascNumNaming  = settings_data.GetBool("increaseNumberNaming");
+	alphabetNaming = settings_data.GetBool("alphabetsInOrderNaming");
+
 	if(ask) {
 		if(ts_rules_path.empty()) {
 			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
@@ -696,4 +700,35 @@ string FSRulesPath(string path)
 	fDG.setFileMode(QFileDialog::Directory);
 	fDG.setOption(QFileDialog::ShowDirsOnly, true);
 	return fDG.getExistingDirectory(NULL, "Select directory containing firestrm.ini", path.c_str()).toStdString();
+}
+
+string GetNameWithNextMark(string name, int iter)
+{
+	string oName = name;
+	if(alphabetNaming) {
+		for(int i = 0; i != 26; ++i) {
+			stringstream ss("");
+			ss << " " << alphas[i];
+			if(name.find(ss.str()) != string::npos) {
+				name.replace(name.find(ss.str()), ss.str().length(), string(" ") + DecToWaypointID(i + iter + 1));
+				break;
+			}
+		}
+	}
+	if(ascNumNaming) {
+		for(int i = 0; i != 99; ++i) {
+			stringstream ss("");
+			ss << i;
+			if(name.find(ss.str()) != string::npos) {
+				name.replace(name.find(ss.str()), ss.str().length(), IntToStr(i + iter + 1));
+				break;
+			}
+		}
+	}
+	if(cloneOfNaming) {
+		name = "Clone of " + name;
+	}
+	if(oName == name)
+		return name + IntToStr(iter);
+	return name;
 }

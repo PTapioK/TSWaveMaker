@@ -221,7 +221,7 @@ void ParseSections() {
 				int32_t eType = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t nullparam = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				//int32_t nullparam = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
 				int32_t param = 0;

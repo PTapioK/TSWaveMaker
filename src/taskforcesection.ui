@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>300</height>
+    <width>621</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,6 +38,9 @@
       <height>211</height>
      </rect>
     </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::MultiSelection</enum>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -55,8 +58,8 @@
    <widget class="QPushButton" name="NewTaskforce">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>250</y>
+      <x>220</x>
+      <y>60</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -68,8 +71,8 @@
    <widget class="QPushButton" name="DeleteTaskforce">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>250</y>
+      <x>220</x>
+      <y>100</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -81,7 +84,7 @@
    <widget class="QListWidget" name="UnitList">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>330</x>
       <y>30</y>
       <width>131</width>
       <height>211</height>
@@ -91,7 +94,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>380</x>
       <y>10</y>
       <width>46</width>
       <height>13</height>
@@ -104,9 +107,9 @@
    <widget class="QPushButton" name="AddUnit">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>250</y>
-      <width>51</width>
+      <x>490</x>
+      <y>100</y>
+      <width>111</width>
       <height>23</height>
      </rect>
     </property>
@@ -117,9 +120,9 @@
    <widget class="QPushButton" name="DeleteUnit">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>250</y>
-      <width>51</width>
+      <x>490</x>
+      <y>130</y>
+      <width>111</width>
       <height>23</height>
      </rect>
     </property>
@@ -130,7 +133,7 @@
    <widget class="QComboBox" name="UnitBox">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>490</x>
       <y>30</y>
       <width>121</width>
       <height>22</height>
@@ -140,7 +143,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>530</x>
       <y>10</y>
       <width>46</width>
       <height>13</height>
@@ -153,8 +156,8 @@
    <widget class="QSpinBox" name="UnitNumberBox">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>90</y>
+      <x>570</x>
+      <y>60</y>
       <width>42</width>
       <height>22</height>
      </rect>
@@ -163,10 +166,10 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>90</y>
+      <x>480</x>
+      <y>60</y>
       <width>81</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">

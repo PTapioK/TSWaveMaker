@@ -14,5 +14,6 @@ InfoDialog::~InfoDialog()
 }
 
 void InfoDialog::closeEvent(QCloseEvent *event) {
+	event->accept();
 	this->deleteLater();
 }
