@@ -31,9 +31,9 @@ extern std::map <std::string, Taskforce*> taskforces;
 extern std::map <std::string, std::string> aitriggers;
 
 extern std::map <uint16_t, unitContainer> buildingnames;
-extern std::map <uint16_t, unitContainer> vehiclenames;
-extern std::map <uint16_t, unitContainer> infantrynames;
-extern std::map <uint16_t, unitContainer> aircraftnames;
+extern std::map <string, unitContainer> vehiclenames;
+extern std::map <string, unitContainer> infantrynames;
+extern std::map <string, unitContainer> aircraftnames;
 
 extern std::map <uint16_t, std::string> houses;
 
@@ -54,5 +54,7 @@ typedef std::map <std::string, std::string>::iterator aitriggerIT;
 typedef std::vector <Action*>::iterator actionIT;
 typedef std::vector <Event*>::iterator eventIT;
 typedef std::vector <int32_t>::iterator waypointIT;
+
+typedef std::map <string, unitContainer>::iterator unitIT;
 
 #endif // CONTAINERS_H

@@ -17,9 +17,9 @@ map <string, Taskforce*> taskforces;
 map <string, string> aitriggers;
 
 map <uint16_t, unitContainer> buildingnames;
-map <uint16_t, unitContainer> vehiclenames;
-map <uint16_t, unitContainer> infantrynames;
-map <uint16_t, unitContainer> aircraftnames;
+map <string, unitContainer> vehiclenames;
+map <string, unitContainer> infantrynames;
+map <string, unitContainer> aircraftnames;
 
 map <uint16_t, string> houses;
 

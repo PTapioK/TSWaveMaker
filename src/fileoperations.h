@@ -4,7 +4,6 @@
 #include "main.h"
 
 void SaveAllToBuffer();
-void WriteValueToBuffer(std::string section, std::string ID);
 void WriteValueToBuffer(std::string section, std::string ID, string value);
 void EditValueInBuffer(std::string section, std::string ID, string value, int count);
 void ReadFileToBuffer();

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>621</width>
+    <width>644</width>
     <height>273</height>
    </rect>
   </property>
@@ -59,8 +59,8 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>60</y>
-      <width>75</width>
+      <y>70</y>
+      <width>81</width>
       <height>23</height>
      </rect>
     </property>
@@ -73,7 +73,7 @@
      <rect>
       <x>220</x>
       <y>100</y>
-      <width>75</width>
+      <width>81</width>
       <height>23</height>
      </rect>
     </property>
@@ -107,7 +107,7 @@
    <widget class="QPushButton" name="AddUnit">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>500</x>
       <y>100</y>
       <width>111</width>
       <height>23</height>
@@ -120,7 +120,7 @@
    <widget class="QPushButton" name="DeleteUnit">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>500</x>
       <y>130</y>
       <width>111</width>
       <height>23</height>
@@ -133,9 +133,9 @@
    <widget class="QComboBox" name="UnitBox">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>480</x>
       <y>30</y>
-      <width>121</width>
+      <width>151</width>
       <height>22</height>
      </rect>
     </property>
@@ -143,10 +143,10 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>540</x>
       <y>10</y>
-      <width>46</width>
-      <height>13</height>
+      <width>51</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
@@ -166,7 +166,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>490</x>
       <y>60</y>
       <width>81</width>
       <height>21</height>
@@ -174,6 +174,55 @@
     </property>
     <property name="text">
      <string>Number of units</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cloneTaskforce">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>160</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clone</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="editTaskforceName">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>130</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Edit name</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="taskforceNameEdit">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>40</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="nameLabel">
+    <property name="geometry">
+     <rect>
+      <x>256</x>
+      <y>20</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name</string>
     </property>
    </widget>
   </widget>

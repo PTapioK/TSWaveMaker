@@ -165,7 +165,7 @@ int32_t WaypointIDToDec(string wID) {
 	return value-1;
 }
 
-bool ConverToBool(string str) {
+bool ConvertToBool(string str) {
 	if(str == "yes") {
 		return true;
 	}
@@ -278,6 +278,18 @@ string GetTaskforceIDByName(string name) {
 	}
 	return "";
 }
+
+
+Taskforce *GetTaskforceByName(string name)
+{
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second;
+		}
+	}
+	return NULL;
+}
+
 
 Script* GetScriptByName(string name) {
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
@@ -648,6 +660,7 @@ void ClearContainers()
 	buildingnames.clear();
 	vehiclenames.clear();
 	infantrynames.clear();
+	aircraftnames.clear();
 
 	localvariables.clear();
 
@@ -731,4 +744,25 @@ string GetNameWithNextMark(string name, int iter)
 	if(oName == name)
 		return name + IntToStr(iter);
 	return name;
+}
+
+
+string GetUnitNameByUnitID(string unitID)
+{
+	for(unitIT IT = aircraftnames.begin(); IT != aircraftnames.end(); ++IT) {
+		if(IT->second.unitID == unitID) {
+			return IT->second.name;
+		}
+	}
+	for(unitIT IT = infantrynames.begin(); IT != infantrynames.end(); ++IT) {
+		if(IT->second.unitID == unitID) {
+			return IT->second.name;
+		}
+	}
+	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
+		if(IT->second.unitID == unitID) {
+			return IT->second.name;
+		}
+	}
+	return string("");
 }

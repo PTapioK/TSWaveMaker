@@ -140,8 +140,8 @@ void ScriptSection::on_SATargetBox_activated()
 			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
 			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
-				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[ui->ScriptActionList->currentRow()]->type;
+				type = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines[rowNum]->type;
+				curtype = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->slines[rowNum]->type;
 				if(curtype == type) {
 					switch(GetScriptActionTargetType(type)) {
 						case NONE:
@@ -399,10 +399,10 @@ void ScriptSection::on_newSA_clicked()
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
 			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
 			cur_script->NewLine(0, 0);
-			string ID;
-			ID = IntToStr((*(cur_script->slines.end()-1))->ID);
-			ui->ScriptActionList->addItem(ID.c_str());
 		}
+		string ID;
+		ID = IntToStr((*(GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->slines.end()-1))->ID);
+		ui->ScriptActionList->addItem(ID.c_str());
 	}
 }
 
@@ -439,4 +439,5 @@ void ScriptSection::UpdateUi() {
 	for(int i = 0; i != 54; ++i) {
 		ui->SATypeBox->addItem(GetScriptActionMeaning(i));
 	}
+	ui->SATypeBox->view()->setMinimumWidth(180);
 }

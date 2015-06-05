@@ -9,7 +9,7 @@ extern Tag* FindTag(string trigID);
 extern string DecToWaypointID(int32_t dec);
 extern string GetTriggerNameByID(string trigID);
 extern int32_t WaypointIDToDec(string wID);
-extern bool ConverToBool(string str);
+extern bool ConvertToBool(string str);
 extern string GetValueStr(string line);
 extern string GetTeamNameByID(string ID);
 extern string GetTriggerIDByName(string name);
@@ -22,6 +22,7 @@ extern Trigger* GetTriggerByName(string name);
 extern string GetTaskforceNameByID(string ID);
 extern string GetTaskforceIDByName(string name);
 extern string GetTaskforceNameByPosition(uint16_t pos);
+extern Taskforce* GetTaskforceByName(string name);
 extern Script* GetScriptByName(string name);
 extern string GetScriptNameByPosition(uint16_t pos);
 extern QString GetScriptActionMeaning(uint8_t ID);
@@ -36,5 +37,6 @@ extern void LoadSettings(bool ask = true);
 extern string TSRulesPath(string path);
 extern string FSRulesPath(string path);
 extern string GetNameWithNextMark(string name, int iter = 0);
+extern string GetUnitNameByUnitID(string unitID);
 
 #endif // UTILS_H

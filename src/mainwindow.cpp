@@ -45,12 +45,12 @@ MainWindow::~MainWindow()
 void MainWindow::NewFile() {
 	ClearContainers();
 
+	ParseRules();
+
 	trgS->UpdateUi();
 	tamS->UpdateUi();
 	srtS->UpdateUi();
 	tskS->UpdateUi();
-
-	ParseRules();
 }
 
 void MainWindow::OpenFile() {

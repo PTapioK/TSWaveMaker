@@ -14,10 +14,31 @@ public:
 	~TaskforceSection();
 
 	void UpdateUi();
-	
+
 	private slots:
 
+	void on_TaskforceList_itemSelectionChanged();
+
+	void on_NewTaskforce_clicked();
+
+	void on_DeleteTaskforce_clicked();
+
+	void on_editTaskforceName_clicked();
+
+	void on_cloneTaskforce_clicked();
+
+	void on_UnitList_itemSelectionChanged();
+
+	void on_UnitBox_currentIndexChanged();
+
+	void on_UnitNumberBox_editingFinished();
+
+	void on_AddUnit_clicked();
+
+	void on_DeleteUnit_clicked();
+
 	private:
+
 	Ui::TaskforceSection *ui;
 
 };

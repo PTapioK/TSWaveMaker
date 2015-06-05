@@ -27,19 +27,14 @@ void SaveAllToBuffer() {
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		(*IT).second->Save();
 	}
-
-}
-
-// 0 = value1, 1 = value2 etc...
-void WriteValueToBuffer(string section, string ID) {
-
-	for(int idC = 0; idC < 1000; ++idC) {
-		stringstream idS;
-		idS << idC;
-		if(curdata.GetKey(idS.str(), section) == NULL) {
-			curdata.SetValue(idS.str(), ID, "", section);
-			break;
-		}
+	i = 0;
+	DeleteSectionInBuffer("TaskForces");
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		WriteValueToBuffer("TaskForces", IntToStr(i), IT->second->getID());
+		++i;
+	}
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		(*IT).second->Save();
 	}
 
 }
@@ -314,17 +309,19 @@ void ParseSections() {
 			string buildingSec = curdata.GetString(Key, "BuildingTypes");
 			string name = GetUnitNameFromFile(buildingSec, &curdata);
 
-			unitContainer cont;
-			cont.unitID = buildingSec;
-			cont.name = name;
-			cont.key = atoi(Key.c_str());
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = buildingSec;
+				cont.name = name;
+				cont.key = atoi(Key.c_str());
 
-			buildingnames[atoi(Key.c_str())] = cont;
+				buildingnames[atoi(Key.c_str())] = cont;
+			}
 		}
 	}
 
-
 	t_Section * vehSec = curdata.GetSection("VehicleTypes");
+
 
 	if (vehSec != NULL) {
 		KeyList * vehl = vehSec->GetKeyList();
@@ -334,11 +331,14 @@ void ParseSections() {
 			string vehicleID = curdata.GetString(Key, "VehicleTypes");
 			string name = GetUnitNameFromFile(vehicleID, &curdata);
 
-			unitContainer cont;
-			cont.unitID = vehicleID;
-			cont.name = name;
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = vehicleID;
+				cont.name = name;
+				cont.key = atoi(Key.c_str());
 
-			vehiclenames[atoi(Key.c_str())] = cont;
+				vehiclenames[vehicleID] = cont;
+			}
 		}
 	}
 
@@ -352,11 +352,13 @@ void ParseSections() {
 			string infID = curdata.GetString(Key, "InfantryTypes");
 			string name = GetUnitNameFromFile(infID, &curdata);
 
-			unitContainer cont;
-			cont.unitID = infID;
-			cont.name = name;
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = infID;
+				cont.name = name;
 
-			infantrynames[atoi(Key.c_str())] = cont;
+				infantrynames[infID] = cont;
+			}
 		}
 	}
 
@@ -370,11 +372,13 @@ void ParseSections() {
 			string airID = curdata.GetString(Key, "AircraftTypes");
 			string name = GetUnitNameFromFile(airID, &curdata);
 
-			unitContainer cont;
-			cont.unitID = airID;
-			cont.name = name;
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = airID;
+				cont.name = name;
 
-			aircraftnames[atoi(Key.c_str())] = cont;
+				aircraftnames[airID] = cont;
+			}
 		}
 	}
 
@@ -410,6 +414,31 @@ void ParseSections() {
 			string housename = curdata.GetString(Key, "Houses");
 
 			houses[atoi(Key.c_str())] = housename;
+		}
+	}
+
+	for(unitIT IT = aircraftnames.begin(); IT != aircraftnames.end(); ++IT) {
+		t_Section * curSec = curdata.GetSection(IT->first);
+		if(curSec != NULL) {
+			string name = curdata.GetString("Name", IT->first);
+			if(name != "")
+				IT->second.name = name;
+		}
+	}
+	for(unitIT IT = infantrynames.begin(); IT != infantrynames.end(); ++IT) {
+		t_Section * curSec = curdata.GetSection(IT->first);
+		if(curSec != NULL) {
+			string name = curdata.GetString("Name", IT->first);
+			if(name != "")
+				IT->second.name = name;
+		}
+	}
+	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
+		t_Section * curSec = curdata.GetSection(IT->first);
+		if(curSec != NULL) {
+			string name = curdata.GetString("Name", IT->first);
+			if(name != "")
+				IT->second.name = name;
 		}
 	}
 
@@ -535,7 +564,7 @@ Team *FindNewTeamFromFile(string teamID) {
 
 		tag = curdata.GetString("Tag", teamID);
 
-		full = ConverToBool(curdata.GetString("Full", teamID));
+		full = ConvertToBool(curdata.GetString("Full", teamID));
 
 		name = curdata.GetString("Name", teamID);
 
@@ -545,53 +574,53 @@ Team *FindNewTeamFromFile(string teamID) {
 
 		script = curdata.GetString("Script", teamID);
 
-		whiner = ConverToBool(curdata.GetString("Whiner", teamID));
+		whiner = ConvertToBool(curdata.GetString("Whiner", teamID));
 
-		droppod = ConverToBool(curdata.GetString("Droppod", teamID));
+		droppod = ConvertToBool(curdata.GetString("Droppod", teamID));
 
-		suicide = ConverToBool(curdata.GetString("Suicide", teamID));
+		suicide = ConvertToBool(curdata.GetString("Suicide", teamID));
 
-		loadable = ConverToBool(curdata.GetString("Loadable", teamID));
+		loadable = ConvertToBool(curdata.GetString("Loadable", teamID));
 
-		prebuild = ConverToBool(curdata.GetString("Prebuild", teamID));
+		prebuild = ConvertToBool(curdata.GetString("Prebuild", teamID));
 
 		priority = curdata.GetInt("Priority", teamID);
 
 		waypoint = curdata.GetString("Waypoint", teamID);
 
-		annoyance = ConverToBool(curdata.GetString("Annoyance", teamID));
+		annoyance = ConvertToBool(curdata.GetString("Annoyance", teamID));
 
-		ionimmune = ConverToBool(curdata.GetString("IonImmune", teamID));
+		ionimmune = ConvertToBool(curdata.GetString("IonImmune", teamID));
 
-		recruiter = ConverToBool(curdata.GetString("Recruiter", teamID));
+		recruiter = ConvertToBool(curdata.GetString("Recruiter", teamID));
 
-		reinforce = ConverToBool(curdata.GetString("Reinforce", teamID));
+		reinforce = ConvertToBool(curdata.GetString("Reinforce", teamID));
 
 		taskforce = curdata.GetString("TaskForce", teamID);
 
 		techlevel = curdata.GetInt("TechLevel", teamID);
 
-		aggressive = ConverToBool(curdata.GetString("Aggressive", teamID));
+		aggressive = ConvertToBool(curdata.GetString("Aggressive", teamID));
 
-		autocreate = ConverToBool(curdata.GetString("Autocreate", teamID));
+		autocreate = ConvertToBool(curdata.GetString("Autocreate", teamID));
 
-		guardslower = ConverToBool(curdata.GetString("GuardSlower", teamID));
+		guardslower = ConvertToBool(curdata.GetString("GuardSlower", teamID));
 
-		ontransonly = ConverToBool(curdata.GetString("OnTransOnly", teamID));
+		ontransonly = ConvertToBool(curdata.GetString("OnTransOnly", teamID));
 
-		avoidthreats = ConverToBool(curdata.GetString("AvoidThreats", teamID));
+		avoidthreats = ConvertToBool(curdata.GetString("AvoidThreats", teamID));
 
-		looserecruit = ConverToBool(curdata.GetString("LooseRecruit", teamID));
+		looserecruit = ConvertToBool(curdata.GetString("LooseRecruit", teamID));
 
 		veteranlevel = curdata.GetInt("VeteranLevel", teamID);
 
-		isbasedefense = ConverToBool(curdata.GetString("IsBaseDefense", teamID));
+		isbasedefense = ConvertToBool(curdata.GetString("IsBaseDefense", teamID));
 
-		onlytargethousenemy = ConverToBool(curdata.GetString("OnlyTargetHouseEnemy", teamID));
+		onlytargethousenemy = ConvertToBool(curdata.GetString("OnlyTargetHouseEnemy", teamID));
 
-		transportsreturnonunload = ConverToBool(curdata.GetString("TransportsReturnOnUnload", teamID));
+		transportsreturnonunload = ConvertToBool(curdata.GetString("TransportsReturnOnUnload", teamID));
 
-		areteammembersrecruitable = ConverToBool(curdata.GetString("AreTeamMembersRecruitable", teamID));
+		areteammembersrecruitable = ConvertToBool(curdata.GetString("AreTeamMembersRecruitable", teamID));
 
 
 		return new Team(teamID, max, tag, full, name, group, house, script, whiner, droppod, suicide,
@@ -625,12 +654,14 @@ void ParseRules()
 				string buildingID = ts_rules_data.GetString(Key, "BuildingTypes");
 				string name = GetUnitNameFromFile(buildingID, &ts_rules_data);
 
-				unitContainer cont;
-				cont.unitID = buildingID;
-				cont.name = name;
-				cont.key = atoi(Key.c_str());
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = buildingID;
+					cont.name = name;
+					cont.key = atoi(Key.c_str());
 
-				buildingnames[i] = cont;
+					buildingnames[i] = cont;
+				}
 
 				++i;
 			}
@@ -646,11 +677,13 @@ void ParseRules()
 				string vehicleID = ts_rules_data.GetString(Key, "VehicleTypes");
 				string name = GetUnitNameFromFile(vehicleID, &ts_rules_data);
 
-				unitContainer cont;
-				cont.unitID = vehicleID;
-				cont.name = name;
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = vehicleID;
+					cont.name = name;
 
-				vehiclenames[atoi(Key.c_str())] = cont;
+					vehiclenames[vehicleID] = cont;
+				}
 			}
 		}
 
@@ -663,12 +696,13 @@ void ParseRules()
 
 				string infID = ts_rules_data.GetString(Key, "InfantryTypes");
 				string name = GetUnitNameFromFile(infID, &ts_rules_data);
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = infID;
+					cont.name = name;
 
-				unitContainer cont;
-				cont.unitID = infID;
-				cont.name = name;
-
-				infantrynames[atoi(Key.c_str())] = cont;
+					infantrynames[infID] = cont;
+				}
 			}
 		}
 
@@ -682,11 +716,13 @@ void ParseRules()
 				string airID = ts_rules_data.GetString(Key, "AircraftTypes");
 				string name = GetUnitNameFromFile(airID, &ts_rules_data);
 
-				unitContainer cont;
-				cont.unitID = airID;
-				cont.name = name;
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = airID;
+					cont.name = name;
 
-				aircraftnames[atoi(Key.c_str())] = cont;
+					aircraftnames[airID] = cont;
+				}
 			}
 		}
 
@@ -742,12 +778,14 @@ void ParseRules()
 				string buildingSec = fs_rules_data.GetString(Key, "BuildingTypes");
 				string name = GetUnitNameFromFile(buildingSec, &fs_rules_data);
 
-				unitContainer cont;
-				cont.unitID = buildingSec;
-				cont.name = name;
-				cont.key = atoi(Key.c_str()) + 169;
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = buildingSec;
+					cont.name = name;
+					cont.key = atoi(Key.c_str()) + 169;
 
-				buildingnames[i] = cont;
+					buildingnames[i] = cont;
+				}
 				++i;
 			}
 		}
@@ -763,11 +801,13 @@ void ParseRules()
 				string vehicleID = fs_rules_data.GetString(Key, "VehicleTypes");
 				string name = GetUnitNameFromFile(vehicleID, &fs_rules_data);
 
-				unitContainer cont;
-				cont.unitID = vehicleID;
-				cont.name = name;
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = vehicleID;
+					cont.name = name;
 
-				vehiclenames[atoi(Key.c_str())] = cont;
+					vehiclenames[vehicleID] = cont;
+				}
 			}
 		}
 
@@ -781,11 +821,13 @@ void ParseRules()
 				string infID = fs_rules_data.GetString(Key, "InfantryTypes");
 				string name = GetUnitNameFromFile(infID, &fs_rules_data);
 
-				unitContainer cont;
-				cont.unitID = infID;
-				cont.name = name;
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = infID;
+					cont.name = name;
 
-				infantrynames[atoi(Key.c_str())] = cont;
+					infantrynames[infID] = cont;
+				}
 			}
 		}
 
@@ -798,12 +840,13 @@ void ParseRules()
 
 				string airID = fs_rules_data.GetString(Key, "AircraftTypes");
 				string name = GetUnitNameFromFile(airID, &fs_rules_data);
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = airID;
+					cont.name = name;
 
-				unitContainer cont;
-				cont.unitID = airID;
-				cont.name = name;
-
-				aircraftnames[atoi(Key.c_str())] = cont;
+					aircraftnames[airID] = cont;
+				}
 			}
 		}
 
@@ -821,5 +864,5 @@ string GetUnitNameFromFile(string unitID, CDataFile *file)
 		return file->GetString("Name", unitID);
 	}
 
-	return "";
+	return string("");
 }
