@@ -80,8 +80,6 @@ Trigger::~Trigger()
 	}
 	actions.clear();
 
-	stringstream line;
-	line << ID << "=" << house << "," << attachID << "," << name << "," << isDisabled << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
 	DeleteValueInBuffer("Triggers", ID);
 }
 

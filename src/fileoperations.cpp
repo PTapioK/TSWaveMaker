@@ -465,8 +465,6 @@ Taskforce* FindNewTaskforceFromFile(string taskforceID) {
 			if(Key == "Group") {
 				group = curdata.GetInt(Key, taskforceID);
 				nTaskforce->setGroup(group);
-
-				return nTaskforce;
 			} else if (Key == "Name") {
 				name = cur_line;
 				nTaskforce->setName(name);
@@ -480,6 +478,7 @@ Taskforce* FindNewTaskforceFromFile(string taskforceID) {
 				nTaskforce->NewLine(type, amount);
 			}
 		}
+		return nTaskforce;
 	}
 
 	return NULL;
@@ -506,8 +505,6 @@ Script *FindNewScriptFromFile(string scriptID) {
 			if(Key == "Name") {
 				name = cur_line;
 				nScript->setName(name);
-
-				return nScript;
 			} else {
 
 				string val = cur_line;
@@ -519,6 +516,7 @@ Script *FindNewScriptFromFile(string scriptID) {
 				nScript->NewLine(type, param);
 			}
 		}
+		return nScript;
 	}
 
 	return NULL;

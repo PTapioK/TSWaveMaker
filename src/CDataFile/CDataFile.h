@@ -36,7 +36,7 @@
 // Used simply as a max size of some internal buffers. Determines the maximum
 // length of a line that will be read from or written to the file or the
 // report output.
-#define MAX_BUFFER_LEN				512
+#define MAX_BUFFER_LEN				2048
 
 
 // eDebugLevel

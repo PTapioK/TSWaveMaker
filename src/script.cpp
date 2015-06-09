@@ -44,12 +44,30 @@ void Script::NewLine(short type, short param) {
 	ScriptLine *nLine = new ScriptLine();
 	nLine->param = param;
 	nLine->type = type;
-
 	nLine->ID = lineCounter;
 
 	slines.push_back(nLine);
 
 	++lineCounter;
+}
+
+void Script::InsertLine(short type, short param, short ID)
+{
+	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+		if((*IT)->ID >= ID) {
+			(*IT)->ID = (*IT)->ID + 1;
+		}
+	}
+
+	ScriptLine *nLine = new ScriptLine();
+	nLine->param = param;
+	nLine->type = type;
+	nLine->ID = ID;
+
+	slines.insert(slines.begin() + ID, nLine);
+
+	++lineCounter;
+
 }
 
 void Script::DeleteLine(short ID)

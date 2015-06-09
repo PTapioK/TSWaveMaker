@@ -12,6 +12,7 @@ public:
 	~Script();
 
 	void NewLine(short type, short param);
+	void InsertLine(short type, short param, short ID);
 	void DeleteLine(short ID);
 
 	void setName(string nName) { name = nName; }

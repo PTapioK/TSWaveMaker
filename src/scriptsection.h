@@ -27,6 +27,8 @@ private slots:
 
 	void on_SATargetBox_activated();
 
+	void Update_SATargetBox();
+
 	void on_CLastButton_clicked();
 
 	void on_newS_clicked();
@@ -52,6 +54,8 @@ private slots:
 	void on_farTarget_clicked();
 
 	void on_defaultTarget_clicked();
+
+	void on_newSA_Bef_clicked();
 
 	private:
 	Ui::ScriptSection *ui;

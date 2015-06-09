@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>750</width>
-    <height>310</height>
+    <height>340</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>750</width>
-    <height>310</height>
+    <height>340</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>750</width>
-    <height>310</height>
+    <height>340</height>
    </size>
   </property>
   <property name="floating">
@@ -57,7 +57,7 @@
       <x>10</x>
       <y>30</y>
       <width>111</width>
-      <height>251</height>
+      <height>281</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -139,190 +139,11 @@
      <string>Clone</string>
     </property>
    </widget>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>180</y>
-      <width>391</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Primary Flags</string>
-     </attribute>
-     <widget class="QCheckBox" name="isSuicde">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Suicide</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isLoadable">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Loadable</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isAreTeamMembersRecruitable">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>161</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>AreTeamMembersRecruitable</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isTransportsReturnOnUnload">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>10</y>
-        <width>151</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>TransportsReturnOnUnload</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isReinforce">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>30</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Reinforce</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isDroppod">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>50</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Droppod</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Secondary Flags</string>
-     </attribute>
-     <widget class="QCheckBox" name="isAutocreate">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>81</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Autocreate</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isOnlyTargetHouseEnemy">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>141</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>OnlyTargetHouseEnemy</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isAggressive">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>81</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Aggressive</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isFull">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>10</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Full</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isAvoidThreats">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>30</y>
-        <width>101</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>AvoidThreats</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="isIsBaseDefense">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>50</y>
-        <width>101</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>IsBaseDefense</string>
-      </property>
-     </widget>
-    </widget>
-   </widget>
    <widget class="QComboBox" name="scriptBox">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>30</y>
+      <x>275</x>
+      <y>50</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -336,10 +157,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>10</y>
-      <width>46</width>
-      <height>13</height>
+      <x>370</x>
+      <y>30</y>
+      <width>41</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -349,8 +170,8 @@
    <widget class="QComboBox" name="taskforceBox">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>90</y>
+      <x>275</x>
+      <y>110</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -364,10 +185,10 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>70</y>
-      <width>46</width>
-      <height>13</height>
+      <x>360</x>
+      <y>90</y>
+      <width>61</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
@@ -377,8 +198,8 @@
    <widget class="QPushButton" name="SAOButton">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>150</y>
+      <x>530</x>
+      <y>30</y>
       <width>201</width>
       <height>23</height>
      </rect>
@@ -390,8 +211,8 @@
    <widget class="QComboBox" name="AOSBox">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>200</y>
+      <x>540</x>
+      <y>80</y>
       <width>181</width>
       <height>22</height>
      </rect>
@@ -405,8 +226,8 @@
    <widget class="QComboBox" name="AOEBox">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>250</y>
+      <x>540</x>
+      <y>130</y>
       <width>181</width>
       <height>22</height>
      </rect>
@@ -421,7 +242,7 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>180</y>
+      <y>60</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -434,7 +255,7 @@
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>230</y>
+      <y>110</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -442,6 +263,279 @@
     <property name="text">
      <string>Ending to script</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>180</y>
+      <width>611</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Flags</string>
+    </property>
+    <widget class="QCheckBox" name="isAggressive">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Aggressive</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isRecruiter">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>20</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Recruiter</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isFull">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>40</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Full</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isAutocreate">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Autocreate</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isIsBaseDefense">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>100</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IsBaseDefense</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isSuicide">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>60</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Suicide</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isAreTeamMembersRecruitable">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>AreTeamMembersRecruitable</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isAnnoyance">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Annoyance</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isAvoidThreats">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>AvoidThreats</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isOnlyTargetHouseEnemy">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>60</y>
+       <width>141</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>OnlyTargetHouseEnemy</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isReinforce">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>40</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Reinforce</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isTransportsReturnOnUnload">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>80</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TransportsReturnOnUnload</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isIonImmune">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>80</y>
+       <width>81</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ion immune</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isDroppod">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Droppod</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isPrebuild">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>100</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Prebuild</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isLooseRecruit">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>40</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Loose recruit</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isGuardSlower">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>60</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Guard slower</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isLoadable">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>20</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Loadable</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isOnTransOnly">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>80</y>
+       <width>101</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>OnTransOnly</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="isWhiner">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>100</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Whiner</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

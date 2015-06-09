@@ -29,7 +29,7 @@ public:
 
 	void on_UnitList_itemSelectionChanged();
 
-	void on_UnitBox_currentIndexChanged();
+	void on_UnitBox_activated();
 
 	void on_UnitNumberBox_editingFinished();
 

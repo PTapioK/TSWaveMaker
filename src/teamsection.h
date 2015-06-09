@@ -36,8 +36,6 @@ private slots:
 
 	void on_SAOButton_clicked();
 
-	void on_isSuicde_clicked();
-
 	void on_isLoadable_clicked();
 
 	void on_isAreTeamMembersRecruitable_clicked();
@@ -60,7 +58,25 @@ private slots:
 
 	void on_isIsBaseDefense_clicked();
 
-private:
+	void on_isAnnoyance_clicked();
+
+	void on_isGuardSlower_clicked();
+
+	void on_isIonImmune_clicked();
+
+	void on_isLooseRecruit_clicked();
+
+	void on_isOnTransOnly_clicked();
+
+	void on_isPrebuild_clicked();
+
+	void on_isRecruiter_clicked();
+
+	void on_isSuicide_clicked();
+
+	void on_isWhiner_clicked();
+
+	private:
 	Ui::TeamSection *ui;
 };
 

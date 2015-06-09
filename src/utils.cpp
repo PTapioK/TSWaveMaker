@@ -665,6 +665,8 @@ void ClearContainers()
 	localvariables.clear();
 
 	waypoints.clear();
+
+	curdata.Clear();
 }
 
 

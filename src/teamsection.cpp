@@ -37,18 +37,26 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 
 		ui->TNameEdit->setText(ui->TeamList->selectedItems().last()->text());
 
-		ui->isSuicde->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->suicide);
-		ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->loadable);
-		ui->isAreTeamMembersRecruitable->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->areteammembersrecruitable);
-		ui->isAggressive->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->aggressive);
-		ui->isAutocreate->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->autocreate);
-		ui->isAvoidThreats->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->avoidthreats);
-		ui->isDroppod->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->droppod);
-		ui->isFull->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->full);
-		ui->isIsBaseDefense->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->isbasedefense);
-		ui->isOnlyTargetHouseEnemy->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->onlytargethousenemy);
-		ui->isReinforce->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->reinforce);
-		ui->isTransportsReturnOnUnload->setChecked(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->transportsreturnonunload);
+		ui->isSuicide->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->suicide);
+		ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->loadable);
+		ui->isAreTeamMembersRecruitable->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->areteammembersrecruitable);
+		ui->isAggressive->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->aggressive);
+		ui->isAutocreate->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->autocreate);
+		ui->isAvoidThreats->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->avoidthreats);
+		ui->isDroppod->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->droppod);
+		ui->isFull->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->full);
+		ui->isIsBaseDefense->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->isbasedefense);
+		ui->isOnlyTargetHouseEnemy->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->onlytargethousenemy);
+		ui->isReinforce->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->reinforce);
+		ui->isTransportsReturnOnUnload->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->transportsreturnonunload);
+		ui->isAnnoyance->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->annoyance);
+		ui->isGuardSlower->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->guardslower);
+		ui->isIonImmune->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->ionimmune);
+		ui->isLooseRecruit->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->looserecruit);
+		ui->isOnTransOnly->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->ontransonly);
+		ui->isPrebuild->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->prebuild);
+		ui->isRecruiter->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->recruiter);
+		ui->isWhiner->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->whiner);
 
 		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->scriptID).c_str()));
 		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->taskForceID).c_str()));
@@ -114,10 +122,10 @@ void TeamSection::on_Clone_clicked()
 	}
 }
 
-void TeamSection::on_isSuicde_clicked()
+void TeamSection::on_isSuicide_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->suicide = ui->isSuicde->isChecked();
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->suicide = ui->isSuicide->isChecked();
 	}
 }
 
@@ -188,6 +196,61 @@ void TeamSection::on_isIsBaseDefense_clicked()
 	}
 }
 
+void TeamSection::on_isAnnoyance_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->annoyance = ui->isAnnoyance->isChecked();
+	}
+}
+
+void TeamSection::on_isGuardSlower_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->guardslower = ui->isGuardSlower->isChecked();
+	}
+}
+
+void TeamSection::on_isIonImmune_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ionimmune = ui->isIonImmune->isChecked();
+	}
+}
+
+void TeamSection::on_isLooseRecruit_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->looserecruit = ui->isLooseRecruit->isChecked();
+	}
+}
+
+void TeamSection::on_isOnTransOnly_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ontransonly = ui->isOnTransOnly->isChecked();
+	}
+}
+
+void TeamSection::on_isPrebuild_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->prebuild = ui->isPrebuild->isChecked();
+	}
+}
+
+void TeamSection::on_isRecruiter_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->recruiter = ui->isRecruiter->isChecked();
+	}
+}
+
+void TeamSection::on_isWhiner_clicked()
+{
+	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->whiner = ui->isWhiner->isChecked();
+	}
+}
 
 // Script for teams
 void TeamSection::on_scriptBox_activated()

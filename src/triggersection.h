@@ -50,13 +50,21 @@ private slots:
 
 	void on_WPointAOButton_clicked();
 
-	void on_isReinforcementCheck_clicked();
-
 	void on_TeamAOButton_clicked();
 
 	void on_anyEventWave_clicked();
 
 	void on_isTimedWave_clicked();
+
+	void on_isCreateTeam_clicked();
+
+	void on_isReinforcement_clicked();
+
+	void on_isNukeStrike_clicked();
+
+	void on_isLose_clicked();
+
+	void on_isWin_clicked();
 
 	private:
 	Ui::TriggerSection *ui;

@@ -14,6 +14,7 @@ public:
 	string getID();
 	void setID(string nID);
 	string getTriggerID();
+	string getName() { return name; }
 
 	void Save();
 

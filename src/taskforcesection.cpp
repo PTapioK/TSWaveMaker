@@ -23,10 +23,8 @@ void TaskforceSection::on_TaskforceList_itemSelectionChanged()
 		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
 		ui->taskforceNameEdit->setText(ui->TaskforceList->selectedItems().last()->text());
 
-		int i = 0;
 		for(std::vector <Taskforce::TaskforceLine*>::iterator tlineIT = cur_taskforce->tlines.begin(); tlineIT != cur_taskforce->tlines.end(); ++tlineIT) {
-			ui->UnitList->addItem(IntToStr(i).c_str());
-			++i;
+			ui->UnitList->addItem(string(IntToStr((*tlineIT)->amount) + " " + GetUnitNameByUnitID((*tlineIT)->type)).c_str());
 		}
 	}
 }
@@ -104,7 +102,7 @@ void TaskforceSection::on_UnitList_itemSelectionChanged()
 	}
 }
 
-void TaskforceSection::on_UnitBox_currentIndexChanged()
+void TaskforceSection::on_UnitBox_activated()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0 && ui->UnitList->currentRow() != -1 && ui->UnitBox->currentIndex() != -1) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
@@ -113,6 +111,7 @@ void TaskforceSection::on_UnitBox_currentIndexChanged()
 			if(cur_taskforce->getLineAmount() >= rowNum+1) {
 				string newType = ui->UnitBox->currentText().toStdString();
 				cur_taskforce->tlines[rowNum]->type = newType.substr(1, newType.find("]")-1);
+				ui->UnitList->currentItem()->setText(string(IntToStr(cur_taskforce->tlines[rowNum]->amount) + " " + GetUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
 			}
 		}
 	}
@@ -126,6 +125,7 @@ void TaskforceSection::on_UnitNumberBox_editingFinished()
 			uint32_t rowNum = ui->UnitList->currentRow();
 			if(cur_taskforce->getLineAmount() >= rowNum+1) {
 				cur_taskforce->tlines[rowNum]->amount = ui->UnitNumberBox->value();
+				ui->UnitList->currentItem()->setText(string(IntToStr(cur_taskforce->tlines[rowNum]->amount) + " " + GetUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
 			}
 		}
 	}
@@ -139,7 +139,8 @@ void TaskforceSection::on_AddUnit_clicked()
 			cur_taskforce->NewLine("APACHE", 0);
 		}
 		string ID;
-		ID = IntToStr((*(GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString())->tlines.end()-1))->ID);
+		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
+		ID = IntToStr((*(cur_taskforce->tlines.end()-1))->amount) + " " + GetUnitNameByUnitID((*(cur_taskforce->tlines.end()-1))->type);
 		ui->UnitList->addItem(ID.c_str());
 	}
 }
@@ -157,8 +158,8 @@ void TaskforceSection::on_DeleteUnit_clicked()
 		}
 		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
 		ui->UnitList->clear();
-		for(std::vector <Taskforce::TaskforceLine*>::iterator IT = cur_taskforce->tlines.begin(); IT != cur_taskforce->tlines.end(); ++IT) {
-			ui->UnitList->addItem(IntToStr((*IT)->ID).c_str());
+		for(std::vector <Taskforce::TaskforceLine*>::iterator tlineIT = cur_taskforce->tlines.begin(); tlineIT != cur_taskforce->tlines.end(); ++tlineIT) {
+			ui->UnitList->addItem(string(IntToStr((*tlineIT)->amount) + " " + GetUnitNameByUnitID((*tlineIT)->type)).c_str());
 		}
 	}
 
@@ -181,5 +182,5 @@ void TaskforceSection::UpdateUi()
 	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
 		ui->UnitBox->addItem(string("["+IT->first+"] "+IT->second.name).c_str());
 	}
-	ui->UnitBox->view()->setMinimumWidth(200);
+	ui->UnitBox->view()->setMinimumWidth(220);
 }

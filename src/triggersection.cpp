@@ -8,6 +8,8 @@ TriggerSection::TriggerSection(QWidget *parent) :
 	ui->setupUi(this);
 
 	sWPoint = 8; // Starting waypoint for "Make waypoints grow in ascending order in all actions"
+
+	ui->isOtherAction->setVisible(false);
 }
 
 TriggerSection::~TriggerSection()
@@ -112,8 +114,9 @@ void TriggerSection::on_DeleteTrigger_clicked()
 		string ID = GetTriggerIDByName(name);
 		delete GetTriggerByName(name);
 		triggers.erase(ID);
-		delete tags[name + " 1"];
-		tags.erase(name + " 1");
+		string tagName = FindTag(ID)->getName();
+		delete FindTag(ID);
+		tags.erase(tagName);
 
 		delete ui->TriggerList->item(ui->TriggerList->currentRow());
 	}
@@ -256,39 +259,111 @@ void TriggerSection::on_ActionList_itemClicked()
 		ui->TeamtypeBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamtypeBox->font())+50);
 		ui->TeamAOBox->view()->setMinimumWidth(GetStringListMaxWidth(teamList, ui->TeamAOBox->font())+50);
 	}
-	if(ui->ActionList->currentRow() != -1) {
+	ui->TeamAOBox->setEnabled(false);
+	ui->TeamAOButton->setEnabled(false);
+	ui->TeamtypeBox->setEnabled(false);
+	ui->isOtherAction->setEnabled(true);
+	if(ui->ActionList->selectedItems().size() != 0) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		Action *cAct = cTrig->getAction(ui->ActionList->currentRow());
-		if(cAct->getType() == 80) {
-			ui->isReinforcementCheck->setChecked(true);
-			ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(GetTeamNameByID(cAct->getP2()).c_str()));
-		} else {
-			ui->isReinforcementCheck->setChecked(false);
+		switch(cAct->getType()) {
+			case 1:
+				if(atoi(cAct->getP2().c_str()) == 2)
+					ui->isLose->toggle();
+				break;
+			case 2:
+				if(atoi(cAct->getP2().c_str()) == 2)
+					ui->isWin->toggle();
+				break;
+			case 4:
+				ui->isCreateTeam->toggle();
+				ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(GetTeamNameByID(cAct->getP2()).c_str()));
+				ui->TeamAOBox->setEnabled(true);
+				ui->TeamAOButton->setEnabled(true);
+				ui->TeamtypeBox->setEnabled(true);
+				break;
+			case 80:
+				ui->isReinforcement->toggle();
+				ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(GetTeamNameByID(cAct->getP2()).c_str()));
+				ui->TeamAOBox->setEnabled(true);
+				ui->TeamAOButton->setEnabled(true);
+				ui->TeamtypeBox->setEnabled(true);
+				break;
+			case 95:
+				ui->isNukeStrike->toggle();
+				break;
+			default:
+				ui->isOtherAction->toggle();
 		}
+
 		stringstream wSS;
 		wSS << cAct->getWaypoint();
 		ui->WaypointBox->setEditText(wSS.str().c_str());
+	}
+}
 
-		ui->TeamAOBox->setEnabled(cAct->getType() == 80);
-		ui->TeamAOButton->setEnabled(cAct->getType() == 80);
-		ui->TeamtypeBox->setEnabled(cAct->getType() == 80);
-	} else {
-		ui->isReinforcementCheck->setChecked(false);
+// Is "create team" - action
+void TriggerSection::on_isCreateTeam_clicked()
+{
+	if(ui->ActionList->currentRow() != -1) {
+		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isCreateTeam->isChecked()) {
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(4);
+			}
+		}
 	}
 }
 
 // Is "reinforcement at waypoint" - action
-void TriggerSection::on_isReinforcementCheck_clicked()
+void TriggerSection::on_isReinforcement_clicked()
 {
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		if(ui->isReinforcementCheck->isChecked()) {
+		if(ui->isReinforcement->isChecked()) {
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(80);
 			}
-		} else {
+		}
+	}
+}
+
+// Is "nuke strike at waypoint" - action
+void TriggerSection::on_isNukeStrike_clicked()
+{
+	if(ui->ActionList->currentRow() != -1) {
+		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isNukeStrike->isChecked()) {
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(0);
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(95);
+			}
+		}
+	}
+}
+
+// Is "lose" - action
+void TriggerSection::on_isLose_clicked()
+{
+	if(ui->ActionList->currentRow() != -1) {
+		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isLose->isChecked()) {
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(1);
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(2);
+			}
+		}
+	}
+}
+
+// Is "win" - action
+void TriggerSection::on_isWin_clicked()
+{
+	if(ui->ActionList->currentRow() != -1) {
+		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
+		if(ui->isWin->isChecked()) {
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(2);
+				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(2);
 			}
 		}
 	}
@@ -434,4 +509,3 @@ void TriggerSection::UpdateUi() {
 		ui->TriggerList->addItem(IT->second->getName());
 	}
 }
-

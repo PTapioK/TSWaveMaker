@@ -80,7 +80,6 @@ void MainWindow::SaveFile() {
 		return;
 	}
 	curdata.SetFileName(cur_file);
-	curdata.Load(cur_file);
 	SaveAllToBuffer();
 	curdata.Save();
 }
