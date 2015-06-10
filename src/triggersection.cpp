@@ -20,8 +20,8 @@ TriggerSection::~TriggerSection()
 
 void TriggerSection::on_TriggerList_itemSelectionChanged()
 {
-	ui->TimerSetLabel->setText("Not set");
 	ui->WaveTimer->setTime(QTime(0, 0, 0));
+	ui->WaveTimer->setTime(QTime(-1, -1));
 
 	clearActionList();
 	if(ui->TriggerList->currentRow() != -1) {
@@ -41,7 +41,6 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 			QTime time(0, 0, 0);
 			time = time.addSecs(secs);
 			ui->WaveTimer->setTime(time);
-			ui->TimerSetLabel->setText("Set");
 		}
 
 		int i = 0;
@@ -82,19 +81,20 @@ void TriggerSection::on_NewTrigger_clicked()
 		triggers[nID] = new Trigger(nID, name);
 		tags[name + " 1"] = new Tag(name + " 1", triggers[nID]->getID());
 	}
-	UpdateUi();
 }
 
 // Edit trigger name
 void TriggerSection::on_EditTriggerName_clicked()
 {
-	if(ui->TriggerList->findItems(ui->NEdit->text(), Qt::MatchExactly).count() == 0) {
-		string cur_name = ui->TriggerList->currentItem()->text().toStdString();
-		string cur_ID = GetTriggerIDByName(cur_name);
+	if(ui->TriggerList->currentRow() != -1) {
+		if(ui->TriggerList->findItems(ui->NEdit->text(), Qt::MatchExactly).count() == 0) {
+			string cur_name = ui->TriggerList->currentItem()->text().toStdString();
+			string cur_ID = GetTriggerIDByName(cur_name);
 
-		triggers[cur_ID]->setName(ui->NEdit->text().toStdString());
+			triggers[cur_ID]->setName(ui->NEdit->text().toStdString());
 
-		ui->TriggerList->currentItem()->setText(ui->NEdit->text());
+			ui->TriggerList->currentItem()->setText(ui->NEdit->text());
+		}
 	}
 }
 
@@ -143,7 +143,6 @@ void TriggerSection::on_CloneTrigger_clicked()
 		tags[newName + " 1"] = new Tag(cTag, triggers[newID]->getID());
 		tags[newName + " 1"]->setName(newName + " 1");
 	}
-	UpdateUi();
 }
 
 void TriggerSection::on_WaveTimer_editingFinished()
@@ -161,8 +160,6 @@ void TriggerSection::on_WaveTimer_editingFinished()
 		} else {
 			cur_trig->getActionByType(27)->editP2(secs);
 		}
-
-		ui->TimerSetLabel->setText("Set");
 
 		ui->ActionList->clear();
 		int i = 0;

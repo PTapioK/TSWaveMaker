@@ -6,6 +6,7 @@ InfoDialog::InfoDialog(QWidget *parent) :
 	ui(new Ui::InfoDialog)
 {
 	ui->setupUi(this);
+	ui->gitBuild->setText(GIT_VERSION);
 }
 
 InfoDialog::~InfoDialog()

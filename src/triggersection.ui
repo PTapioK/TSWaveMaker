@@ -243,7 +243,7 @@
       <x>280</x>
       <y>30</y>
       <width>111</width>
-      <height>271</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -305,7 +305,7 @@
       <x>150</x>
       <y>189</y>
       <width>120</width>
-      <height>91</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -358,108 +358,18 @@ expired</string>
       <x>400</x>
       <y>130</y>
       <width>291</width>
-      <height>171</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="title">
-     <string>Action settings</string>
+     <string>Current action settings</string>
     </property>
-    <widget class="QPushButton" name="WPointAOButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>271</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Make target waypoints grow in ascending order</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="SWPointLabel">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>110</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Starting from waypoint:</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="SWaypointBox">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>110</y>
-       <width>41</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhPreferNumbers</set>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <property name="maxCount">
-      <number>99</number>
-     </property>
-    </widget>
-    <widget class="QTimeEdit" name="WaveTimer">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>140</y>
-       <width>118</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="displayFormat">
-      <string>mm:ss</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="TimerSetLabel">
-     <property name="geometry">
-      <rect>
-       <x>245</x>
-       <y>140</y>
-       <width>51</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Not set</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="TALALabel">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>140</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Time to next wave:</string>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
     <widget class="QLabel" name="WPointLabel">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>91</width>
+       <x>10</x>
+       <y>20</y>
+       <width>131</width>
        <height>21</height>
       </rect>
      </property>
@@ -470,8 +380,8 @@ expired</string>
     <widget class="QComboBox" name="WaypointBox">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>50</y>
+       <x>100</x>
+       <y>20</y>
        <width>41</width>
        <height>20</height>
       </rect>
@@ -498,27 +408,26 @@ expired</string>
       <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
      </property>
     </widget>
-    <widget class="QRadioButton" name="isReinforcement">
+    <widget class="QRadioButton" name="isOtherAction">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>10</y>
+       <x>270</x>
+       <y>140</y>
        <width>91</width>
-       <height>31</height>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>Reinforcement 
-at waypoint</string>
+      <string>Other action</string>
      </property>
     </widget>
     <widget class="QRadioButton" name="isNukeStrike">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>10</y>
+       <x>10</x>
+       <y>50</y>
        <width>91</width>
-       <height>31</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -526,24 +435,11 @@ at waypoint</string>
 at waypoint</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="isCreateTeam">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Create team</string>
-     </property>
-    </widget>
     <widget class="QRadioButton" name="isLose">
      <property name="geometry">
       <rect>
-       <x>171</x>
-       <y>50</y>
+       <x>200</x>
+       <y>20</y>
        <width>51</width>
        <height>20</height>
       </rect>
@@ -555,8 +451,8 @@ at waypoint</string>
     <widget class="QRadioButton" name="isWin">
      <property name="geometry">
       <rect>
-       <x>231</x>
-       <y>50</y>
+       <x>200</x>
+       <y>40</y>
        <width>51</width>
        <height>20</height>
       </rect>
@@ -565,19 +461,110 @@ at waypoint</string>
       <string>Win</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="isOtherAction">
+    <widget class="QRadioButton" name="isReinforcement">
      <property name="geometry">
       <rect>
-       <x>191</x>
-       <y>110</y>
+       <x>100</x>
+       <y>50</y>
        <width>91</width>
-       <height>20</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
-      <string>Other action</string>
+      <string>Reinforcement 
+at waypoint</string>
      </property>
     </widget>
+    <widget class="QRadioButton" name="isCreateTeam">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>60</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Create team</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="WPointAOButton">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>230</y>
+      <width>271</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Make target waypoints grow in ascending order</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TALALabel">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>283</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Time to next wave:</string>
+    </property>
+    <property name="wordWrap">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QTimeEdit" name="WaveTimer">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>283</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="displayFormat">
+     <string>mm:ss</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="SWPointLabel">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>260</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Starting from waypoint:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="SWaypointBox">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>260</y>
+      <width>41</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhPreferNumbers</set>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="maxCount">
+     <number>99</number>
+    </property>
    </widget>
    <zorder>NEdit</zorder>
    <zorder>CloneTrigger</zorder>
@@ -600,6 +587,11 @@ at waypoint</string>
    <zorder>TeamAOBox</zorder>
    <zorder>label</zorder>
    <zorder>groupBox_3</zorder>
+   <zorder>WPointAOButton</zorder>
+   <zorder>TALALabel</zorder>
+   <zorder>WaveTimer</zorder>
+   <zorder>SWPointLabel</zorder>
+   <zorder>SWaypointBox</zorder>
   </widget>
  </widget>
  <resources/>

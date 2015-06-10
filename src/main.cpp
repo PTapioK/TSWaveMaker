@@ -1,7 +1,6 @@
 #include "main.h"
 #include "mainwindow.h"
 
-
 int main(int argc, char *argv[])
 {
 	curdata.m_Flags |= AUTOCREATE_KEYS;

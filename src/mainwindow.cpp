@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->setupUi(this);
 
+	this->setWindowTitle(tr("TSWaveMaker ") + tr(VERSION) + tr(" version"));
+
 	connect(ui->actionNew_file, SIGNAL(triggered()), this, SLOT(NewFile()));
 	connect(ui->actionOpen_file, SIGNAL(triggered()), this, SLOT(OpenFile()));
 	connect(ui->actionSave_file, SIGNAL(triggered()), this, SLOT(SaveFile()));
