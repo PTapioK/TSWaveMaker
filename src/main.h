@@ -13,8 +13,9 @@
 #include <QtDebug>
 #include <map>
 #include <sstream>
-#include <cstdio>
-#include <cstdint>
+#include <stdio.h>
+#include <stdint.h>
+#include <math.h>
 #include <vector>
 #include <algorithm>
 
@@ -74,5 +75,7 @@ const char alphas[26] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N
 
 #include "fileoperations.h"
 #include "utils.h"
+
+#define CAPTIONBASE (tr("TSWaveMaker ") + tr(VERSION) + tr(" version"))
 
 #endif // MAIN_H

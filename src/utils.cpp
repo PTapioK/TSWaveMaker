@@ -343,7 +343,7 @@ QString GetScriptActionMeaning(uint8_t ID) {
 	case 7:
 		return "Player wins";
 	case 8:
-		return "Transport releases freight";
+		return "Unload transports";
 	case 9:
 		return "Deploy";
 	case 10:
@@ -678,6 +678,8 @@ void LoadSettings(bool ask)
 	cloneOfNaming = settings_data.GetBool("cloneOfNaming");
 	ascNumNaming  = settings_data.GetBool("increaseNumberNaming");
 	alphabetNaming = settings_data.GetBool("alphabetsInOrderNaming");
+
+	last_path = settings_data.GetString("last_path");
 
 	if(ask) {
 		if(ts_rules_path.empty()) {

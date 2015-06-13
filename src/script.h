@@ -13,7 +13,7 @@ public:
 
 	void NewLine(short type, short param);
 	void InsertLine(short type, short param, short ID);
-	void DeleteLine(short ID);
+	void DeleteLine(short lineID);
 
 	void setName(string nName) { name = nName; }
 

@@ -14,6 +14,8 @@ struct variableContainer {
 		string name;
 };
 
+extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
+
 extern const std::string settings_ini;
 extern CDataFile settings_data;
 
@@ -22,6 +24,8 @@ extern CDataFile curdata;
 
 extern std::string ts_rules;
 extern std::string fs_rules;
+
+extern std::string last_path;
 
 extern std::map <std::string, Trigger*> triggers;
 extern std::map <std::string, Tag*> tags;
@@ -41,8 +45,6 @@ extern std::map <uint16_t, variableContainer> localvariables;
 extern std::map <uint16_t, variableContainer> globalvariables;
 
 extern std::vector <int32_t> waypoints;
-
-extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
 
 typedef std::map <std::string, Trigger*>::iterator triggerIT;
 typedef std::map <std::string, Tag*>::iterator tagIT;

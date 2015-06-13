@@ -369,13 +369,15 @@ void ScriptSection::on_delS_clicked()
 // Edit script mame
 void ScriptSection::on_editSN_clicked()
 {
-	if(ui->ScriptList->findItems(ui->SNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string cur_name = ui->ScriptList->selectedItems().last()->text().toStdString();
-		string cur_ID = GetScriptIDByName(cur_name);
+	if(ui->ScriptList->selectedItems().size() != 0) {
+		if(ui->ScriptList->findItems(ui->SNameEdit->text(), Qt::MatchExactly).count() == 0) {
+			string cur_name = ui->ScriptList->selectedItems().last()->text().toStdString();
+			string cur_ID = GetScriptIDByName(cur_name);
 
-		scripts[cur_ID]->setName(ui->SNameEdit->text().toStdString());
+			scripts[cur_ID]->setName(ui->SNameEdit->text().toStdString());
 
-		ui->ScriptList->selectedItems().last()->setText(ui->SNameEdit->text());
+			ui->ScriptList->selectedItems().last()->setText(ui->SNameEdit->text());
+		}
 	}
 }
 
@@ -416,17 +418,19 @@ void ScriptSection::on_newSA_clicked()
 // New script action before current action
 void ScriptSection::on_newSA_Bef_clicked()
 {
-	uint32_t rowNum = ui->ScriptActionList->currentRow();
-	for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
-		if(cur_script->getLineAmount() >= rowNum) {
-			cur_script->InsertLine(0, 0, rowNum);
+	if(ui->ScriptActionList->currentRow() != -1) {
+		uint32_t rowNum = ui->ScriptActionList->currentRow();
+		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
+			Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			if(cur_script->getLineAmount() >= rowNum) {
+				cur_script->InsertLine(0, 0, rowNum);
+			}
 		}
-	}
-	Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
-	ui->ScriptActionList->clear();
-	for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->slines.begin(); IT != cur_script->slines.end(); ++IT) {
-		ui->ScriptActionList->addItem(IntToStr((*IT)->ID).c_str());
+		Script *cur_script = GetScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
+		ui->ScriptActionList->clear();
+		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->slines.begin(); IT != cur_script->slines.end(); ++IT) {
+			ui->ScriptActionList->addItem(IntToStr((*IT)->ID).c_str());
+		}
 	}
 }
 

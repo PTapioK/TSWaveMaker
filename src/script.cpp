@@ -70,11 +70,11 @@ void Script::InsertLine(short type, short param, short ID)
 
 }
 
-void Script::DeleteLine(short ID)
+void Script::DeleteLine(short lineID)
 {
 
 	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
-		if((*IT)->ID == ID) {
+		if((*IT)->ID == lineID) {
 			delete (*IT);
 			slines.erase(IT);
 			break;
@@ -87,7 +87,7 @@ void Script::DeleteLine(short ID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-
+	DeleteValueInBuffer(ID, IntToStr(lineID));
 }
 
 void Script::Save()

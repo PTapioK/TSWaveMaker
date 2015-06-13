@@ -761,6 +761,7 @@ void ParseRules()
 
 	}
 
+	ts_rules_data.Clear();
 	ts_rules_data.~CDataFile();
 
 	// Tiberian Sun Firestorm rules
@@ -848,10 +849,10 @@ void ParseRules()
 			}
 		}
 
+		fs_rules_data.Clear();
+		fs_rules_data.~CDataFile();
+
 	}
-
-	fs_rules_data.~CDataFile();
-
 }
 
 

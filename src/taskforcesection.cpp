@@ -57,13 +57,15 @@ void TaskforceSection::on_DeleteTaskforce_clicked()
 // Edit taskforce name
 void TaskforceSection::on_editTaskforceName_clicked()
 {
-	if(ui->TaskforceList->findItems(ui->taskforceNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string cur_name = ui->TaskforceList->selectedItems().last()->text().toStdString();
-		string cur_ID = GetTaskforceIDByName(cur_name);
+	if(ui->TaskforceList->selectedItems().size() != 0) {
+		if(ui->TaskforceList->findItems(ui->taskforceNameEdit->text(), Qt::MatchExactly).count() == 0) {
+			string cur_name = ui->TaskforceList->selectedItems().last()->text().toStdString();
+			string cur_ID = GetTaskforceIDByName(cur_name);
 
-		taskforces[cur_ID]->setName(ui->taskforceNameEdit->text().toStdString());
+			taskforces[cur_ID]->setName(ui->taskforceNameEdit->text().toStdString());
 
-		ui->TaskforceList->selectedItems().last()->setText(ui->taskforceNameEdit->text());
+			ui->TaskforceList->selectedItems().last()->setText(ui->taskforceNameEdit->text());
+		}
 	}
 }
 

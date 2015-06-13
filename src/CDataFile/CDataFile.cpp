@@ -66,7 +66,7 @@ CDataFile::CDataFile(t_Str szFileName)
 	m_bDirty = false;
 	m_szFileName = szFileName;
 	m_Flags = (AUTOCREATE_SECTIONS | AUTOCREATE_KEYS);
-	m_Sections.push_back( *(new t_Section) );
+	m_Sections.push_back( (new t_Section) );
 
 	Load(m_szFileName);
 }
@@ -75,7 +75,7 @@ CDataFile::CDataFile()
 {
 	Clear();
 	m_Flags = (AUTOCREATE_SECTIONS | AUTOCREATE_KEYS);
-	m_Sections.push_back( *(new t_Section) );
+	m_Sections.push_back( (new t_Section) );
 }
 
 // ~CDataFile
@@ -90,6 +90,9 @@ CDataFile::~CDataFile()
 // Resets the member variables to their defaults
 void CDataFile::Clear()
 {
+	for(SectionItor secIT = m_Sections.begin(); secIT != m_Sections.end(); ++secIT) {
+		delete *secIT;
+	}
 	m_bDirty = false;
 	m_szFileName = t_Str("");
 	m_Sections.clear();
@@ -120,7 +123,7 @@ bool CDataFile::Load(t_Str szFileName)
 	m_szFileName = szFileName;
 	// We dont want to create a new file here.  If it doesn't exist, just
 	// return false and report the failure.
-	fstream File(szFileName.c_str(), ios::in|ios::_Nocreate);
+	fstream File(szFileName.c_str(), ios::in);
 
 	if ( File.is_open() )
 	{
@@ -130,7 +133,7 @@ bool CDataFile::Load(t_Str szFileName)
 		
 		t_Str szLine;
 		t_Str szComment;
-		char buffer[MAX_BUFFER_LEN]; 
+		char buffer[MAX_BUFFER_LEN];
 		t_Section* pSection = GetSection("");
 
 		// These need to be set, we'll restore the original values later.
@@ -222,7 +225,7 @@ bool CDataFile::Save()
 	{
 		SectionItor s_pos;
 		KeyItor k_pos;
-		t_Section Section;
+		t_Section *Section;
 		t_Key Key;
 
 		for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
@@ -230,20 +233,20 @@ bool CDataFile::Save()
 			Section = (*s_pos);
 			bool bWroteComment = false;
 
-			if ( Section.szComment.size() > 0 )
+			if ( Section->szComment.size() > 0 )
 			{
 				bWroteComment = true;
-				WriteLn(File, "\n%s", CommentStr(Section.szComment).c_str());
+				WriteLn(File, "\n%s", CommentStr(Section->szComment).c_str());
 			}
 
-			if ( Section.szName.size() > 0 )
+			if ( Section->szName.size() > 0 )
 			{
 				WriteLn(File, "%s[%s]", 
 						bWroteComment ? "" : "\n", 
-						Section.szName.c_str());
+						Section->szName.c_str());
 			}
 
-			for (k_pos = Section.Keys.begin(); k_pos != Section.Keys.end(); k_pos++)
+			for (k_pos = Section->Keys.begin(); k_pos != Section->Keys.end(); k_pos++)
 			{
 				Key = (*k_pos);
 
@@ -308,9 +311,9 @@ bool CDataFile::SetSectionComment(t_Str szSection, t_Str szComment)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
+		if ( CompareCase( (*s_pos)->szName, szSection ) == 0 )
 		{
-		    (*s_pos).szComment = szComment;
+			(*s_pos)->szComment = szComment;
 			m_bDirty = true;
 			return true;
 		}
@@ -472,7 +475,7 @@ bool CDataFile::DeleteSection(t_Str szSection)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
+		if ( CompareCase( (*s_pos)->szName, szSection ) == 0 )
 		{
 			m_Sections.erase(s_pos);
 			return true;
@@ -545,7 +548,7 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment)
 
 	pSection->szName = szSection;
 	pSection->szComment = szComment;
-	m_Sections.push_back(*pSection);
+	m_Sections.push_back(pSection);
 	m_bDirty = true;
 
 	return true;
@@ -580,7 +583,7 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment, KeyList Keys)
 		pSection->Keys.push_back(*pKey);
 	}
 
-	m_Sections.push_back(*pSection);
+	m_Sections.push_back(pSection);
 	m_bDirty = true;
 
 	return true;
@@ -601,7 +604,7 @@ int CDataFile::KeyCount()
 	SectionItor s_pos;
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
-		nCounter += (*s_pos).Keys.size();
+		nCounter += (*s_pos)->Keys.size();
 
 	return nCounter;
 }
@@ -642,8 +645,8 @@ t_Section* CDataFile::GetSection(t_Str szSection)
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
 	{
-		if ( CompareCase( (*s_pos).szName, szSection ) == 0 )
-			return (t_Section*)&(*s_pos);
+		if ( CompareCase( (*s_pos)->szName, szSection ) == 0 )
+			return (*s_pos);
 	}
 
 	return NULL;

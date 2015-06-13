@@ -9,6 +9,8 @@ CDataFile curdata;
 string ts_rules;
 string fs_rules;
 
+string last_path = ".";
+
 map <string, Trigger*> triggers;
 map <string, Tag*> tags;
 map <string, Team*> teams;

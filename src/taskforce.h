@@ -14,7 +14,7 @@ public:
 	std::string getID() { return ID; }
 
 	void NewLine(string type, short amount);
-	void DeleteLine(short ID);
+	void DeleteLine(short lineID);
 
 	void setGroup(int32_t nGroup) { group = nGroup; }
 	void setName(string nName) { name = nName; }

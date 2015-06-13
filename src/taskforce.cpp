@@ -56,10 +56,10 @@ void Taskforce::NewLine(string type, short amount)
 	++lineCounter;
 }
 
-void Taskforce::DeleteLine(short ID)
+void Taskforce::DeleteLine(short lineID)
 {
 	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
-		if((*IT)->ID == ID) {
+		if((*IT)->ID == lineID) {
 			delete (*IT);
 			tlines.erase(IT);
 			break;
@@ -72,6 +72,7 @@ void Taskforce::DeleteLine(short ID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
+	DeleteValueInBuffer(ID, IntToStr(lineID));
 }
 
 void Taskforce::Save()
