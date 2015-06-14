@@ -305,6 +305,9 @@ void TriggerSection::on_isCreateTeam_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		if(ui->isCreateTeam->isChecked()) {
+			ui->TeamAOBox->setEnabled(true);
+			ui->TeamAOButton->setEnabled(true);
+			ui->TeamtypeBox->setEnabled(true);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(4);
 			}
@@ -318,6 +321,9 @@ void TriggerSection::on_isReinforcement_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		if(ui->isReinforcement->isChecked()) {
+			ui->TeamAOBox->setEnabled(true);
+			ui->TeamAOButton->setEnabled(true);
+			ui->TeamtypeBox->setEnabled(true);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(80);
 			}
@@ -331,6 +337,9 @@ void TriggerSection::on_isNukeStrike_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		if(ui->isNukeStrike->isChecked()) {
+			ui->TeamAOBox->setEnabled(false);
+			ui->TeamAOButton->setEnabled(false);
+			ui->TeamtypeBox->setEnabled(false);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(95);
 			}
@@ -344,6 +353,9 @@ void TriggerSection::on_isLose_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		if(ui->isLose->isChecked()) {
+			ui->TeamAOBox->setEnabled(false);
+			ui->TeamAOButton->setEnabled(false);
+			ui->TeamtypeBox->setEnabled(false);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(1);
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(2);
@@ -358,6 +370,9 @@ void TriggerSection::on_isWin_clicked()
 	if(ui->ActionList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		if(ui->isWin->isChecked()) {
+			ui->TeamAOBox->setEnabled(false);
+			ui->TeamAOButton->setEnabled(false);
+			ui->TeamtypeBox->setEnabled(false);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(2);
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(2);
