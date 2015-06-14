@@ -35,7 +35,7 @@
    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
   </property>
   <property name="windowTitle">
-   <string>TriggerSection</string>
+   <string>Trigger Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QLineEdit" name="NEdit">
