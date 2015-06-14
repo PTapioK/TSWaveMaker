@@ -38,8 +38,8 @@ void SettingsDialog::on_firestrmFind_clicked()
 
 void SettingsDialog::on_saveButton_clicked()
 {
-	settings_data.SetValue("rules_path", ui->rulesFileEdit->text().toStdString());
-	settings_data.SetValue("firestrm_path", ui->firestrmEdit->text().toStdString());
+	settings_data.SetValue("rulesPath", ui->rulesFileEdit->text().toStdString(), "", "rules");
+	settings_data.SetValue("firestrmPath", ui->firestrmEdit->text().toStdString(), "", "rules");
 
 	settings_data.SetBool("cloneOfNaming", ui->cloneOfBox->isChecked());
 	settings_data.SetBool("increaseNumberNaming", ui->ascNumBox->isChecked());

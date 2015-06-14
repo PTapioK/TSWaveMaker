@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-	settings_data.SetValue("last_path", last_path);
+	settings_data.SetValue("lastUsedPath", last_path);
 	settings_data.Save();
 	delete ui;
 }

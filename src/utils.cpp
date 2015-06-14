@@ -672,14 +672,14 @@ void ClearContainers()
 
 void LoadSettings(bool ask)
 {
-	string ts_rules_path = settings_data.GetString("rules_path");
-	string fs_rules_path = settings_data.GetString("firestrm_path");
+	string ts_rules_path = settings_data.GetString("rulesPath", "rules");
+	string fs_rules_path = settings_data.GetString("firestrmPath", "rules");
 
 	cloneOfNaming = settings_data.GetBool("cloneOfNaming");
 	ascNumNaming  = settings_data.GetBool("increaseNumberNaming");
 	alphabetNaming = settings_data.GetBool("alphabetsInOrderNaming");
 
-	last_path = settings_data.GetString("last_path");
+	last_path = settings_data.GetString("lastUsedPath");
 
 	if(ask) {
 		if(ts_rules_path.empty()) {
@@ -694,8 +694,8 @@ void LoadSettings(bool ask)
 		}
 	}
 
-	settings_data.SetValue("rules_path", ts_rules_path);
-	settings_data.SetValue("firestrm_path", fs_rules_path);
+	settings_data.SetValue("rulesPath", ts_rules_path, "", "rules");
+	settings_data.SetValue("firestrmPath", fs_rules_path, "", "rules");
 
 	ts_rules = ts_rules_path + "/rules.ini";
 	fs_rules = fs_rules_path + "/firestrm.ini";
