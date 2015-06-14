@@ -500,7 +500,7 @@ Script *FindNewScriptFromFile(string scriptID) {
 			string cur_line = curdata.GetString(Key, scriptID);
 
 			short type = 0;
-			short param = 0;
+			int param = 0;
 
 			if(Key == "Name") {
 				name = cur_line;

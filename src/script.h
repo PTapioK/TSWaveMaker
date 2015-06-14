@@ -11,7 +11,7 @@ public:
 	Script(string nID, Script *cS);
 	~Script();
 
-	void NewLine(short type, short param);
+	void NewLine(short type, int param);
 	void InsertLine(short type, short param, short ID);
 	void DeleteLine(short lineID);
 

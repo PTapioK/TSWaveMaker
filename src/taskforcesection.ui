@@ -70,9 +70,9 @@
    <widget class="QPushButton" name="NewTaskforce">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>60</y>
-      <width>81</width>
+      <width>101</width>
       <height>23</height>
      </rect>
     </property>
@@ -83,9 +83,9 @@
    <widget class="QPushButton" name="DeleteTaskforce">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>90</y>
-      <width>81</width>
+      <width>101</width>
       <height>23</height>
      </rect>
     </property>
@@ -191,9 +191,9 @@
    <widget class="QPushButton" name="cloneTaskforce">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>150</y>
-      <width>81</width>
+      <width>101</width>
       <height>23</height>
      </rect>
     </property>
@@ -204,9 +204,9 @@
    <widget class="QPushButton" name="editTaskforceName">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>240</x>
       <y>120</y>
-      <width>81</width>
+      <width>101</width>
       <height>23</height>
      </rect>
     </property>
