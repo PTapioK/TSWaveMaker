@@ -242,7 +242,7 @@ void TriggerSection::on_CloneAction_clicked()
 	}
 }
 
-void TriggerSection::on_ActionList_itemClicked()
+void TriggerSection::on_ActionList_itemSelectionChanged()
 {
 	ui->TeamtypeBox->clear();
 	ui->TeamAOBox->clear();

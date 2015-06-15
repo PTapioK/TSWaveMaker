@@ -40,8 +40,6 @@ private slots:
 
 	void on_CloneAction_clicked();
 
-	void on_ActionList_itemClicked();
-
 	void on_WaypointBox_currentIndexChanged();
 
 	void on_SWaypointBox_currentIndexChanged();
@@ -65,6 +63,8 @@ private slots:
 	void on_isLose_clicked();
 
 	void on_isWin_clicked();
+
+	void on_ActionList_itemSelectionChanged();
 
 	private:
 	Ui::TriggerSection *ui;
