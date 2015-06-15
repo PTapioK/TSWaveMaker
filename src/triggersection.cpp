@@ -262,7 +262,7 @@ void TriggerSection::on_ActionList_itemSelectionChanged()
 	ui->isOtherAction->setEnabled(true);
 	if(ui->ActionList->selectedItems().size() != 0) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		Action *cAct = cTrig->getAction(ui->ActionList->currentRow());
+		Action *cAct = cTrig->getAction(ui->ActionList->selectedItems().indexOf(ui->ActionList->selectedItems().last()));
 		switch(cAct->getType()) {
 			case 1:
 				if(atoi(cAct->getP2().c_str()) == 2)

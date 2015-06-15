@@ -58,8 +58,8 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 		ui->isRecruiter->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->recruiter);
 		ui->isWhiner->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->whiner);
 
-		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->scriptID).c_str()));
-		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->currentItem()->text().toStdString())->taskForceID).c_str()));
+		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->scriptID).c_str()));
+		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->taskForceID).c_str()));
 	}
 }
 
