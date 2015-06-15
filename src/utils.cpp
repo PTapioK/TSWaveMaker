@@ -118,6 +118,18 @@ string DecToWaypointID(int dec) {
 	return retVal;
 }
 
+string ConvertToSmallAlphas(int32_t dec)
+{
+	string retVal;
+	dec=dec+1;
+	while(dec != 0) {
+		--dec;
+		retVal = small_alphas[dec % 26] + retVal;
+		dec /= 26;
+	}
+	return retVal;
+}
+
 string GetTriggerNameByID(string trigID) {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getID() == trigID) {
@@ -729,6 +741,20 @@ string GetNameWithNextMark(string name, int iter)
 			if(name.find(ss.str()) != string::npos) {
 				name.replace(name.find(ss.str()), ss.str().length(), string(" ") + DecToWaypointID(i + iter + 1));
 				break;
+			} else if(*(name.end()-1) == alphas[i]) {
+				name.replace(name.length()-1, sizeof(char), DecToWaypointID(i + iter + 1));
+				break;
+			}
+		}
+		for(int i = 0; i != 26; ++i) {
+			stringstream ss("");
+			ss << " " << small_alphas[i];
+			if(name.find(ss.str()) != string::npos) {
+				name.replace(name.find(ss.str()), ss.str().length(), string(" ") + ConvertToSmallAlphas(i + iter + 1));
+				break;
+			} else if(*(name.end()-1) == small_alphas[i]) {
+				name.replace(name.length()-1, sizeof(char), ConvertToSmallAlphas(i + iter + 1));
+				break;
 			}
 		}
 	}
@@ -770,3 +796,4 @@ string GetUnitNameByUnitID(string unitID)
 	}
 	return string("");
 }
+
