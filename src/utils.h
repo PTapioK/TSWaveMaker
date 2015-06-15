@@ -7,6 +7,7 @@ extern std::string fffID();
 extern bool isFirstTrigger(string ID);
 extern Tag* FindTag(string trigID);
 extern string DecToWaypointID(int32_t dec);
+extern string ConvertToSmallAlphas(int32_t dec);
 extern string GetTriggerNameByID(string trigID);
 extern int32_t WaypointIDToDec(string wID);
 extern bool ConvertToBool(string str);
