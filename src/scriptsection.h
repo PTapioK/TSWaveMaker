@@ -57,6 +57,8 @@ private slots:
 
 	void on_newSA_Bef_clicked();
 
+	void mousePressEvent(QMouseEvent *event);
+
 	private:
 	Ui::ScriptSection *ui;
 };

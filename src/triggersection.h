@@ -66,6 +66,8 @@ private slots:
 
 	void on_ActionList_itemSelectionChanged();
 
+	void mousePressEvent(QMouseEvent *event);
+
 	private:
 	Ui::TriggerSection *ui;
 

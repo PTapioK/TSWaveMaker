@@ -76,6 +76,8 @@ private slots:
 
 	void on_isWhiner_clicked();
 
+	void mousePressEvent(QMouseEvent *event);
+
 	private:
 	Ui::TeamSection *ui;
 };

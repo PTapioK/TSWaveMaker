@@ -167,6 +167,12 @@ void TaskforceSection::on_DeleteUnit_clicked()
 
 }
 
+void TaskforceSection::mousePressEvent(QMouseEvent *event)
+{
+	event->accept();
+	ui->TaskforceList->clearSelection();
+}
+
 void TaskforceSection::UpdateUi()
 {
 	ui->TaskforceList->clearSelection();

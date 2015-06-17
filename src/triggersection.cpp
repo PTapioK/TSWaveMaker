@@ -299,6 +299,12 @@ void TriggerSection::on_ActionList_itemSelectionChanged()
 	}
 }
 
+void TriggerSection::mousePressEvent(QMouseEvent *event)
+{
+	event->accept();
+	ui->ActionList->clearSelection();
+}
+
 // Is "create team" - action
 void TriggerSection::on_isCreateTeam_clicked()
 {

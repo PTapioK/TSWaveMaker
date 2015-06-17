@@ -252,6 +252,12 @@ void TeamSection::on_isWhiner_clicked()
 	}
 }
 
+void TeamSection::mousePressEvent(QMouseEvent *event)
+{
+	event->accept();
+	ui->TeamList->clearSelection();
+}
+
 // Script for teams
 void TeamSection::on_scriptBox_activated()
 {
