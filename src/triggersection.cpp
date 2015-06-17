@@ -92,6 +92,7 @@ void TriggerSection::on_EditTriggerName_clicked()
 			string cur_ID = GetTriggerIDByName(cur_name);
 
 			triggers[cur_ID]->setName(ui->NEdit->text().toStdString());
+			FindTag(cur_ID)->setName(ui->NEdit->text().toStdString() + " 1");
 
 			ui->TriggerList->currentItem()->setText(ui->NEdit->text());
 		}
