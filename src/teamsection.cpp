@@ -37,29 +37,31 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 
 		ui->TNameEdit->setText(ui->TeamList->selectedItems().last()->text());
 
-		ui->isSuicide->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->suicide);
-		ui->isLoadable->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->loadable);
-		ui->isAreTeamMembersRecruitable->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->areteammembersrecruitable);
-		ui->isAggressive->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->aggressive);
-		ui->isAutocreate->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->autocreate);
-		ui->isAvoidThreats->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->avoidthreats);
-		ui->isDroppod->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->droppod);
-		ui->isFull->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->full);
-		ui->isIsBaseDefense->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->isbasedefense);
-		ui->isOnlyTargetHouseEnemy->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->onlytargethousenemy);
-		ui->isReinforce->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->reinforce);
-		ui->isTransportsReturnOnUnload->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->transportsreturnonunload);
-		ui->isAnnoyance->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->annoyance);
-		ui->isGuardSlower->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->guardslower);
-		ui->isIonImmune->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->ionimmune);
-		ui->isLooseRecruit->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->looserecruit);
-		ui->isOnTransOnly->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->ontransonly);
-		ui->isPrebuild->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->prebuild);
-		ui->isRecruiter->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->recruiter);
-		ui->isWhiner->setChecked(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->whiner);
+		Team *cur_team = GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString());
 
-		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->scriptID).c_str()));
-		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString())->taskForceID).c_str()));
+		ui->isSuicide->setChecked(cur_team->suicide);
+		ui->isLoadable->setChecked(cur_team->loadable);
+		ui->isAreTeamMembersRecruitable->setChecked(cur_team->areteammembersrecruitable);
+		ui->isAggressive->setChecked(cur_team->aggressive);
+		ui->isAutocreate->setChecked(cur_team->autocreate);
+		ui->isAvoidThreats->setChecked(cur_team->avoidthreats);
+		ui->isDroppod->setChecked(cur_team->droppod);
+		ui->isFull->setChecked(cur_team->full);
+		ui->isIsBaseDefense->setChecked(cur_team->isbasedefense);
+		ui->isOnlyTargetHouseEnemy->setChecked(cur_team->onlytargethousenemy);
+		ui->isReinforce->setChecked(cur_team->reinforce);
+		ui->isTransportsReturnOnUnload->setChecked(cur_team->transportsreturnonunload);
+		ui->isAnnoyance->setChecked(cur_team->annoyance);
+		ui->isGuardSlower->setChecked(cur_team->guardslower);
+		ui->isIonImmune->setChecked(cur_team->ionimmune);
+		ui->isLooseRecruit->setChecked(cur_team->looserecruit);
+		ui->isOnTransOnly->setChecked(cur_team->ontransonly);
+		ui->isPrebuild->setChecked(cur_team->prebuild);
+		ui->isRecruiter->setChecked(cur_team->recruiter);
+		ui->isWhiner->setChecked(cur_team->whiner);
+
+		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(cur_team->scriptID).c_str()));
+		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(cur_team->taskForceID).c_str()));
 	}
 }
 

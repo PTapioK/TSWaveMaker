@@ -21,7 +21,6 @@ TriggerSection::~TriggerSection()
 void TriggerSection::on_TriggerList_itemSelectionChanged()
 {
 	ui->WaveTimer->setTime(QTime(0, 0, 0));
-	ui->WaveTimer->setTime(QTime(-1, -1));
 
 	clearActionList();
 	if(ui->TriggerList->currentRow() != -1) {
@@ -263,7 +262,7 @@ void TriggerSection::on_ActionList_itemSelectionChanged()
 	ui->isOtherAction->setEnabled(true);
 	if(ui->ActionList->selectedItems().size() != 0) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		Action *cAct = cTrig->getAction(ui->ActionList->selectedItems().indexOf(ui->ActionList->selectedItems().last()));
+		Action *cAct = cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 		switch(cAct->getType()) {
 			case 1:
 				if(atoi(cAct->getP2().c_str()) == 2)
@@ -381,7 +380,6 @@ void TriggerSection::on_isWin_clicked()
 			ui->TeamAOButton->setEnabled(false);
 			ui->TeamtypeBox->setEnabled(false);
 			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(2);
 				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(2);
 			}
 		}
@@ -466,17 +464,16 @@ void TriggerSection::on_TeamtypeBox_activated()
 // Make teams grow as actions in selected actions
 void TriggerSection::on_TeamAOButton_clicked()
 {
-	if(ui->ActionList->currentRow() != -1) {
+	if(ui->ActionList->selectedItems().size() != 0) {
 		Trigger *cur_trig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
-		Team *sTeam = GetTeamByName(ui->TeamAOBox->currentText().toStdString());
-		if(sTeam != NULL) {
-			int i = 0;
-			for(teamIT IT = teams.find(sTeam->getID()); IT != teams.end(); ++IT) {
-				cur_trig->getAction(i)->editType(80);
-				cur_trig->getAction(i)->editP1(1);
-				cur_trig->getAction(i)->editP2(IT->second->getID());
-				++i;
-				if(i == ui->ActionList->selectedItems().size()) {
+		teamIT teamIT = teams.find(GetTeamIDByName(ui->TeamAOBox->currentText().toStdString()));
+		if(teamIT != teams.end()) {
+			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
+				cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editType(80);
+				cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP1(1);
+				cur_trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->editP2(teamIT->second->getID());
+				++teamIT;
+				if(teamIT == teams.end()) {
 					break;
 				}
 			}
