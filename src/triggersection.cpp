@@ -21,8 +21,8 @@ TriggerSection::~TriggerSection()
 void TriggerSection::on_TriggerList_itemSelectionChanged()
 {
 	ui->WaveTimer->setTime(QTime(0, 0, 0));
+	ui->ActionList->clear();
 
-	clearActionList();
 	if(ui->TriggerList->currentRow() != -1) {
 		string trig_name = ui->TriggerList->currentItem()->text().toStdString();
 		Trigger *cur_trig = GetTriggerByName(trig_name);
@@ -260,7 +260,7 @@ void TriggerSection::on_ActionList_itemSelectionChanged()
 	ui->TeamAOButton->setEnabled(false);
 	ui->TeamtypeBox->setEnabled(false);
 	ui->isOtherAction->setEnabled(true);
-	if(ui->ActionList->selectedItems().size() != 0) {
+	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->currentRow() != -1) {
 		Trigger *cTrig = GetTriggerByName(ui->TriggerList->currentItem()->text().toStdString());
 		Action *cAct = cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 		switch(cAct->getType()) {
