@@ -74,7 +74,7 @@ void TaskforceSection::on_cloneTaskforce_clicked()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			string newName = GetNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), a);
+			string newName = GetNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), a, 0);
 
 			int i = 0;
 			while(ui->TaskforceList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {

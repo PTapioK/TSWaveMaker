@@ -731,9 +731,11 @@ string FSRulesPath(string path)
 	return fDG.getExistingDirectory(NULL, "Select directory containing firestrm.ini", path.c_str()).toStdString();
 }
 
-string GetNameWithNextMark(string name, int iter)
+string GetNameWithNextMark(string name, int iter, int numIter)
 {
 	string oName = name;
+	if(numIter == -1000000) numIter = iter;
+
 	if(alphabetNaming) {
 		for(int i = 0; i != 26; ++i) {
 			stringstream ss("");
@@ -763,7 +765,7 @@ string GetNameWithNextMark(string name, int iter)
 			stringstream ss("");
 			ss << i;
 			if(name.find(ss.str()) != string::npos) {
-				name.replace(name.find(ss.str()), ss.str().length(), IntToStr(i + iter + 1));
+				name.replace(name.find(ss.str()), ss.str().length(), IntToStr(i + numIter + 1));
 				break;
 			}
 		}
@@ -771,6 +773,7 @@ string GetNameWithNextMark(string name, int iter)
 	if(cloneOfNaming) {
 		name = "Clone of " + name;
 	}
+
 	if(oName == name)
 		return name + IntToStr(iter);
 	return name;

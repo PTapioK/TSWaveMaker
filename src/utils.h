@@ -37,7 +37,7 @@ extern void ClearContainers();
 extern void LoadSettings(bool ask = true);
 extern string TSRulesPath(string path);
 extern string FSRulesPath(string path);
-extern string GetNameWithNextMark(string name, int iter = 0);
+extern string GetNameWithNextMark(string name, int iter = 0, int numIter = -1000000);
 extern string GetUnitNameByUnitID(string unitID);
 
 #endif // UTILS_H

@@ -314,7 +314,7 @@ void ScriptSection::on_CLastButton_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a);
+			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a, 0);
 
 			int i = 0;
 			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
@@ -386,7 +386,7 @@ void ScriptSection::on_cloneS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a);
+			string newName = GetNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a, 0);
 
 			int i = 0;
 			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
