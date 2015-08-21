@@ -761,11 +761,14 @@ string GetNameWithNextMark(string name, int iter, int numIter)
 		}
 	}
 	if(ascNumNaming) {
-		for(int i = 0; i != 99; ++i) {
-			stringstream ss("");
-			ss << i;
-			if(name.find(ss.str()) != string::npos) {
-				name.replace(name.find(ss.str()), ss.str().length(), IntToStr(i + numIter + 1));
+		int intLoc = string::npos;
+		for(int i = 0; i < 10; ++i) {
+			intLoc = name.find(IntToStr(i));
+			if(intLoc != string::npos) {
+				string numStr("");
+				int num = stoi(name.substr(intLoc), nullptr);
+				numStr = IntToStr(num);
+				name.replace(intLoc, numStr.length(), IntToStr(atoi(numStr.c_str()) + numIter + 1));
 				break;
 			}
 		}
