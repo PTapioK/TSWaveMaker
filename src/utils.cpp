@@ -546,7 +546,6 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		list << "Defend the position. Do not move";
 		list << "Enter a building or transport within Sight range";
 		list << "Capture any buildings in the neighborhood";
-		list << "Move into & get eaten";
 		list << "Begin to harvest Tiberium (-waste)";
 		list << "Defend the location in Sight range. If necessary follow the opponent in order to attack him, but no need to come back";
 		list << "Return to the place where this unit was spawned. Effective for harvesters (HARV) only...";
