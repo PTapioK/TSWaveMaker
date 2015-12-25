@@ -2,18 +2,18 @@
 
 
 // Find First Free ID
-string fffID() {
-	string nextID;
-	stringstream ssID;
+std::string fffID() {
+	std::string nextID;
+	std::stringstream ssID;
 
 	int32_t i = 1000000;
 
-	vector<string> IDTemp;
-	vector<string>::iterator IDIT;
+	std::vector<std::string> IDTemp;
+	std::vector<std::string>::iterator IDIT;
 
 	if(triggers.empty() && tags.empty() && teams.empty() && scripts.empty() && taskforces.empty() && aitriggers.empty()) {
 		ssID << "0" << i;
-		return string(ssID.str().c_str());
+		return std::string (ssID.str().c_str());
 	}
 
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
@@ -48,11 +48,11 @@ string fffID() {
 		IDIT = IDTemp.begin();
 	}
 
-	string a = "";
+	std::string a = "";
 	while(1) {
 		ssID.str("");
 		ssID << "0" << i;
-		nextID = string(ssID.str().c_str());
+		nextID = std::string (ssID.str().c_str());
 
 		if(IDIT == IDTemp.end()) {
 			a = "";
@@ -77,19 +77,19 @@ string fffID() {
 
 	ssID.str("");
 	ssID << "0" << i;
-	nextID = string(ssID.str().c_str());
+	nextID = std::string (ssID.str().c_str());
 
 	return nextID;
 }
 
-string GetValueStr(string line) {
-	string::size_type pos;
+std::string getValueStr(std::string line) {
+	std::string::size_type pos;
 	pos = line.find("=");
 	line = line.substr(pos+1);
 	return line.substr(0, line.find('\n'));
 }
 
-bool isFirstTrigger(string ID) {
+bool isFirstTrigger(std::string ID) {
 	bool retVal = true;
 	triggerIT IT = triggers.begin();
 	if((*IT).second->getID() != ID) {
@@ -98,7 +98,7 @@ bool isFirstTrigger(string ID) {
 	return retVal;
 }
 
-Tag* FindTag(string trigID) {
+Tag* findTag(std::string trigID) {
 	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
 		if((*IT).second->getTriggerID() == trigID) {
 			return (*IT).second;
@@ -107,8 +107,8 @@ Tag* FindTag(string trigID) {
 	return NULL;
 }
 
-string DecToWaypointID(int dec) {
-	string retVal;
+std::string decToWaypointID(int dec) {
+	std::string retVal;
 	dec=dec+1;
 	while(dec != 0) {
 		--dec;
@@ -118,9 +118,9 @@ string DecToWaypointID(int dec) {
 	return retVal;
 }
 
-string ConvertToSmallAlphas(int32_t dec)
+std::string convertToSmallAlphas(int32_t dec)
 {
-	string retVal;
+	std::string retVal;
 	dec=dec+1;
 	while(dec != 0) {
 		--dec;
@@ -130,7 +130,7 @@ string ConvertToSmallAlphas(int32_t dec)
 	return retVal;
 }
 
-string GetTriggerNameByID(string trigID) {
+std::string getTriggerNameByID(std::string trigID) {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getID() == trigID) {
 			return IT->second->getName().toStdString();
@@ -139,16 +139,16 @@ string GetTriggerNameByID(string trigID) {
 	return NULL;
 }
 
-string GetTriggerIDByName(string name) {
+std::string getTriggerIDByName(std::string name) {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName().toStdString() == name) {
 			return IT->second->getID();
 		}
 	}
-	return string("");
+	return std::string ("");
 }
 
-Trigger* GetTriggerByName(string name) {
+Trigger* getTriggerByName(std::string name) {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName().toStdString() == name) {
 			return IT->second;
@@ -157,7 +157,7 @@ Trigger* GetTriggerByName(string name) {
 	return NULL;
 }
 
-int32_t WaypointIDToDec(string wID) {
+int32_t waypointIDToDec(std::string wID) {
 	int32_t value = 0;
 	int i = wID.length();
 	while(1) {
@@ -177,7 +177,7 @@ int32_t WaypointIDToDec(string wID) {
 	return value-1;
 }
 
-bool ConvertToBool(string str) {
+bool convertToBool(std::string str) {
 	if(str == "yes") {
 		return true;
 	}
@@ -194,7 +194,7 @@ bool ConvertToBool(string str) {
 	return false;
 }
 
-string ConverBoolToYesNo(bool boolean) {
+std::string converBoolToYesNo(bool boolean) {
 	if(boolean == true) {
 		return "yes";
 	} else {
@@ -202,22 +202,22 @@ string ConverBoolToYesNo(bool boolean) {
 	}
 }
 
-string IntToStr(int integer) {
-	stringstream ss;
+std::string intToStr(int integer) {
+	std::stringstream ss;
 	ss << integer;
 	return ss.str();
 }
 
-string GetTeamNameByID(string ID) {
+std::string getTeamNameByID(std::string ID) {
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
 		}
 	}
-	return string("");
+	return std::string ("");
 }
 
-Trigger* FindNearestTimerTrigger(string trigID) {
+Trigger* findNearestTimerTrigger(std::string trigID) {
 	triggerIT IT = triggers.find(trigID);
 	while(IT != triggers.begin()) {
 		--IT;
@@ -237,7 +237,7 @@ Trigger* FindNearestTimerTrigger(string trigID) {
 	return NULL;
 }
 
-Team* GetTeamByName(string name) {
+Team* getTeamByName(std::string name) {
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
@@ -246,16 +246,16 @@ Team* GetTeamByName(string name) {
 	return NULL;
 }
 
-string GetTeamIDByName(string name) {
+std::string getTeamIDByName(std::string name) {
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
 		}
 	}
-	return string("");
+	return std::string ("");
 }
 
-string GetScriptNameByID(string ID) {
+std::string getScriptNameByID(std::string ID) {
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
@@ -264,7 +264,7 @@ string GetScriptNameByID(string ID) {
 	return "";
 }
 
-string GetScriptIDByName(string name) {
+std::string getScriptIDByName(std::string name) {
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
@@ -273,7 +273,7 @@ string GetScriptIDByName(string name) {
 	return "";
 }
 
-string GetTaskforceNameByID(string ID) {
+std::string getTaskforceNameByID(std::string ID) {
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
@@ -282,7 +282,7 @@ string GetTaskforceNameByID(string ID) {
 	return "";
 }
 
-string GetTaskforceIDByName(string name) {
+std::string getTaskforceIDByName(std::string name) {
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
@@ -292,7 +292,7 @@ string GetTaskforceIDByName(string name) {
 }
 
 
-Taskforce *GetTaskforceByName(string name)
+Taskforce *getTaskforceByName(std::string name)
 {
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getName() == name) {
@@ -303,7 +303,7 @@ Taskforce *GetTaskforceByName(string name)
 }
 
 
-Script* GetScriptByName(string name) {
+Script* getScriptByName(std::string name) {
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
@@ -313,7 +313,7 @@ Script* GetScriptByName(string name) {
 }
 
 
-string GetScriptNameByPosition(uint16_t pos) {
+std::string getScriptNameByPosition(uint16_t pos) {
 	int i = 0;
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(i == pos) {
@@ -324,7 +324,7 @@ string GetScriptNameByPosition(uint16_t pos) {
 	return 0;
 }
 
-string GetTaskforceNameByPosition(uint16_t pos)
+std::string getTaskforceNameByPosition(uint16_t pos)
 {
 	int i = 0;
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
@@ -336,7 +336,7 @@ string GetTaskforceNameByPosition(uint16_t pos)
 	return 0;
 }
 
-QString GetScriptActionMeaning(uint8_t ID) {
+QString getScriptActionMeaning(uint8_t ID) {
 	switch(ID) {
 	case 0:
 		return "Attack a kind of target";
@@ -453,7 +453,7 @@ QString GetScriptActionMeaning(uint8_t ID) {
 	}
 }
 
-SATargetType GetScriptActionTargetType(uint8_t ID) {
+SATargetType getScriptActionTargetType(uint8_t ID) {
 	switch(ID) {
 	case 0:
 		return TARGET;
@@ -507,7 +507,7 @@ SATargetType GetScriptActionTargetType(uint8_t ID) {
 	}
 }
 
-QStringList GetScriptActionTargetStrings(SATargetType type) {
+QStringList getScriptActionTargetStrings(SATargetType type) {
 	QStringList list;
 	switch(type) {
 	case TARGET:
@@ -525,7 +525,7 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		break;
 	case WAYPOINT:
 		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
-			stringstream ss;
+			std::stringstream ss;
 			ss << (*IT);
 			list << ss.str().c_str();
 		}
@@ -568,7 +568,7 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		list << "Attack move";
 		break;
 	case BUILDING:
-		for(std::map<uint16_t, unitContainer>::iterator IT = buildingnames.begin(); IT != buildingnames.end(); ++IT) {
+		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
 			list << (*IT).second.name.c_str();
 		}
 		break;
@@ -608,7 +608,7 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 		}
 		break;
 	case HOUSE:
-		for(std::map<uint16_t, string>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+		for(std::map<uint16_t, std::string >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
 			list << (*IT).second.c_str();
 		}
 		break;
@@ -619,9 +619,9 @@ QStringList GetScriptActionTargetStrings(SATargetType type) {
 	return list;
 }
 
-uint32_t GetStringListMaxWidth(QStringList list, QFont font) {
+uint32_t getStringListMaxWidth(QStringList list, QFont font) {
 	if(!list.empty()) {
-		vector <uint32_t> widths;
+		std::vector <uint32_t> widths;
 		QFontMetrics metr(font);
 		for(QStringList::Iterator listIT = list.begin(); listIT != list.end(); ++listIT) {
 			widths.push_back(metr.width(*listIT));
@@ -633,9 +633,9 @@ uint32_t GetStringListMaxWidth(QStringList list, QFont font) {
 }
 
 
-uint16_t GetBuildingTypePosByKey(int key)
+uint16_t getBuildingTypePosByKey(int key)
 {
-	for(std::map<uint16_t, unitContainer>::iterator IT = buildingnames.begin(); IT != buildingnames.end(); ++IT) {
+	for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
 		if((*IT).second.key == key) {
 			return (*IT).first;
 		}
@@ -643,7 +643,7 @@ uint16_t GetBuildingTypePosByKey(int key)
 	return 0;
 }
 
-void ClearContainers()
+void clearContainers()
 {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		delete (*IT).second;
@@ -668,53 +668,53 @@ void ClearContainers()
 
 	aitriggers.clear();
 
-	buildingnames.clear();
-	vehiclenames.clear();
-	infantrynames.clear();
-	aircraftnames.clear();
+	buildings.clear();
+	vehicles.clear();
+	infantry.clear();
+	aircraft.clear();
 
 	localvariables.clear();
 
 	waypoints.clear();
 
-	curdata.Clear();
+	currentFileData.Clear();
 }
 
 
-void LoadSettings(bool ask)
+void loadSettings(bool ask)
 {
-	string ts_rules_path = settings_data.GetString("rulesPath", "rules");
-	string fs_rules_path = settings_data.GetString("firestrmPath", "rules");
+	std::string ts_rules_path = settingsFileData.GetString("rulesPath", "rules");
+	std::string fs_rules_path = settingsFileData.GetString("firestrmPath", "rules");
 
-	cloneOfNaming = settings_data.GetBool("cloneOfNaming");
-	ascNumNaming  = settings_data.GetBool("increaseNumberNaming");
-	alphabetNaming = settings_data.GetBool("alphabetsInOrderNaming");
+	cloneOfNaming = settingsFileData.GetBool("cloneOfNaming");
+	ascNumNaming  = settingsFileData.GetBool("increaseNumberNaming");
+	alphabetNaming = settingsFileData.GetBool("alphabetsInOrderNaming");
 
-	last_path = settings_data.GetString("lastUsedPath");
+	lastUsedPath = settingsFileData.GetString("lastUsedPath");
 
 	if(ask) {
 		if(ts_rules_path.empty()) {
 			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				ts_rules_path = TSRulesPath(ts_rules_path);
+				ts_rules_path = rulesPathForTS(ts_rules_path);
 			}
 		}
 		if(fs_rules_path.empty()) {
 			if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				fs_rules_path = FSRulesPath(fs_rules_path);
+				fs_rules_path = rulesPathForFS(fs_rules_path);
 			}
 		}
 	}
 
-	settings_data.SetValue("rulesPath", ts_rules_path, "", "rules");
-	settings_data.SetValue("firestrmPath", fs_rules_path, "", "rules");
+	settingsFileData.SetValue("rulesPath", ts_rules_path, "", "rules");
+	settingsFileData.SetValue("firestrmPath", fs_rules_path, "", "rules");
 
-	ts_rules = ts_rules_path + "/rules.ini";
-	fs_rules = fs_rules_path + "/firestrm.ini";
+	tsRulesPath = ts_rules_path + "/rules.ini";
+	fsRulesPath = fs_rules_path + "/firestrm.ini";
 
-	settings_data.Save();
+	settingsFileData.Save();
 }
 
-string TSRulesPath(string path)
+std::string rulesPathForTS(std::string path)
 {
 	QFileDialog fDG(NULL);
 	fDG.setFileMode(QFileDialog::Directory);
@@ -722,7 +722,7 @@ string TSRulesPath(string path)
 	return fDG.getExistingDirectory(NULL, "Select directory containing rules.ini", path.c_str()).toStdString();
 }
 
-string FSRulesPath(string path)
+std::string rulesPathForFS(std::string path)
 {
 	QFileDialog fDG(NULL);
 	fDG.setFileMode(QFileDialog::Directory);
@@ -730,44 +730,44 @@ string FSRulesPath(string path)
 	return fDG.getExistingDirectory(NULL, "Select directory containing firestrm.ini", path.c_str()).toStdString();
 }
 
-string GetNameWithNextMark(string name, int iter, int numIter)
+std::string getNameWithNextMark(std::string name, int iter, int numIter)
 {
-	string oName = name;
+	std::string oName = name;
 	if(numIter == -1000000) numIter = iter;
 
 	if(alphabetNaming) {
 		for(int i = 0; i != 26; ++i) {
-			stringstream ss("");
+			std::stringstream ss("");
 			ss << " " << alphas[i];
-			if(name.find(ss.str()) != string::npos) {
-				name.replace(name.find(ss.str()), ss.str().length(), string(" ") + DecToWaypointID(i + iter + 1));
+			if(name.find(ss.str()) != std::string ::npos) {
+				name.replace(name.find(ss.str()), ss.str().length(), std::string (" ") + decToWaypointID(i + iter + 1));
 				break;
 			} else if(*(name.end()-1) == alphas[i]) {
-				name.replace(name.length()-1, sizeof(char), DecToWaypointID(i + iter + 1));
+				name.replace(name.length()-1, sizeof(char), decToWaypointID(i + iter + 1));
 				break;
 			}
 		}
 		for(int i = 0; i != 26; ++i) {
-			stringstream ss("");
+			std::stringstream ss("");
 			ss << " " << small_alphas[i];
-			if(name.find(ss.str()) != string::npos) {
-				name.replace(name.find(ss.str()), ss.str().length(), string(" ") + ConvertToSmallAlphas(i + iter + 1));
+			if(name.find(ss.str()) != std::string ::npos) {
+				name.replace(name.find(ss.str()), ss.str().length(), std::string (" ") + convertToSmallAlphas(i + iter + 1));
 				break;
 			} else if(*(name.end()-1) == small_alphas[i]) {
-				name.replace(name.length()-1, sizeof(char), ConvertToSmallAlphas(i + iter + 1));
+				name.replace(name.length()-1, sizeof(char), convertToSmallAlphas(i + iter + 1));
 				break;
 			}
 		}
 	}
 	if(ascNumNaming) {
-		int intLoc = string::npos;
+		int intLoc = std::string ::npos;
 		for(int i = 0; i < 10; ++i) {
-			intLoc = name.find(IntToStr(i));
-			if(intLoc != string::npos) {
-				string numStr("");
+			intLoc = name.find(intToStr(i));
+			if(intLoc != std::string ::npos) {
+				std::string numStr("");
 				int num = stoi(name.substr(intLoc), nullptr);
-				numStr = IntToStr(num);
-				name.replace(intLoc, numStr.length(), IntToStr(atoi(numStr.c_str()) + numIter + 1));
+				numStr = intToStr(num);
+				name.replace(intLoc, numStr.length(), intToStr(atoi(numStr.c_str()) + numIter + 1));
 				break;
 			}
 		}
@@ -777,28 +777,28 @@ string GetNameWithNextMark(string name, int iter, int numIter)
 	}
 
 	if(oName == name)
-		return name + IntToStr(iter);
+		return name + intToStr(iter);
 	return name;
 }
 
 
-string GetUnitNameByUnitID(string unitID)
+std::string getUnitNameByUnitID(std::string unitID)
 {
-	for(unitIT IT = aircraftnames.begin(); IT != aircraftnames.end(); ++IT) {
+	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
 	}
-	for(unitIT IT = infantrynames.begin(); IT != infantrynames.end(); ++IT) {
+	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
 	}
-	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
+	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
 	}
-	return string("");
+	return std::string ("");
 }
 

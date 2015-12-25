@@ -37,7 +37,7 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 
 		ui->TNameEdit->setText(ui->TeamList->selectedItems().last()->text());
 
-		Team *cur_team = GetTeamByName(ui->TeamList->selectedItems().last()->text().toStdString());
+		Team *cur_team = getTeamByName(ui->TeamList->selectedItems().last()->text().toStdString());
 
 		ui->isSuicide->setChecked(cur_team->suicide);
 		ui->isLoadable->setChecked(cur_team->loadable);
@@ -60,8 +60,8 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 		ui->isRecruiter->setChecked(cur_team->recruiter);
 		ui->isWhiner->setChecked(cur_team->whiner);
 
-		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(GetScriptNameByID(cur_team->scriptID).c_str()));
-		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(GetTaskforceNameByID(cur_team->taskForceID).c_str()));
+		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(getScriptNameByID(cur_team->scriptID).c_str()));
+		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(getTaskforceNameByID(cur_team->taskForceID).c_str()));
 	}
 }
 
@@ -69,9 +69,9 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 void TeamSection::on_New_clicked()
 {
 	if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string name = ui->TNameEdit->text().toStdString();
+		std::string name = ui->TNameEdit->text().toStdString();
 		ui->TeamList->addItem(ui->TNameEdit->text());
-		string nID = fffID();
+		std::string nID = fffID();
 		teams[nID] = new Team(nID, name);
 
 	}
@@ -82,12 +82,12 @@ void TeamSection::on_Delete_clicked()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-			string name = ui->TeamList->selectedItems().at(a)->text().toStdString();
-			string ID = GetTeamIDByName(name);
-			delete GetTeamByName(name);
+			std::string name = ui->TeamList->selectedItems().at(a)->text().toStdString();
+			std::string ID = getTeamIDByName(name);
+			delete getTeamByName(name);
 			teams.erase(ID);
 		}
-		UpdateUi();
+		updateUi();
 	}
 }
 
@@ -95,8 +95,8 @@ void TeamSection::on_Delete_clicked()
 void TeamSection::on_EditName_clicked()
 {
 	if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string cur_name = ui->TeamList->selectedItems().last()->text().toStdString();
-		string cur_ID = GetTeamIDByName(cur_name);
+		std::string cur_name = ui->TeamList->selectedItems().last()->text().toStdString();
+		std::string cur_ID = getTeamIDByName(cur_name);
 
 		teams[cur_ID]->setName(ui->TNameEdit->text().toStdString());
 
@@ -109,15 +109,15 @@ void TeamSection::on_Clone_clicked()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-			string newName = GetNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), a, 0);
+			std::string newName = getNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), a, 0);
 
 			int i = 0;
 			while(ui->TeamList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = GetNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), i);
+				newName = getNameWithNextMark(ui->TeamList->selectedItems().at(a)->text().toStdString(), i);
 			}
-			string newID = fffID();
-			teams[newID] = new Team(newID, GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString()));
+			std::string newID = fffID();
+			teams[newID] = new Team(newID, getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString()));
 			teams[newID]->setName(newName);
 			ui->TeamList->addItem(newName.c_str());
 		}
@@ -127,130 +127,130 @@ void TeamSection::on_Clone_clicked()
 void TeamSection::on_isSuicide_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->suicide = ui->isSuicide->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->suicide = ui->isSuicide->isChecked();
 	}
 }
 
 void TeamSection::on_isLoadable_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->loadable = ui->isLoadable->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->loadable = ui->isLoadable->isChecked();
 	}
 }
 void TeamSection::on_isAreTeamMembersRecruitable_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->areteammembersrecruitable = ui->isAreTeamMembersRecruitable->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->areteammembersrecruitable = ui->isAreTeamMembersRecruitable->isChecked();
 	}
 }
 void TeamSection::on_isTransportsReturnOnUnload_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->transportsreturnonunload = ui->isTransportsReturnOnUnload->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->transportsreturnonunload = ui->isTransportsReturnOnUnload->isChecked();
 	}
 }
 void TeamSection::on_isReinforce_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->reinforce = ui->isReinforce->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->reinforce = ui->isReinforce->isChecked();
 	}
 }
 void TeamSection::on_isDroppod_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->droppod = ui->isDroppod->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->droppod = ui->isDroppod->isChecked();
 	}
 }
 void TeamSection::on_isAutocreate_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->autocreate = ui->isAutocreate->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->autocreate = ui->isAutocreate->isChecked();
 	}
 }
 void TeamSection::on_isOnlyTargetHouseEnemy_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->onlytargethousenemy = ui->isOnlyTargetHouseEnemy->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->onlytargethousenemy = ui->isOnlyTargetHouseEnemy->isChecked();
 	}
 }
 void TeamSection::on_isAggressive_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->aggressive = ui->isAggressive->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->aggressive = ui->isAggressive->isChecked();
 	}
 }
 void TeamSection::on_isFull_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->full = ui->isFull->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->full = ui->isFull->isChecked();
 	}
 }
 void TeamSection::on_isAvoidThreats_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->avoidthreats = ui->isAvoidThreats->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->avoidthreats = ui->isAvoidThreats->isChecked();
 	}
 }
 void TeamSection::on_isIsBaseDefense_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->isbasedefense = ui->isIsBaseDefense->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->isbasedefense = ui->isIsBaseDefense->isChecked();
 	}
 }
 
 void TeamSection::on_isAnnoyance_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->annoyance = ui->isAnnoyance->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->annoyance = ui->isAnnoyance->isChecked();
 	}
 }
 
 void TeamSection::on_isGuardSlower_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->guardslower = ui->isGuardSlower->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->guardslower = ui->isGuardSlower->isChecked();
 	}
 }
 
 void TeamSection::on_isIonImmune_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ionimmune = ui->isIonImmune->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ionimmune = ui->isIonImmune->isChecked();
 	}
 }
 
 void TeamSection::on_isLooseRecruit_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->looserecruit = ui->isLooseRecruit->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->looserecruit = ui->isLooseRecruit->isChecked();
 	}
 }
 
 void TeamSection::on_isOnTransOnly_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ontransonly = ui->isOnTransOnly->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->ontransonly = ui->isOnTransOnly->isChecked();
 	}
 }
 
 void TeamSection::on_isPrebuild_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->prebuild = ui->isPrebuild->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->prebuild = ui->isPrebuild->isChecked();
 	}
 }
 
 void TeamSection::on_isRecruiter_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->recruiter = ui->isRecruiter->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->recruiter = ui->isRecruiter->isChecked();
 	}
 }
 
 void TeamSection::on_isWhiner_clicked()
 {
 	for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-		GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->whiner = ui->isWhiner->isChecked();
+		getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->whiner = ui->isWhiner->isChecked();
 	}
 }
 
@@ -265,7 +265,7 @@ void TeamSection::on_scriptBox_activated()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-			GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->scriptID = GetScriptIDByName(ui->scriptBox->currentText().toStdString());
+			getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->scriptID = getScriptIDByName(ui->scriptBox->currentText().toStdString());
 		}
 	}
 }
@@ -275,7 +275,7 @@ void TeamSection::on_taskforceBox_activated()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
-			GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->taskForceID = GetTaskforceIDByName(ui->taskforceBox->currentText().toStdString());
+			getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString())->taskForceID = getTaskforceIDByName(ui->taskforceBox->currentText().toStdString());
 		}
 	}
 }
@@ -285,13 +285,13 @@ void TeamSection::on_SAOButton_clicked()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 
-		vector<Script*> temp;
-		vector<Script*>::iterator tempIT;
+		std::vector<Script*> temp;
+		std::vector<Script*>::iterator tempIT;
 
-		scriptIT IT = scripts.find(GetScriptIDByName(ui->AOSBox->currentText().toStdString()));
+		scriptIT IT = scripts.find(getScriptIDByName(ui->AOSBox->currentText().toStdString()));
 		do {
 			temp.push_back(IT->second);
-			if(IT == scripts.find(GetScriptIDByName(ui->AOEBox->currentText().toStdString()))) { break; }
+			if(IT == scripts.find(getScriptIDByName(ui->AOEBox->currentText().toStdString()))) { break; }
 			++IT;
 		} while (1);
 
@@ -299,7 +299,7 @@ void TeamSection::on_SAOButton_clicked()
 
 		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
 
-			Team *cur_team = GetTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString());
+			Team *cur_team = getTeamByName(ui->TeamList->selectedItems().at(a)->text().toStdString());
 
 			cur_team->scriptID = (*tempIT)->getID();
 
@@ -312,7 +312,7 @@ void TeamSection::on_SAOButton_clicked()
 	}
 }
 
-void TeamSection::UpdateUi() {
+void TeamSection::updateUi() {
 	ui->TeamList->clearSelection();
 	ui->TeamList->clear();
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {

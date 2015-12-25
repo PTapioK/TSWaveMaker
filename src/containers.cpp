@@ -1,33 +1,33 @@
 #include "containers.h"
 
-const string settings_ini = "settings.ini";
-CDataFile settings_data(settings_ini);
+const std::string settingsFilePath = "settings.ini";
+CDataFile settingsFileData(settingsFilePath);
 
-string cur_file;
-CDataFile curdata;
+std::string currentFilePath;
+CDataFile currentFileData;
 
-string ts_rules;
-string fs_rules;
+std::string tsRulesPath;
+std::string fsRulesPath;
 
-string last_path = ".";
+std::string lastUsedPath = ".";
 
-map <string, Trigger*> triggers;
-map <string, Tag*> tags;
-map <string, Team*> teams;
-map <string, Script*> scripts;
-map <string, Taskforce*> taskforces;
-map <string, string> aitriggers;
+std::map <std::string, Trigger*> triggers;
+std::map <std::string, Tag*> tags;
+std::map <std::string, Team*> teams;
+std::map <std::string, Script*> scripts;
+std::map <std::string, Taskforce*> taskforces;
+std::map <std::string, std::string > aitriggers;
 
-map <uint16_t, unitContainer> buildingnames;
-map <string, unitContainer> vehiclenames;
-map <string, unitContainer> infantrynames;
-map <string, unitContainer> aircraftnames;
+std::map <uint16_t, unitContainer> buildings;
+std::map <std::string, unitContainer> vehicles;
+std::map <std::string, unitContainer> infantry;
+std::map <std::string, unitContainer> aircraft;
 
-map <uint16_t, string> houses;
+std::map <uint16_t, std::string > houses;
 
-map <uint16_t, variableContainer> localvariables;
-map <uint16_t, variableContainer> globalvariables;
+std::map <uint16_t, variableContainer> localvariables;
+std::map <uint16_t, variableContainer> globalvariables;
 
-vector <int32_t> waypoints;
+std::vector <int32_t> waypoints;
 
 bool cloneOfNaming, ascNumNaming, alphabetNaming;

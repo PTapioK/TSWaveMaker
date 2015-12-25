@@ -5,26 +5,26 @@
 
 class Tag
 {
-public:
-	Tag(std::string tname, string trigID);
-	Tag(Tag* oTag, string trigID);
-	Tag(string nID, string nName, string nTrigID, int32_t nmode);
-	~Tag();
+	public:
+		Tag(std::string tname, std::string trigID);
+		Tag(Tag* oTag, std::string trigID);
+		Tag(std::string nID, std::string nName, std::string nTrigID, int32_t nmode);
+		~Tag();
 
-	string getID();
-	void setID(string nID);
-	string getTriggerID();
-	string getName() { return name; }
+		void setID(std::string nID);
+		void setName(std::string nName);
 
-	void Save();
+		void save();
 
-	void setName(string nName);
+		std::string getTriggerID() const;
+		std::string getName() const;
+		std::string getID() const;
 
-private:
-	std::string ID;
-	std::string name;
-	std::string triggerID;
-	int32_t mode;
+	private:
+		std::string ID;
+		std::string name;
+		std::string triggerID;
+		int32_t mode;
 };
 
 #endif // TAG_H

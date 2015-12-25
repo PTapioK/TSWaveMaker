@@ -5,110 +5,108 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-	LoadSettings();
+	loadSettings();
 
 	ui->setupUi(this);
 
-	connect(ui->actionNew_file, SIGNAL(triggered()), this, SLOT(NewFile()));
-	connect(ui->actionOpen_file, SIGNAL(triggered()), this, SLOT(OpenFile()));
-	connect(ui->actionSave_file, SIGNAL(triggered()), this, SLOT(SaveFile()));
-	connect(ui->actionSave_As, SIGNAL(triggered()), this, SLOT(SaveFileAs()));
-
+	// Connect file menu
+	connect(ui->actionNewFile, SIGNAL(triggered()), this, SLOT(newFile()));
+	connect(ui->actionOpenFile, SIGNAL(triggered()), this, SLOT(openFile()));
+	connect(ui->actionSaveFile, SIGNAL(triggered()), this, SLOT(saveFile()));
+	connect(ui->actionSaveFileAs, SIGNAL(triggered()), this, SLOT(saveFileAs()));
 	connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+	// Connect edit menu
+	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settings()));
+	// Connect info menu
+	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(info()));
 
-	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(Info()));
-	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(Settings()));
+	triggerSct		= new TriggerSection(this);
+	teamSct			= new TeamSection(this);
+	scriptSct		= new ScriptSection(this);
+	taskforceSct	= new TaskforceSection(this);
 
-	trgS = new TriggerSection(this);
-	tamS = new TeamSection(this);
-	srtS = new ScriptSection(this);
-	tskS = new TaskforceSection(this);
+	addDockWidget(Qt::LeftDockWidgetArea, triggerSct);
+	addDockWidget(Qt::RightDockWidgetArea, teamSct);
+	addDockWidget(Qt::BottomDockWidgetArea, scriptSct);
+	addDockWidget(Qt::BottomDockWidgetArea, taskforceSct);
 
-	addDockWidget(Qt::LeftDockWidgetArea, trgS);
-	addDockWidget(Qt::RightDockWidgetArea, tamS);
-	addDockWidget(Qt::BottomDockWidgetArea, srtS);
-	addDockWidget(Qt::BottomDockWidgetArea, tskS);
-
-	trgS->setFloating(false);
-	tamS->setFloating(false);
-	srtS->setFloating(false);
-	tskS->setFloating(false);
-
-	NewFile();
+	newFile();
 }
 
 MainWindow::~MainWindow()
 {
-	settings_data.SetValue("lastUsedPath", last_path);
-	settings_data.Save();
+	// Save settings before quitting
+	settingsFileData.SetValue("lastUsedPath", lastUsedPath);
+	settingsFileData.Save();
+
 	delete ui;
 }
 
-void MainWindow::NewFile() {
+void MainWindow::newFile() {
 	this->setWindowTitle(CAPTIONBASE);
 
-	ClearContainers();
+	clearContainers();
 
-	ParseRules();
+	parseRules();
 
-	trgS->UpdateUi();
-	tamS->UpdateUi();
-	srtS->UpdateUi();
-	tskS->UpdateUi();
+	triggerSct->UpdateUi();
+	teamSct->updateUi();
+	scriptSct->UpdateUi();
+	taskforceSct->updateUi();
 }
 
-void MainWindow::OpenFile() {
+void MainWindow::openFile() {
 	QFileDialog fDG(this);
 
-	cur_file = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), last_path.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 
-	if(cur_file.empty()) {
+	if(currentFilePath.empty()) {
 		return;
 	}
 
-	NewFile();
+	newFile();
 
-	ReadFileToBuffer();
-	ParseSections();
+	readFileToBuffer();
+	parseSections();
 
-	trgS->UpdateUi();
-	tamS->UpdateUi();
-	srtS->UpdateUi();
-	tskS->UpdateUi();
+	triggerSct->UpdateUi();
+	teamSct->updateUi();
+	scriptSct->UpdateUi();
+	taskforceSct->updateUi();
 
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + cur_file.c_str());
-	last_path = QFileInfo(cur_file.c_str()).path().toStdString();
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
+	lastUsedPath = QFileInfo(currentFilePath.c_str()).path().toStdString();
 }
 
-void MainWindow::SaveFile() {
-	if(cur_file.empty()) {
-		SaveFileAs();
+void MainWindow::saveFile() {
+	if(currentFilePath.empty()) {
+		saveFileAs();
 		return;
 	}
-	curdata.SetFileName(cur_file);
-	SaveAllToBuffer();
-	curdata.Save();
+	currentFileData.SetFileName(currentFilePath);
+	saveAllToBuffer();
+	currentFileData.Save();
 }
 
-void MainWindow::SaveFileAs() {
+void MainWindow::saveFileAs() {
 	QFileDialog fDG(this);
-	cur_file = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), last_path.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
-	if(cur_file.empty()) {
+	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	if(currentFilePath.empty()) {
 		return;
 	}
-	SaveFile();
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + cur_file.c_str());
-	last_path = QFileInfo(cur_file.c_str()).path().toStdString();
+	saveFile();
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
+	lastUsedPath = QFileInfo(currentFilePath.c_str()).path().toStdString();
 }
 
-void MainWindow::Info() {
-	InfoDialog * dlg = new InfoDialog;
-	dlg->show();
+void MainWindow::info() {
+	InfoDialog * dialog = new InfoDialog;
+	dialog->show();
 }
 
-void MainWindow::Settings()
+void MainWindow::settings()
 {
-	SettingsDialog * dlg = new SettingsDialog;
-	dlg->show();
+	SettingsDialog * dialog = new SettingsDialog;
+	dialog->show();
 }
 

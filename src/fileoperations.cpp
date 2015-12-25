@@ -1,145 +1,143 @@
 #include "fileoperations.h"
 
 
-void SaveAllToBuffer() {
+void saveAllToBuffer() {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
-		(*IT).second->Save();
+		(*IT).second->save();
 	}
 	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
-		(*IT).second->Save();
+		(*IT).second->save();
 	}
 
 	int i = 0;
-	DeleteSectionInBuffer("TeamTypes");
+	deleteSectionFromBuffer("TeamTypes");
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
-		WriteValueToBuffer("TeamTypes", IntToStr(i), IT->second->getID());
+		writeLineToBuffer("TeamTypes", intToStr(i), IT->second->getID());
 		++i;
 	}
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
-		(*IT).second->Save();
+		(*IT).second->save();
 	}
 	i = 0;
-	DeleteSectionInBuffer("ScriptTypes");
+	deleteSectionFromBuffer("ScriptTypes");
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		WriteValueToBuffer("ScriptTypes", IntToStr(i), IT->second->getID());
+		writeLineToBuffer("ScriptTypes", intToStr(i), IT->second->getID());
 		++i;
 	}
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		(*IT).second->Save();
+		(*IT).second->save();
 	}
 	i = 0;
-	DeleteSectionInBuffer("TaskForces");
+	deleteSectionFromBuffer("TaskForces");
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		WriteValueToBuffer("TaskForces", IntToStr(i), IT->second->getID());
+		writeLineToBuffer("TaskForces", intToStr(i), IT->second->getID());
 		++i;
 	}
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		(*IT).second->Save();
+		(*IT).second->save();
 	}
 
 }
 
-void WriteValueToBuffer(string section, string ID, string value) {
-	curdata.SetValue(ID, value, "", section);
+void writeLineToBuffer(std::string section, std::string ID, std::string value) {
+	currentFileData.SetValue(ID, value, "", section);
 }
 
-void EditValueInBuffer(string section, string ID, string value, int count) {
+void editValueInBuffer(std::string section, std::string ID, std::string value, int count) {
 
-	string rawEx = curdata.GetValue(ID, section);
-	string exvalue = rawEx.substr(rawEx.find(",")+1);
-	string newVal = IntToStr(count) + "," + exvalue + "," + value;
-	curdata.SetValue(ID, newVal, "", section);
+	std::string rawEx = currentFileData.GetValue(ID, section);
+	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
+	std::string newVal = intToStr(count) + "," + exvalue + "," + value;
+	currentFileData.SetValue(ID, newVal, "", section);
 
 }
 
-void ReadFileToBuffer() {
-	curdata.Load(cur_file);
+void readFileToBuffer() {
+	currentFileData.Load(currentFilePath);
 }
 
-void DeleteValueInBuffer(string section, string ID) {
-	curdata.DeleteKey(ID, section);
+void deleteLineFromBuffer(std::string section, std::string ID) {
+	currentFileData.DeleteKey(ID, section);
 }
 
-void DeleteSectionInBuffer(string section) {
-	curdata.DeleteSection(section);
+void deleteSectionFromBuffer(std::string section) {
+	currentFileData.DeleteSection(section);
 }
 
-void ParseSections() {
+void parseSections() {
 
-	t_Section * trSec = curdata.GetSection("Triggers");
+	t_Section * trSec = currentFileData.GetSection("Triggers");
 
 	if(trSec != NULL) {
 		triggers.clear();
 		KeyList * trigs = trSec->GetKeyList();
 		for(KeyItor keyIT = trigs->begin(); keyIT < trigs->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string cur_line = curdata.GetString(Key, "Triggers");
+			std::string cur_line = currentFileData.GetString(Key, "Triggers");
 
-			string ID = Key;
+			std::string ID = Key;
 
-			string house = cur_line.substr(0, cur_line.find(","));
+			std::string house = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 
-			string attachID = cur_line.substr(0, cur_line.find(","));
+			std::string attachID = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 
-			string name = cur_line.substr(0, cur_line.find(","));
+			std::string name = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 
-			string isDisabled_s = cur_line.substr(0, cur_line.find(","));
+			std::string isDisabled_s = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 			bool isDisabled = atoi(isDisabled_s.c_str());
 
-			string isEasy_s = cur_line.substr(0, cur_line.find(","));
+			std::string isEasy_s = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 			bool isEasy = atoi(isEasy_s.c_str());
 
-			string isMedium_s = cur_line.substr(0, cur_line.find(","));
+			std::string isMedium_s = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 			bool isMedium = atoi(isMedium_s.c_str());
 
-			string isHard_s = cur_line;
+			std::string isHard_s = cur_line;
 			bool isHard = atoi(isHard_s.c_str());
 
 			triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard);
-
 		}
 
 	}
 
-	t_Section * tagSec = curdata.GetSection("Tags");
+	t_Section * tagSec = currentFileData.GetSection("Tags");
 
 	if (tagSec != NULL) {
 		tags.clear();
 		KeyList * tagsl = tagSec->GetKeyList();
 		for(KeyItor keyIT = tagsl->begin(); keyIT < tagsl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string cur_line = curdata.GetString(Key, "Tags");
+			std::string cur_line = currentFileData.GetString(Key, "Tags");
 
-			string ID = Key;
+			std::string ID = Key;
 
 			int32_t mode = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 
-			string name = cur_line.substr(0, cur_line.find(","));
+			std::string name = cur_line.substr(0, cur_line.find(","));
 			cur_line = cur_line.substr(cur_line.find(",")+1);
 
-			string triggerID = cur_line;
+			std::string triggerID = cur_line;
 
 			tags[name] = new Tag(ID, name, triggerID, mode);
-
 		}
 	}
 
-	t_Section * wpnSec = curdata.GetSection("Waypoints");
+	t_Section * wpnSec = currentFileData.GetSection("Waypoints");
 
 	if (wpnSec != NULL) {
 		waypoints.clear();
 		KeyList * wpnl = wpnSec->GetKeyList();
 		for(KeyItor keyIT = wpnl->begin(); keyIT < wpnl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
 			int32_t waypoint = atoi(Key.c_str());
 			waypoints.push_back(waypoint);
@@ -147,67 +145,69 @@ void ParseSections() {
 
 	}
 
-	t_Section * teamSec = curdata.GetSection("TeamTypes");
+	t_Section * teamSec = currentFileData.GetSection("TeamTypes");
 
 	if (teamSec != NULL) {
 		teams.clear();
 		KeyList * teaml = teamSec->GetKeyList();
 		for(KeyItor keyIT = teaml->begin(); keyIT < teaml->end(); ++keyIT) {
-			string Key = keyIT->szKey;
-			string cur_line = curdata.GetString(Key, "TeamTypes");
+			std::string Key = keyIT->szKey;
+			std::string cur_line = currentFileData.GetString(Key, "TeamTypes");
 
-			string teamID = cur_line.substr(0, 8);
-			Team *nTeam = FindNewTeamFromFile(teamID);
+			std::string teamID = cur_line.substr(0, 8);
+			Team *nTeam = findNewTeamFromFile(teamID);
 
-			if(nTeam != NULL)
+			if(nTeam != NULL) {
 				teams[teamID] = nTeam;
-
+			}
 
 		}
 	}
 
-	t_Section * scriptSec = curdata.GetSection("ScriptTypes");
+	t_Section * scriptSec = currentFileData.GetSection("ScriptTypes");
 	if (scriptSec != NULL) {
 		scripts.clear();
 		KeyList * scriptl = scriptSec->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
-			string cur_line = curdata.GetString(Key, "ScriptTypes");
+			std::string Key = keyIT->szKey;
+			std::string cur_line = currentFileData.GetString(Key, "ScriptTypes");
 
-			string scriptID = cur_line.substr(0, 8);
-			Script *nScript = FindNewScriptFromFile(scriptID);
+			std::string scriptID = cur_line.substr(0, 8);
+			Script *nScript = findNewScriptFromFile(scriptID);
 
-			if(nScript != NULL)
+			if(nScript != NULL) {
 				scripts[scriptID] = nScript;
+			}
 
 		}
 	}
 
-	t_Section * taskSec = curdata.GetSection("TaskForces");
+	t_Section * taskSec = currentFileData.GetSection("TaskForces");
 	if (taskSec != NULL) {
 		taskforces.clear();
 		KeyList * taskl = taskSec->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
-			string cur_line = curdata.GetString(Key, "TaskForces");
+			std::string Key = keyIT->szKey;
+			std::string cur_line = currentFileData.GetString(Key, "TaskForces");
 
-			string taskforceID = cur_line.substr(0, 8);
-			Taskforce *nTaskforce = FindNewTaskforceFromFile(taskforceID);
+			std::string taskforceID = cur_line.substr(0, 8);
+			Taskforce *nTaskforce = findNewTaskforceFromFile(taskforceID);
 
-			if(nTaskforce != NULL)
+			if(nTaskforce != NULL) {
 				taskforces[taskforceID] = nTaskforce;
+			}
 		}
 	}
 
-	t_Section * eventSec = curdata.GetSection("Events");
+	t_Section * eventSec = currentFileData.GetSection("Events");
 	if(eventSec != NULL) {
 		KeyList * eventl = eventSec->GetKeyList();
 		for(KeyItor keyIT = eventl->begin(); keyIT < eventl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string cur_line = curdata.GetString(Key, "Events");
+			std::string cur_line = currentFileData.GetString(Key, "Events");
 
-			string ID = Key;
+			std::string ID = Key;
 
 			int32_t count = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 			cur_line = cur_line.substr(cur_line.find(",")+1);
@@ -233,81 +233,83 @@ void ParseSections() {
 		}
 	}
 
-	t_Section * actionSec = curdata.GetSection("Actions");
+	t_Section * actionSec = currentFileData.GetSection("Actions");
 	if (actionSec != NULL) {
 
 		KeyList * actl = actionSec->GetKeyList();
 		for(KeyItor keyIT = actl->begin(); keyIT < actl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string cur_line = curdata.GetString(Key, "Actions");
+			std::string cur_line = currentFileData.GetString(Key, "Actions");
 
-			string ID = Key;
+			std::string ID = Key;
 
 			int32_t count = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 			cur_line = cur_line.substr(cur_line.find(",")+1);
+
+			std::array<std::string, 6> params;
 
 			for(int i = 0; i != count; ++i) {
 				int32_t aType = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t p1 = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				params[0] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				string p2 = cur_line.substr(0, cur_line.find(","));
+				params[1] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t p3 = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				params[2] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t p4 = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				params[3] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t p5 = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				params[4] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
-				int32_t p6 = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
+				params[5] = cur_line.substr(0, cur_line.find(","));
 				cur_line = cur_line.substr(cur_line.find(",")+1);
 
 				int32_t wPoint = 0;
 
 				if(i != count-1) {
-					wPoint = WaypointIDToDec(cur_line.substr(0, cur_line.find(",")).c_str());
+					wPoint = waypointIDToDec(cur_line.substr(0, cur_line.find(",")).c_str());
 					cur_line = cur_line.substr(cur_line.find(",")+1);
 				} else {
-					wPoint = WaypointIDToDec(cur_line.c_str());
+					wPoint = waypointIDToDec(cur_line.c_str());
 				}
 
-				triggers[ID]->addAction(new Action(ID, aType, wPoint, p1, p2, p3, p4, p5, p6));
+				triggers[ID]->addAction(new Action(ID, aType, params, wPoint));
 			}
 
 		}
 	}
 
-	t_Section * aiTrigSec = curdata.GetSection("AITriggerTypes");
+	t_Section * aiTrigSec = currentFileData.GetSection("AITriggerTypes");
 	if(aiTrigSec != NULL) {
 		KeyList * aiTrigl = aiTrigSec->GetKeyList();
 		for(KeyItor keyIT = aiTrigl->begin(); keyIT < aiTrigl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string cur_line = curdata.GetString(Key, "Actions");
+			std::string cur_line = currentFileData.GetString(Key, "Actions");
 
-			string ID = Key;
+			std::string ID = Key;
 
 			aitriggers[ID] = cur_line;
 		}
 	}
 
 	// Rules inside map
-	t_Section * buildSec = curdata.GetSection("BuildingTypes");
+	t_Section * buildSec = currentFileData.GetSection("BuildingTypes");
 
 	if (buildSec != NULL) {
 		KeyList * buildl = buildSec->GetKeyList();
 		for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string buildingSec = curdata.GetString(Key, "BuildingTypes");
-			string name = GetUnitNameFromFile(buildingSec, &curdata);
+			std::string buildingSec = currentFileData.GetString(Key, "BuildingTypes");
+			std::string name = getUnitNameFromFile(buildingSec, &currentFileData);
 
 			if(name != "") {
 				unitContainer cont;
@@ -315,21 +317,21 @@ void ParseSections() {
 				cont.name = name;
 				cont.key = atoi(Key.c_str());
 
-				buildingnames[atoi(Key.c_str())] = cont;
+				buildings[atoi(Key.c_str())] = cont;
 			}
 		}
 	}
 
-	t_Section * vehSec = curdata.GetSection("VehicleTypes");
+	t_Section * vehSec = currentFileData.GetSection("VehicleTypes");
 
 
 	if (vehSec != NULL) {
 		KeyList * vehl = vehSec->GetKeyList();
 		for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string vehicleID = curdata.GetString(Key, "VehicleTypes");
-			string name = GetUnitNameFromFile(vehicleID, &curdata);
+			std::string vehicleID = currentFileData.GetString(Key, "VehicleTypes");
+			std::string name = getUnitNameFromFile(vehicleID, &currentFileData);
 
 			if(name != "") {
 				unitContainer cont;
@@ -337,61 +339,61 @@ void ParseSections() {
 				cont.name = name;
 				cont.key = atoi(Key.c_str());
 
-				vehiclenames[vehicleID] = cont;
+				vehicles[vehicleID] = cont;
 			}
 		}
 	}
 
-	t_Section * infSec = curdata.GetSection("InfantryTypes");
+	t_Section * infSec = currentFileData.GetSection("InfantryTypes");
 
 	if (infSec != NULL) {
 		KeyList * infl = infSec->GetKeyList();
 		for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string infID = curdata.GetString(Key, "InfantryTypes");
-			string name = GetUnitNameFromFile(infID, &curdata);
+			std::string infID = currentFileData.GetString(Key, "InfantryTypes");
+			std::string name = getUnitNameFromFile(infID, &currentFileData);
 
 			if(name != "") {
 				unitContainer cont;
 				cont.unitID = infID;
 				cont.name = name;
 
-				infantrynames[infID] = cont;
+				infantry[infID] = cont;
 			}
 		}
 	}
 
-	t_Section * airSec = curdata.GetSection("AircraftTypes");
+	t_Section * airSec = currentFileData.GetSection("AircraftTypes");
 
 	if (airSec != NULL) {
 		KeyList * airl = airSec->GetKeyList();
 		for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string airID = curdata.GetString(Key, "AircraftTypes");
-			string name = GetUnitNameFromFile(airID, &curdata);
+			std::string airID = currentFileData.GetString(Key, "AircraftTypes");
+			std::string name = getUnitNameFromFile(airID, &currentFileData);
 
 			if(name != "") {
 				unitContainer cont;
 				cont.unitID = airID;
 				cont.name = name;
 
-				aircraftnames[airID] = cont;
+				aircraft[airID] = cont;
 			}
 		}
 	}
 
-	t_Section * localSec = curdata.GetSection("VariableNames");
+	t_Section * localSec = currentFileData.GetSection("VariableNames");
 
 	if (localSec != NULL) {
 		KeyList * locall = localSec->GetKeyList();
 		for(KeyItor keyIT = locall->begin(); keyIT < locall->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string localstr = curdata.GetString(Key, "VariableNames");
+			std::string localstr = currentFileData.GetString(Key, "VariableNames");
 
-			string name = localstr.substr(0, localstr.find(","));
+			std::string name = localstr.substr(0, localstr.find(","));
 			localstr = localstr.substr(localstr.find(",")+1);
 
 			bool set = atoi(localstr.c_str());
@@ -404,39 +406,39 @@ void ParseSections() {
 		}
 	}
 
-	t_Section * houseSec = curdata.GetSection("Houses");
+	t_Section * houseSec = currentFileData.GetSection("Houses");
 
 	if (houseSec != NULL) {
 		KeyList * housel = houseSec->GetKeyList();
 		for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
-			string Key = keyIT->szKey;
+			std::string Key = keyIT->szKey;
 
-			string housename = curdata.GetString(Key, "Houses");
+			std::string housename = currentFileData.GetString(Key, "Houses");
 
 			houses[atoi(Key.c_str())] = housename;
 		}
 	}
 
-	for(unitIT IT = aircraftnames.begin(); IT != aircraftnames.end(); ++IT) {
-		t_Section * curSec = curdata.GetSection(IT->first);
+	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+		t_Section * curSec = currentFileData.GetSection(IT->first);
 		if(curSec != NULL) {
-			string name = curdata.GetString("Name", IT->first);
+			std::string name = currentFileData.GetString("Name", IT->first);
 			if(name != "")
 				IT->second.name = name;
 		}
 	}
-	for(unitIT IT = infantrynames.begin(); IT != infantrynames.end(); ++IT) {
-		t_Section * curSec = curdata.GetSection(IT->first);
+	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+		t_Section * curSec = currentFileData.GetSection(IT->first);
 		if(curSec != NULL) {
-			string name = curdata.GetString("Name", IT->first);
+			std::string name = currentFileData.GetString("Name", IT->first);
 			if(name != "")
 				IT->second.name = name;
 		}
 	}
-	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
-		t_Section * curSec = curdata.GetSection(IT->first);
+	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+		t_Section * curSec = currentFileData.GetSection(IT->first);
 		if(curSec != NULL) {
-			string name = curdata.GetString("Name", IT->first);
+			std::string name = currentFileData.GetString("Name", IT->first);
 			if(name != "")
 				IT->second.name = name;
 		}
@@ -444,38 +446,38 @@ void ParseSections() {
 
 }
 
-Taskforce* FindNewTaskforceFromFile(string taskforceID) {
+Taskforce* findNewTaskforceFromFile(std::string taskforceID) {
 
-	t_Section * cTaskF = curdata.GetSection(taskforceID);
+	t_Section * cTaskF = currentFileData.GetSection(taskforceID);
 	if(cTaskF != NULL) {
 
-		string name = "New Taskforce";
+		std::string name = "New Taskforce";
 		int32_t group = -1;
 
 		Taskforce *nTaskforce = new Taskforce(taskforceID);
 
 		KeyList * taskl = cTaskF->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
-			string cur_line = curdata.GetString(Key, taskforceID);
+			std::string Key = keyIT->szKey;
+			std::string cur_line = currentFileData.GetString(Key, taskforceID);
 
-			string type = "";
+			std::string type = "";
 			short amount = 0;
 
 			if(Key == "Group") {
-				group = curdata.GetInt(Key, taskforceID);
+				group = currentFileData.GetInt(Key, taskforceID);
 				nTaskforce->setGroup(group);
 			} else if (Key == "Name") {
 				name = cur_line;
 				nTaskforce->setName(name);
 			} else {
-				string val = GetValueStr(cur_line);
+				std::string val = getValueStr(cur_line);
 				amount = atoi(val.substr(0, val.find(",")).c_str());
 
 				val = val.substr(val.find(",")+1);
 				type = val;
 
-				nTaskforce->NewLine(type, amount);
+				nTaskforce->addLine(type, amount);
 			}
 		}
 		return nTaskforce;
@@ -484,20 +486,20 @@ Taskforce* FindNewTaskforceFromFile(string taskforceID) {
 	return NULL;
 }
 
-Script *FindNewScriptFromFile(string scriptID) {
+Script *findNewScriptFromFile(std::string scriptID) {
 
-	t_Section * cScript = curdata.GetSection(scriptID);
+	t_Section * cScript = currentFileData.GetSection(scriptID);
 
 	if(cScript != NULL) {
 
-		string name = "New Script";
+		std::string name = "New Script";
 
 		Script *nScript = new Script(scriptID);
 
 		KeyList * scriptl = cScript->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
-			string Key = keyIT->szKey;
-			string cur_line = curdata.GetString(Key, scriptID);
+			std::string Key = keyIT->szKey;
+			std::string cur_line = currentFileData.GetString(Key, scriptID);
 
 			short type = 0;
 			int param = 0;
@@ -507,13 +509,13 @@ Script *FindNewScriptFromFile(string scriptID) {
 				nScript->setName(name);
 			} else {
 
-				string val = cur_line;
+				std::string val = cur_line;
 				type = atoi(val.substr(0, val.find(",")).c_str());
 
 				val = val.substr(val.find(",")+1);
 				param = atoi(val.c_str());
 
-				nScript->NewLine(type, param);
+				nScript->addLine(type, param);
 			}
 		}
 		return nScript;
@@ -522,29 +524,29 @@ Script *FindNewScriptFromFile(string scriptID) {
 	return NULL;
 }
 
-Team *FindNewTeamFromFile(string teamID) {
-	t_Section * cTeam = curdata.GetSection(teamID);
-	if(cTeam != NULL) {
+Team *findNewTeamFromFile(std::string teamID) {
+	t_Section * cTeam = currentFileData.GetSection(teamID);
 
+	if(cTeam != NULL) {
 		int max = 0;
-		string tag;
+		std::string tag;
 		bool full = false;
-		string name;
+		std::string name;
 		int group = -1;
-		string house;
-		string script;
+		std::string house;
+		std::string script;
 		bool whiner = false;
 		bool droppod = false;
 		bool suicide = false;
 		bool loadable = false;
 		bool prebuild = false;
 		int priority = 1;
-		string waypoint;
+		std::string waypoint;
 		bool annoyance = false;
 		bool ionimmune = false;
 		bool recruiter = false;
 		bool reinforce = false;
-		string taskforce;
+		std::string taskforce;
 		int techlevel;
 		bool aggressive = false;
 		bool autocreate = false;
@@ -558,67 +560,37 @@ Team *FindNewTeamFromFile(string teamID) {
 		bool transportsreturnonunload = false;
 		bool areteammembersrecruitable = true;
 
-		max = curdata.GetInt("Max", teamID);
-
-		tag = curdata.GetString("Tag", teamID);
-
-		full = ConvertToBool(curdata.GetString("Full", teamID));
-
-		name = curdata.GetString("Name", teamID);
-
-		group = curdata.GetInt("Group", teamID);
-
-		house = curdata.GetString("House", teamID);
-
-		script = curdata.GetString("Script", teamID);
-
-		whiner = ConvertToBool(curdata.GetString("Whiner", teamID));
-
-		droppod = ConvertToBool(curdata.GetString("Droppod", teamID));
-
-		suicide = ConvertToBool(curdata.GetString("Suicide", teamID));
-
-		loadable = ConvertToBool(curdata.GetString("Loadable", teamID));
-
-		prebuild = ConvertToBool(curdata.GetString("Prebuild", teamID));
-
-		priority = curdata.GetInt("Priority", teamID);
-
-		waypoint = curdata.GetString("Waypoint", teamID);
-
-		annoyance = ConvertToBool(curdata.GetString("Annoyance", teamID));
-
-		ionimmune = ConvertToBool(curdata.GetString("IonImmune", teamID));
-
-		recruiter = ConvertToBool(curdata.GetString("Recruiter", teamID));
-
-		reinforce = ConvertToBool(curdata.GetString("Reinforce", teamID));
-
-		taskforce = curdata.GetString("TaskForce", teamID);
-
-		techlevel = curdata.GetInt("TechLevel", teamID);
-
-		aggressive = ConvertToBool(curdata.GetString("Aggressive", teamID));
-
-		autocreate = ConvertToBool(curdata.GetString("Autocreate", teamID));
-
-		guardslower = ConvertToBool(curdata.GetString("GuardSlower", teamID));
-
-		ontransonly = ConvertToBool(curdata.GetString("OnTransOnly", teamID));
-
-		avoidthreats = ConvertToBool(curdata.GetString("AvoidThreats", teamID));
-
-		looserecruit = ConvertToBool(curdata.GetString("LooseRecruit", teamID));
-
-		veteranlevel = curdata.GetInt("VeteranLevel", teamID);
-
-		isbasedefense = ConvertToBool(curdata.GetString("IsBaseDefense", teamID));
-
-		onlytargethousenemy = ConvertToBool(curdata.GetString("OnlyTargetHouseEnemy", teamID));
-
-		transportsreturnonunload = ConvertToBool(curdata.GetString("TransportsReturnOnUnload", teamID));
-
-		areteammembersrecruitable = ConvertToBool(curdata.GetString("AreTeamMembersRecruitable", teamID));
+		max = currentFileData.GetInt("Max", teamID);
+		tag = currentFileData.GetString("Tag", teamID);
+		full = convertToBool(currentFileData.GetString("Full", teamID));
+		name = currentFileData.GetString("Name", teamID);
+		group = currentFileData.GetInt("Group", teamID);
+		house = currentFileData.GetString("House", teamID);
+		script = currentFileData.GetString("Script", teamID);
+		whiner = convertToBool(currentFileData.GetString("Whiner", teamID));
+		droppod = convertToBool(currentFileData.GetString("Droppod", teamID));
+		suicide = convertToBool(currentFileData.GetString("Suicide", teamID));
+		loadable = convertToBool(currentFileData.GetString("Loadable", teamID));
+		prebuild = convertToBool(currentFileData.GetString("Prebuild", teamID));
+		priority = currentFileData.GetInt("Priority", teamID);
+		waypoint = currentFileData.GetString("Waypoint", teamID);
+		annoyance = convertToBool(currentFileData.GetString("Annoyance", teamID));
+		ionimmune = convertToBool(currentFileData.GetString("IonImmune", teamID));
+		recruiter = convertToBool(currentFileData.GetString("Recruiter", teamID));
+		reinforce = convertToBool(currentFileData.GetString("Reinforce", teamID));
+		taskforce = currentFileData.GetString("TaskForce", teamID);
+		techlevel = currentFileData.GetInt("TechLevel", teamID);
+		aggressive = convertToBool(currentFileData.GetString("Aggressive", teamID));
+		autocreate = convertToBool(currentFileData.GetString("Autocreate", teamID));
+		guardslower = convertToBool(currentFileData.GetString("GuardSlower", teamID));
+		ontransonly = convertToBool(currentFileData.GetString("OnTransOnly", teamID));
+		avoidthreats = convertToBool(currentFileData.GetString("AvoidThreats", teamID));
+		looserecruit = convertToBool(currentFileData.GetString("LooseRecruit", teamID));
+		veteranlevel = currentFileData.GetInt("VeteranLevel", teamID);
+		isbasedefense = convertToBool(currentFileData.GetString("IsBaseDefense", teamID));
+		onlytargethousenemy = convertToBool(currentFileData.GetString("OnlyTargetHouseEnemy", teamID));
+		transportsreturnonunload = convertToBool(currentFileData.GetString("TransportsReturnOnUnload", teamID));
+		areteammembersrecruitable = convertToBool(currentFileData.GetString("AreTeamMembersRecruitable", teamID));
 
 
 		return new Team(teamID, max, tag, full, name, group, house, script, whiner, droppod, suicide,
@@ -633,24 +605,24 @@ Team *FindNewTeamFromFile(string teamID) {
 
 
 
-void ParseRules()
+void parseRules()
 {
 
 	// Structure ID counter
 	uint16_t i = 0;
 
 	// Tiberian Sun rules
-	CDataFile ts_rules_data(ts_rules);
+	CDataFile ts_rules_data(tsRulesPath);
 	{
 		t_Section * buildSec = ts_rules_data.GetSection("BuildingTypes");
 
 		if (buildSec != NULL) {
 			KeyList * buildl = buildSec->GetKeyList();
 			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string buildingID = ts_rules_data.GetString(Key, "BuildingTypes");
-				string name = GetUnitNameFromFile(buildingID, &ts_rules_data);
+				std::string buildingID = ts_rules_data.GetString(Key, "BuildingTypes");
+				std::string name = getUnitNameFromFile(buildingID, &ts_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
@@ -658,7 +630,7 @@ void ParseRules()
 					cont.name = name;
 					cont.key = atoi(Key.c_str());
 
-					buildingnames[i] = cont;
+					buildings[i] = cont;
 				}
 
 				++i;
@@ -670,17 +642,17 @@ void ParseRules()
 		if (vehSec != NULL) {
 			KeyList * vehl = vehSec->GetKeyList();
 			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string vehicleID = ts_rules_data.GetString(Key, "VehicleTypes");
-				string name = GetUnitNameFromFile(vehicleID, &ts_rules_data);
+				std::string vehicleID = ts_rules_data.GetString(Key, "VehicleTypes");
+				std::string name = getUnitNameFromFile(vehicleID, &ts_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = vehicleID;
 					cont.name = name;
 
-					vehiclenames[vehicleID] = cont;
+					vehicles[vehicleID] = cont;
 				}
 			}
 		}
@@ -690,16 +662,16 @@ void ParseRules()
 		if (infSec != NULL) {
 			KeyList * infl = infSec->GetKeyList();
 			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string infID = ts_rules_data.GetString(Key, "InfantryTypes");
-				string name = GetUnitNameFromFile(infID, &ts_rules_data);
+				std::string infID = ts_rules_data.GetString(Key, "InfantryTypes");
+				std::string name = getUnitNameFromFile(infID, &ts_rules_data);
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = infID;
 					cont.name = name;
 
-					infantrynames[infID] = cont;
+					infantry[infID] = cont;
 				}
 			}
 		}
@@ -709,17 +681,17 @@ void ParseRules()
 		if (airSec != NULL) {
 			KeyList * airl = airSec->GetKeyList();
 			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string airID = ts_rules_data.GetString(Key, "AircraftTypes");
-				string name = GetUnitNameFromFile(airID, &ts_rules_data);
+				std::string airID = ts_rules_data.GetString(Key, "AircraftTypes");
+				std::string name = getUnitNameFromFile(airID, &ts_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = airID;
 					cont.name = name;
 
-					aircraftnames[airID] = cont;
+					aircraft[airID] = cont;
 				}
 			}
 		}
@@ -729,11 +701,11 @@ void ParseRules()
 		if (globalSec != NULL) {
 			KeyList * globall = globalSec->GetKeyList();
 			for(KeyItor keyIT = globall->begin(); keyIT < globall->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string globalstr = ts_rules_data.GetString(Key, "VariableNames");
+				std::string globalstr = ts_rules_data.GetString(Key, "VariableNames");
 
-				string name = globalstr.substr(0, globalstr.find(","));
+				std::string name = globalstr.substr(0, globalstr.find(","));
 				globalstr = globalstr.substr(globalstr.find(",")+1);
 
 				bool set = atoi(globalstr.c_str());
@@ -751,9 +723,9 @@ void ParseRules()
 		if (houseSec != NULL) {
 			KeyList * housel = houseSec->GetKeyList();
 			for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string housename = ts_rules_data.GetString(Key, "Houses");
+				std::string housename = ts_rules_data.GetString(Key, "Houses");
 
 				houses[atoi(Key.c_str())] = housename;
 			}
@@ -765,17 +737,17 @@ void ParseRules()
 	ts_rules_data.~CDataFile();
 
 	// Tiberian Sun Firestorm rules
-	CDataFile fs_rules_data(fs_rules);
+	CDataFile fs_rules_data(fsRulesPath);
 	{
 		t_Section * buildSec = fs_rules_data.GetSection("BuildingTypes");
 
 		if (buildSec != NULL) {
 			KeyList * buildl = buildSec->GetKeyList();
 			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string buildingSec = fs_rules_data.GetString(Key, "BuildingTypes");
-				string name = GetUnitNameFromFile(buildingSec, &fs_rules_data);
+				std::string buildingSec = fs_rules_data.GetString(Key, "BuildingTypes");
+				std::string name = getUnitNameFromFile(buildingSec, &fs_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
@@ -783,7 +755,7 @@ void ParseRules()
 					cont.name = name;
 					cont.key = atoi(Key.c_str()) + 169;
 
-					buildingnames[i] = cont;
+					buildings[i] = cont;
 				}
 				++i;
 			}
@@ -795,17 +767,17 @@ void ParseRules()
 		if (vehSec != NULL) {
 			KeyList * vehl = vehSec->GetKeyList();
 			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string vehicleID = fs_rules_data.GetString(Key, "VehicleTypes");
-				string name = GetUnitNameFromFile(vehicleID, &fs_rules_data);
+				std::string vehicleID = fs_rules_data.GetString(Key, "VehicleTypes");
+				std::string name = getUnitNameFromFile(vehicleID, &fs_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = vehicleID;
 					cont.name = name;
 
-					vehiclenames[vehicleID] = cont;
+					vehicles[vehicleID] = cont;
 				}
 			}
 		}
@@ -815,17 +787,17 @@ void ParseRules()
 		if (infSec != NULL) {
 			KeyList * infl = infSec->GetKeyList();
 			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string infID = fs_rules_data.GetString(Key, "InfantryTypes");
-				string name = GetUnitNameFromFile(infID, &fs_rules_data);
+				std::string infID = fs_rules_data.GetString(Key, "InfantryTypes");
+				std::string name = getUnitNameFromFile(infID, &fs_rules_data);
 
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = infID;
 					cont.name = name;
 
-					infantrynames[infID] = cont;
+					infantry[infID] = cont;
 				}
 			}
 		}
@@ -835,33 +807,32 @@ void ParseRules()
 		if (airSec != NULL) {
 			KeyList * airl = airSec->GetKeyList();
 			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-				string Key = keyIT->szKey;
+				std::string Key = keyIT->szKey;
 
-				string airID = fs_rules_data.GetString(Key, "AircraftTypes");
-				string name = GetUnitNameFromFile(airID, &fs_rules_data);
+				std::string airID = fs_rules_data.GetString(Key, "AircraftTypes");
+				std::string name = getUnitNameFromFile(airID, &fs_rules_data);
 				if(name != "") {
 					unitContainer cont;
 					cont.unitID = airID;
 					cont.name = name;
 
-					aircraftnames[airID] = cont;
+					aircraft[airID] = cont;
 				}
 			}
 		}
 
 		fs_rules_data.Clear();
 		fs_rules_data.~CDataFile();
-
 	}
 }
 
 
-string GetUnitNameFromFile(string unitID, CDataFile *file)
+std::string getUnitNameFromFile(std::string unitID, CDataFile *file)
 {
 	t_Section * cUnit = file->GetSection(unitID);
 	if(cUnit != NULL) {
 		return file->GetString("Name", unitID);
 	}
 
-	return string("");
+	return std::string("");
 }

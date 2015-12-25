@@ -3,59 +3,62 @@
 
 #include "main.h"
 
-struct Action;
-struct Event;
+class Action;
+class Event;
 class Trigger
 {
-public:
+	public:
 
-	std::vector <Action*> actions;
-	std::vector <Event*> events;
+		std::vector <Action*> actions;
+		std::vector <Event*> events;
 
-	Trigger(string nName);
-	Trigger(string nID, string nHouse, string nAttachID, string nName, bool nIsDis, bool nIsEas, bool nIsMed, bool nIsHar);
-	Trigger(Trigger* trig);
-	Trigger(string nID, Trigger* trig);
-	Trigger(string nID, string nName);
-	~Trigger();
+		Trigger(std::string newName);
+		Trigger(std::string newID, std::string newHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar);
+		Trigger(Trigger* otherTrigger);
+		Trigger(std::string newID, Trigger* otherTrigger);
+		Trigger(std::string newID, std::string newName);
+		~Trigger();
 
-	std::string getID();
-	void setID(std::string nID);
+		void setID(std::string newID);
 
-	void Save();
+		void save();
 
-	bool isDis();
-	void setDis(bool dis);
+		void setDis(bool dis);
 
-	void setName(string nName);
-	QString getName() { return name.c_str(); }
+		void setName(std::string nName);
 
-	void addEvent(Event *nEvent);
-	void addAction(Action *nAction);
+		void addEvent(Event *nEvent);
+		void addAction(Action *nAction);
 
-	void eraseAction(int32_t count);
+		void eraseAction(int32_t count);
 
-	void eraseEventByType(int32_t type);
+		void eraseEventByType(int32_t type);
 
-	void eraseActionsFromBuffer();
-	void eraseEventsFromBuffer();
+		void eraseActionsFromBuffer();
+		void eraseEventsFromBuffer();
 
-	Action* getAction(int32_t count);
-	Action* getActionByType(int32_t type);
+		Action* getAction(int32_t count) const;
+		Action* getActionByType(int32_t type);
 
-	bool hasEventType(int32_t type);
-	bool hasActionType(int32_t type);
+		bool hasEventType(int32_t type);
+		bool hasActionType(int32_t type);
 
-	Event* getEventByType(int32_t type);
+		Event* getEventByType(int32_t type);
 
-private:
-	std::string name;
-	std::string house;
-	std::string ID;
-	std::string attachID;
+		std::string getID() const;
 
-	bool isDisabled;
-	bool isEasy, isMedium, isHard;
+		bool isDisabled() const;
+
+		QString getName() const;
+
+	private:
+		std::string name;
+		std::string house;
+		std::string ID;
+		std::string attachID;
+
+		bool isDis;
+		bool isEasy, isMedium, isHard;
 
 };
 

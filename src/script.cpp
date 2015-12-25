@@ -1,114 +1,129 @@
 #include "script.h"
 
-Script::Script(string nID)
+Script::Script(std::string newID)
 {
-	name = string("");
+	name = std::string("");
 
-	ID = nID;
+	ID = newID;
 
 	lineCounter = 0;
 }
 
-Script::Script(string nID, string nName)
+Script::Script(std::string newID, std::string newName)
 {
-	name = nName;
+	name = newName;
 
-	ID = nID;
+	ID = newID;
 
 	lineCounter = 0;
 }
 
-Script::Script(string nID, Script *cS)
+Script::Script(std::string newID, Script *currentScript)
 {
-	ID = nID;
+	ID = newID;
 
 	lineCounter = 0;
 
-	slines.clear();
-	for(slineIT IT = cS->slines.begin(); IT != cS->slines.end(); ++IT) {
-		ScriptLine *sline = new ScriptLine();
-		sline->param = (*IT)->param;
-		sline->type = (*IT)->type;
-		sline->ID = (*IT)->ID;
-		slines.push_back(sline);
+	scriptLines.clear();
+	for(slineIT IT = currentScript->scriptLines.begin(); IT != currentScript->scriptLines.end(); ++IT) {
+		ScriptLine *scriptLine = new ScriptLine();
+		scriptLine->param = (*IT)->param;
+		scriptLine->type = (*IT)->type;
+		scriptLine->ID = (*IT)->ID;
+		scriptLines.push_back(scriptLine);
 		++lineCounter;
 	}
 }
 
 Script::~Script()
 {
-	DeleteSectionInBuffer(ID);
+	deleteSectionFromBuffer(ID);
 }
 
-void Script::NewLine(short type, int param) {
-	ScriptLine *nLine = new ScriptLine();
-	nLine->param = param;
-	nLine->type = type;
-	nLine->ID = lineCounter;
+void Script::addLine(short type, int parameter) {
+	ScriptLine *newLine = new ScriptLine();
+	newLine->param = parameter;
+	newLine->type = type;
+	newLine->ID = lineCounter;
 
-	slines.push_back(nLine);
+	scriptLines.push_back(newLine);
 
 	++lineCounter;
 }
 
-void Script::InsertLine(short type, short param, short ID)
+void Script::insertLine(short type, short parameter, short ID)
 {
-	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
 		if((*IT)->ID >= ID) {
 			(*IT)->ID = (*IT)->ID + 1;
 		}
 	}
 
-	ScriptLine *nLine = new ScriptLine();
-	nLine->param = param;
-	nLine->type = type;
-	nLine->ID = ID;
+	ScriptLine *newLine = new ScriptLine();
+	newLine->param = parameter;
+	newLine->type = type;
+	newLine->ID = ID;
 
-	slines.insert(slines.begin() + ID, nLine);
+	scriptLines.insert(scriptLines.begin() + ID, newLine);
 
 	++lineCounter;
 
 }
 
-void Script::DeleteLine(short lineID)
+void Script::deleteLine(short lineID)
 {
 
-	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
 		if((*IT)->ID == lineID) {
 			delete (*IT);
-			slines.erase(IT);
+			scriptLines.erase(IT);
 			break;
 		}
 	}
 
 	lineCounter = 0;
 
-	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
+	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	DeleteValueInBuffer(ID, IntToStr(lineID));
+	deleteLineFromBuffer(ID, intToStr(lineID));
 }
 
-void Script::Save()
+void Script::setName(std::string newName)
 {
-	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
-		stringstream valueSS;
-		valueSS << (*IT)->type << "," << (*IT)->param;
-		WriteValueToBuffer(ID, IntToStr((*IT)->ID), valueSS.str());
-	}
-	WriteValueToBuffer(ID, "Name", name);
+	name = newName;
 }
 
-std::string Script::getID() {
+void Script::save()
+{
+	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
+		std::stringstream valueSS;
+		valueSS << (*IT)->type << "," << (*IT)->param;
+		writeLineToBuffer(ID, intToStr((*IT)->ID), valueSS.str());
+	}
+	writeLineToBuffer(ID, "Name", name);
+}
+
+std::string Script::getName() const
+{
+	return name;
+}
+
+std::string Script::getID() const {
 	return ID;
 }
 
-vector<Script::ScriptLine *> Script::GetLinesByType(SATargetType type)
+uint16_t Script::getLineAmount() const
 {
-	vector<ScriptLine*> lines;
-	for(slineIT IT = slines.begin(); IT != slines.end(); ++IT) {
-		if(GetScriptActionTargetType((*IT)->type) == type) {
+	return lineCounter;
+}
+
+std::vector<Script::ScriptLine *> Script::GetLinesByType(SATargetType type)
+{
+	std::vector<ScriptLine*> lines;
+	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
+		if(getScriptActionTargetType((*IT)->type) == type) {
 			lines.push_back((*IT));
 		}
 	}

@@ -1,70 +1,70 @@
 #include "trigger.h"
 
-Trigger::Trigger(string nName)
+Trigger::Trigger(std::string newName)
 {
-	name = nName;
+	name = newName;
 	ID = fffID();
 	attachID = "<none>";
 	house = "Neutral";
 	isEasy = true;
 	isMedium = true;
 	isHard = true;
-	isDisabled = false;
+	isDis = false;
 }
 
-Trigger::Trigger(string nID, string nHouse, string nAttachID, string nName, bool nIsDis, bool nIsEas, bool nIsMed, bool nIsHar)
+Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, std::string newName, bool nIsDis, bool newIsEas, bool newIsMed, bool newIsHar)
 {
-	name = nName;
+	name = newName;
 	ID = nID;
-	attachID = nAttachID;
+	attachID = newAttachID;
 	house = nHouse;
-	isEasy = nIsEas;
-	isMedium = nIsMed;
-	isHard = nIsHar;
-	isDisabled = nIsDis;
+	isEasy = newIsEas;
+	isMedium = newIsMed;
+	isHard = newIsHar;
+	isDis = nIsDis;
 
 }
 
-Trigger::Trigger(Trigger *trig)
+Trigger::Trigger(Trigger *otherTrigger)
 {
-	*this = *trig;
+	*this = *otherTrigger;
 	setID(fffID());
 	events.clear();
-	for(eventIT IT = trig->events.begin(); IT != trig->events.end(); ++IT) {
+	for(eventIT IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
 		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT IT = trig->actions.begin(); IT != trig->actions.end(); ++IT) {
+	for(actionIT IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
 		actions.push_back(new Action(*IT, ID));
 	}
 
 }
 
-Trigger::Trigger(string nID, Trigger *trig)
+Trigger::Trigger(std::string newID, Trigger *otherTrigger)
 {
-	*this = *trig;
-	setID(nID);
+	*this = *otherTrigger;
+	setID(newID);
 	events.clear();
-	for(eventIT IT = trig->events.begin(); IT != trig->events.end(); ++IT) {
+	for(eventIT IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
 		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT IT = trig->actions.begin(); IT != trig->actions.end(); ++IT) {
+	for(actionIT IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
 		actions.push_back(new Action(*IT, ID));
 	}
 
 }
 
-Trigger::Trigger(string nID, string nName)
+Trigger::Trigger(std::string newID, std::string newName)
 {
-	name = nName;
-	ID = nID;
+	name = newName;
+	ID = newID;
 	attachID = "<none>";
 	house = "Neutral";
 	isEasy = true;
 	isMedium = true;
 	isHard = true;
-	isDisabled = false;
+	isDis = false;
 }
 
 Trigger::~Trigger()
@@ -80,45 +80,49 @@ Trigger::~Trigger()
 	}
 	actions.clear();
 
-	DeleteValueInBuffer("Triggers", ID);
+	deleteLineFromBuffer("Triggers", ID);
 }
 
-std::string Trigger::getID() {
+std::string Trigger::getID() const {
 	return ID;
 }
 
-void Trigger::setID(std::string nID) {
-	ID = nID;
+void Trigger::setID(std::string newID) {
+	ID = newID;
 }
 
-void Trigger::Save() {
+void Trigger::save() {
 
-	stringstream valueSS;
-	valueSS << house << "," << attachID << "," << name << "," << isDisabled << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
-	WriteValueToBuffer("Triggers", ID, valueSS.str());
+	std::stringstream valueSS;
+	valueSS << house << "," << attachID << "," << name << "," << isDis << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
+	writeLineToBuffer("Triggers", ID, valueSS.str());
 
 	int i = 0;
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
 		i = i + 1;
-		(*IT)->Save(i);
+		(*IT)->save(i);
 	}
 	i = 0;
 	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
 		i = i + 1;
-		(*IT)->Save(i);
+		(*IT)->save(i);
 	}
 
 }
 
-bool Trigger::isDis() {
-	return isDisabled;
+bool Trigger::isDisabled() const {
+	return isDis;
+}
+
+QString Trigger::getName() const {
+	return name.c_str();
 }
 
 void Trigger::setDis(bool dis) {
-	isDisabled = dis;
+	isDis = dis;
 }
 
-void Trigger::setName(string nName) {
+void Trigger::setName(std::string nName) {
 	name = nName;
 }
 
@@ -138,7 +142,7 @@ void Trigger::eraseAction(int32_t count) {
 void Trigger::eraseEventByType(int32_t type)
 {
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
-		if((*IT)->eType == type) {
+		if((*IT)->getType() == type) {
 			delete *IT;
 			events.erase(IT);
 			return;
@@ -146,21 +150,21 @@ void Trigger::eraseEventByType(int32_t type)
 	}
 }
 
-Action* Trigger::getAction(int32_t count) {
+Action* Trigger::getAction(int32_t count) const {
 	return *(actions.begin()+count);
 }
 
 void Trigger::eraseActionsFromBuffer() {
-	DeleteValueInBuffer("Actions", ID);
+	deleteLineFromBuffer("Actions", ID);
 }
 
 void Trigger::eraseEventsFromBuffer() {
-	DeleteValueInBuffer("Events", ID);
+	deleteLineFromBuffer("Events", ID);
 }
 
 bool Trigger::hasEventType(int32_t type) {
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
-		if((*IT)->eType == type) {
+		if((*IT)->getType() == type) {
 			return true;
 		}
 	}
@@ -169,7 +173,7 @@ bool Trigger::hasEventType(int32_t type) {
 
 bool Trigger::hasActionType(int32_t type) {
 	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
-		if((*IT)->aType == type) {
+		if((*IT)->getType() == type) {
 			return true;
 		}
 	}
@@ -178,7 +182,7 @@ bool Trigger::hasActionType(int32_t type) {
 
 Action* Trigger::getActionByType(int32_t type) {
 	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
-		if((*IT)->aType == type) {
+		if((*IT)->getType() == type) {
 			return *IT;
 		}
 	}
@@ -187,7 +191,7 @@ Action* Trigger::getActionByType(int32_t type) {
 
 Event* Trigger::getEventByType(int32_t type) {
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
-		if((*IT)->eType == type) {
+		if((*IT)->getType() == type) {
 			return *IT;
 		}
 	}

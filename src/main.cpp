@@ -3,8 +3,8 @@
 
 int main(int argc, char *argv[])
 {
-	curdata.m_Flags |= AUTOCREATE_KEYS;
-	curdata.m_Flags |= AUTOCREATE_SECTIONS;
+	currentFileData.m_Flags |= AUTOCREATE_KEYS;
+	currentFileData.m_Flags |= AUTOCREATE_SECTIONS;
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();

@@ -3,34 +3,33 @@
 
 #include "main.h"
 
-struct Action
+class Action
 {
-	Action(string nID);
-	Action(string nID, int32_t naType, int32_t nwPoint, int32_t pa1, int32_t pa2, int32_t pa3, int32_t pa4, int32_t pa5, int32_t pa6);
-	Action(string nID, int32_t naType, int32_t nwPoint, int32_t pa1, string pa2, int32_t pa3, int32_t pa4, int32_t pa5, int32_t pa6);
-	Action(Action *oAct, string nID);
+	public:
+		Action(std::string newID);
+		Action(Action *otherAction, std::string newID);
+		Action(std::string newID, int32_t newType, int32_t newWayPoint);
+		Action(std::string newID, int32_t newType, std::array<std::string, 6> newParameters, int32_t newWaypoint);
+		Action(std::string newID, int32_t newType, int32_t newWayPoint,
+			   std::string parameter1, std::string parameter2, std::string parameter3, std::string parameter4, std::string parameter5, std::string parameter6);
 
-	void Save(int32_t count);
+		void save(int32_t count);
 
-	void editType(int32_t type);
-	void editWPoint(int32_t wayP);
-	void editP1(int32_t pa1);
-	void editP2(int32_t pa2);
-	void editP2(string pa2);
-	void editP3(int32_t pa3);
-	void editP4(int32_t pa4);
-	void editP5(int32_t pa5);
-	void editP6(int32_t pa6);
+		void setType(int32_t newType);
+		void setWayPoint(int32_t newWaypoint);
 
-	int32_t getType();
-	int32_t getWaypoint();
+		void setParameter(int i, std::string data);
+		void setParameter(int i, int32_t data);
 
-	string getP2();
+		int32_t getType() const;
+		int32_t getWaypoint() const;
+		std::string getParameter(int i) const;
 
-	string ID;
-	int32_t aType;
-	string p1, p2, p3, p4, p5, p6;
-	string wPoint;
+	private:
+		std::string ID;
+		int32_t type;
+		std::array<std::string, 6> params;
+		std::string waypoint;
 };
 
 #endif // ACTION_H

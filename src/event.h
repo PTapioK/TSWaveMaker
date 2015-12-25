@@ -3,17 +3,23 @@
 
 #include "main.h"
 
-struct Event
+class Event
 {
-	Event(string nID);
-	Event(Event* oEvent, string nID);
-	Event(int32_t neType, int32_t nparam, string nID);
+	public:
+		Event(std::string newID);
+		Event(Event* otherEvent, std::string newID);
+		Event(int32_t newType, int32_t newParameter, std::string newID);
 
-	int32_t eType;
-	string param;
-	string ID;
+		void setParameter(std::string parameter);
+		void setType(int32_t newType);
+		void save(int32_t count);
 
-	void Save(int32_t count);
+		std::string getParameter() const;
+		int32_t getType() const;
+	private:
+		int32_t type;
+		std::string param;
+		std::string ID;
 };
 
 #endif // EVENT_H

@@ -5,50 +5,47 @@
 
 class Script
 {
-public:
-	Script(string nID);
-	Script(string nID, string nName);
-	Script(string nID, Script *cS);
-	~Script();
+	public:
+		Script(std::string newID);
+		Script(std::string newID, std::string newName);
+		Script(std::string newID, Script *currentScript);
+		~Script();
 
-	void NewLine(short type, int param);
-	void InsertLine(short type, short param, short ID);
-	void DeleteLine(short lineID);
+		void addLine(short type, int parameter);
+		void insertLine(short type, short parameter, short ID);
+		void deleteLine(short lineID);
 
-	void setName(string nName) { name = nName; }
+		void setName(std::string newName);
 
-	string getName() { return name; }
+		void save();
 
-	std::string getID();
+		std::string getName() const;
+		std::string getID() const;
+		uint16_t getLineAmount() const;
 
-	uint32_t getLineAmount() { return lineCounter; }
+	private:
 
-	void Save();
+		friend class ScriptSection;
 
-private:
+		std::string ID;
 
-	friend class ScriptSection;
+		std::string name;
 
-	std::string ID;
+		struct ScriptLine
+		{
+			short type;
+			int param;
 
-	string name;
+			short ID;
+		};
 
-	struct ScriptLine
-	{
-		short type;
-		int param;
+		std::vector <ScriptLine*> scriptLines;
+		typedef std::vector <ScriptLine*>::iterator slineIT;
 
-		short ID;
-	};
+		uint16_t lineCounter;
 
-	std::vector <ScriptLine*> slines;
-	typedef std::vector <ScriptLine*>::iterator slineIT;
-
-	short lineCounter;
-
-public:
-
-	vector<Script::ScriptLine*> GetLinesByType(SATargetType type);
+	public:
+		std::vector<Script::ScriptLine*> GetLinesByType(SATargetType type);
 
 };
 

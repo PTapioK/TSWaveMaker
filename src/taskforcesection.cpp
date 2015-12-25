@@ -20,11 +20,11 @@ void TaskforceSection::on_TaskforceList_itemSelectionChanged()
 	ui->UnitBox->setCurrentIndex(-1);
 	ui->UnitNumberBox->setValue(0);
 	if(ui->TaskforceList->selectedItems().size() != NULL) {
-		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
+		Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
 		ui->taskforceNameEdit->setText(ui->TaskforceList->selectedItems().last()->text());
 
 		for(std::vector <Taskforce::TaskforceLine*>::iterator tlineIT = cur_taskforce->tlines.begin(); tlineIT != cur_taskforce->tlines.end(); ++tlineIT) {
-			ui->UnitList->addItem(string(IntToStr((*tlineIT)->amount) + " " + GetUnitNameByUnitID((*tlineIT)->type)).c_str());
+			ui->UnitList->addItem(std::string(intToStr((*tlineIT)->amount) + " " + getUnitNameByUnitID((*tlineIT)->type)).c_str());
 		}
 	}
 }
@@ -33,9 +33,9 @@ void TaskforceSection::on_TaskforceList_itemSelectionChanged()
 void TaskforceSection::on_NewTaskforce_clicked()
 {
 	if(ui->TaskforceList->findItems(ui->taskforceNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		string name = ui->taskforceNameEdit->text().toStdString();
+		std::string name = ui->taskforceNameEdit->text().toStdString();
 		ui->TaskforceList->addItem(ui->taskforceNameEdit->text());
-		string nID = fffID();
+		std::string nID = fffID();
 		taskforces[nID] = new Taskforce(nID, name);
 	}
 }
@@ -45,12 +45,12 @@ void TaskforceSection::on_DeleteTaskforce_clicked()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			string name = ui->TaskforceList->selectedItems().at(a)->text().toStdString();
-			string ID = GetTaskforceIDByName(name);
-			delete GetTaskforceByName(name);
+			std::string name = ui->TaskforceList->selectedItems().at(a)->text().toStdString();
+			std::string ID = getTaskforceIDByName(name);
+			delete getTaskforceByName(name);
 			taskforces.erase(ID);
 		}
-		UpdateUi();
+		updateUi();
 	}
 }
 
@@ -59,8 +59,8 @@ void TaskforceSection::on_editTaskforceName_clicked()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0) {
 		if(ui->TaskforceList->findItems(ui->taskforceNameEdit->text(), Qt::MatchExactly).count() == 0) {
-			string cur_name = ui->TaskforceList->selectedItems().last()->text().toStdString();
-			string cur_ID = GetTaskforceIDByName(cur_name);
+			std::string cur_name = ui->TaskforceList->selectedItems().last()->text().toStdString();
+			std::string cur_ID = getTaskforceIDByName(cur_name);
 
 			taskforces[cur_ID]->setName(ui->taskforceNameEdit->text().toStdString());
 
@@ -74,15 +74,15 @@ void TaskforceSection::on_cloneTaskforce_clicked()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			string newName = GetNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), a, 0);
+			std::string newName = getNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), a, 0);
 
 			int i = 0;
 			while(ui->TaskforceList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = GetNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), i);
+				newName = getNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text().toStdString(), i);
 			}
-			string newID = fffID();
-			taskforces[newID] = new Taskforce(newID, GetTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString()));
+			std::string newID = fffID();
+			taskforces[newID] = new Taskforce(newID, getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString()));
 			taskforces[newID]->setName(newName);
 			ui->TaskforceList->addItem(newName.c_str());
 		}
@@ -93,9 +93,9 @@ void TaskforceSection::on_cloneTaskforce_clicked()
 void TaskforceSection::on_UnitList_itemSelectionChanged()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0 && ui->UnitList->currentRow() != -1) {
-		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
-		string unitID = cur_taskforce->tlines[ui->UnitList->currentRow()]->type;
-		int index = ui->UnitBox->findText(string("["+unitID+"] "+GetUnitNameByUnitID(unitID)).c_str());
+		Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
+		std::string unitID = cur_taskforce->tlines[ui->UnitList->currentRow()]->type;
+		int index = ui->UnitBox->findText(std::string("["+unitID+"] "+getUnitNameByUnitID(unitID)).c_str());
 		if(index != -1) {
 			ui->UnitBox->setCurrentIndex(index);
 		}
@@ -108,12 +108,12 @@ void TaskforceSection::on_UnitBox_activated()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0 && ui->UnitList->currentRow() != -1 && ui->UnitBox->currentIndex() != -1) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
+			Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
 			uint32_t rowNum = ui->UnitList->currentRow();
 			if(cur_taskforce->getLineAmount() >= rowNum+1) {
-				string newType = ui->UnitBox->currentText().toStdString();
+				std::string newType = ui->UnitBox->currentText().toStdString();
 				cur_taskforce->tlines[rowNum]->type = newType.substr(1, newType.find("]")-1);
-				ui->UnitList->currentItem()->setText(string(IntToStr(cur_taskforce->tlines[rowNum]->amount) + " " + GetUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
+				ui->UnitList->currentItem()->setText(std::string(intToStr(cur_taskforce->tlines[rowNum]->amount) + " " + getUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
 			}
 		}
 	}
@@ -123,11 +123,11 @@ void TaskforceSection::on_UnitNumberBox_editingFinished()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0 && ui->UnitList->currentRow() != -1) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
+			Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
 			uint32_t rowNum = ui->UnitList->currentRow();
 			if(cur_taskforce->getLineAmount() >= rowNum+1) {
 				cur_taskforce->tlines[rowNum]->amount = ui->UnitNumberBox->value();
-				ui->UnitList->currentItem()->setText(string(IntToStr(cur_taskforce->tlines[rowNum]->amount) + " " + GetUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
+				ui->UnitList->currentItem()->setText(std::string(intToStr(cur_taskforce->tlines[rowNum]->amount) + " " + getUnitNameByUnitID(cur_taskforce->tlines[rowNum]->type)).c_str());
 			}
 		}
 	}
@@ -137,12 +137,12 @@ void TaskforceSection::on_AddUnit_clicked()
 {
 	if(ui->TaskforceList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
-			cur_taskforce->NewLine("APACHE", 0);
+			Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
+			cur_taskforce->addLine("APACHE", 0);
 		}
-		string ID;
-		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
-		ID = IntToStr((*(cur_taskforce->tlines.end()-1))->amount) + " " + GetUnitNameByUnitID((*(cur_taskforce->tlines.end()-1))->type);
+		std::string ID;
+		Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
+		ID = intToStr((*(cur_taskforce->tlines.end()-1))->amount) + " " + getUnitNameByUnitID((*(cur_taskforce->tlines.end()-1))->type);
 		ui->UnitList->addItem(ID.c_str());
 	}
 }
@@ -153,15 +153,15 @@ void TaskforceSection::on_DeleteUnit_clicked()
 		uint32_t rowNum = ui->UnitList->currentRow();
 		delete ui->UnitList->item(rowNum);
 		for(int a = 0; a != ui->TaskforceList->selectedItems().size(); ++a) {
-			Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
+			Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text().toStdString());
 			if(cur_taskforce->getLineAmount() >= rowNum) {
-				cur_taskforce->DeleteLine(rowNum);
+				cur_taskforce->deleteLine(rowNum);
 			}
 		}
-		Taskforce *cur_taskforce = GetTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
+		Taskforce *cur_taskforce = getTaskforceByName(ui->TaskforceList->selectedItems().last()->text().toStdString());
 		ui->UnitList->clear();
 		for(std::vector <Taskforce::TaskforceLine*>::iterator tlineIT = cur_taskforce->tlines.begin(); tlineIT != cur_taskforce->tlines.end(); ++tlineIT) {
-			ui->UnitList->addItem(string(IntToStr((*tlineIT)->amount) + " " + GetUnitNameByUnitID((*tlineIT)->type)).c_str());
+			ui->UnitList->addItem(std::string(intToStr((*tlineIT)->amount) + " " + getUnitNameByUnitID((*tlineIT)->type)).c_str());
 		}
 	}
 
@@ -173,7 +173,7 @@ void TaskforceSection::mousePressEvent(QMouseEvent *event)
 	ui->TaskforceList->clearSelection();
 }
 
-void TaskforceSection::UpdateUi()
+void TaskforceSection::updateUi()
 {
 	ui->TaskforceList->clearSelection();
 	ui->TaskforceList->clear();
@@ -181,14 +181,14 @@ void TaskforceSection::UpdateUi()
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		ui->TaskforceList->addItem(IT->second->getName().c_str());
 	}
-	for(unitIT IT = aircraftnames.begin(); IT != aircraftnames.end(); ++IT) {
-		ui->UnitBox->addItem(string("["+IT->first+"] "+IT->second.name).c_str());
+	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+		ui->UnitBox->addItem(std::string("["+IT->first+"] "+IT->second.name).c_str());
 	}
-	for(unitIT IT = infantrynames.begin(); IT != infantrynames.end(); ++IT) {
-		ui->UnitBox->addItem(string("["+IT->first+"] "+IT->second.name).c_str());
+	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+		ui->UnitBox->addItem(std::string("["+IT->first+"] "+IT->second.name).c_str());
 	}
-	for(unitIT IT = vehiclenames.begin(); IT != vehiclenames.end(); ++IT) {
-		ui->UnitBox->addItem(string("["+IT->first+"] "+IT->second.name).c_str());
+	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+		ui->UnitBox->addItem(std::string("["+IT->first+"] "+IT->second.name).c_str());
 	}
 	ui->UnitBox->view()->setMinimumWidth(220);
 }

@@ -1,9 +1,9 @@
 #include "team.h"
 
 
-Team::Team(string nID, int nmax, string ntagID, bool nfull, string nname, int ngroup, string nhouse, string nscriptID, bool nwhiner, bool ndroppod, bool nsuicide, bool nloadable, bool nprebuild,
-		   int nprioirity, string nwpoint, bool nannoyance, bool nionimmune, bool nrecruiter,
-		   bool nreinforce, string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly, bool navoidthreats, bool
+Team::Team(std::string nID, int nmax, std::string ntagID, bool nfull, std::string nname, int ngroup, std::string nhouse, std::string nscriptID, bool nwhiner, bool ndroppod, bool nsuicide, bool nloadable, bool nprebuild,
+		   int nprioirity, std::string nwpoint, bool nannoyance, bool nionimmune, bool nrecruiter,
+		   bool nreinforce, std::string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly, bool navoidthreats, bool
 		   nlooserecruit, int nveteranlevel, bool nisbasedefense,
 		   bool nonlytargethouseenemy, bool ntransportsreturnonunload, bool nareteammemberrecruitable) :
 	ID(nID), max(nmax), tagID(ntagID), full(nfull), name(nname), group(ngroup), house(nhouse), scriptID(nscriptID), whiner(nwhiner), droppod(ndroppod), suicide(nsuicide),
@@ -14,7 +14,7 @@ Team::Team(string nID, int nmax, string ntagID, bool nfull, string nname, int ng
 {
 }
 
-Team::Team(string nID, string nname) {
+Team::Team(std::string nID, std::string nname) {
 	ID = nID;
 	max = 0;
 	full = false;
@@ -48,7 +48,7 @@ Team::Team(string nID, string nname) {
 	areteammembersrecruitable = true;
 }
 
-Team::Team(string nID, Team *nTeam)
+Team::Team(std::string nID, Team *nTeam)
 {
 	*this = *nTeam;
 	this->ID = nID;
@@ -56,42 +56,57 @@ Team::Team(string nID, Team *nTeam)
 
 Team::~Team()
 {
-	DeleteSectionInBuffer(ID);
+	deleteSectionFromBuffer(ID);
 }
 
-void Team::Save()
+void Team::setName(std::string newName)
 {
-	WriteValueToBuffer(ID, "Max", IntToStr(max));
+	name = newName;
+}
+
+void Team::save()
+{
+	writeLineToBuffer(ID, "Max", intToStr(max));
 	if(!tagID.empty()) {
-		WriteValueToBuffer(ID, "Tag", tagID);
+		writeLineToBuffer(ID, "Tag", tagID);
 	}
-	WriteValueToBuffer(ID, "Full", ConverBoolToYesNo(full));
-	WriteValueToBuffer(ID, "Name", name);
-	WriteValueToBuffer(ID, "Group", IntToStr(group));
-	WriteValueToBuffer(ID, "House", house);
-	WriteValueToBuffer(ID, "Script", scriptID);
-	WriteValueToBuffer(ID, "Whiner", ConverBoolToYesNo(whiner));
-	WriteValueToBuffer(ID, "Droppod", ConverBoolToYesNo(droppod));
-	WriteValueToBuffer(ID, "Suicide", ConverBoolToYesNo(suicide));
-	WriteValueToBuffer(ID, "Loadable", ConverBoolToYesNo(loadable));
-	WriteValueToBuffer(ID, "Prebuild", ConverBoolToYesNo(prebuild));
-	WriteValueToBuffer(ID, "Priority", IntToStr(priority));
-	WriteValueToBuffer(ID, "Waypoint", wPoint);
-	WriteValueToBuffer(ID, "Annoyance", ConverBoolToYesNo(annoyance));
-	WriteValueToBuffer(ID, "IonImmune", ConverBoolToYesNo(ionimmune));
-	WriteValueToBuffer(ID, "Recruiter", ConverBoolToYesNo(recruiter));
-	WriteValueToBuffer(ID, "Reinforce", ConverBoolToYesNo(reinforce));
-	WriteValueToBuffer(ID, "TaskForce", taskForceID);
-	WriteValueToBuffer(ID, "TechLevel", IntToStr(techlevel));
-	WriteValueToBuffer(ID, "Aggressive", ConverBoolToYesNo(aggressive));
-	WriteValueToBuffer(ID, "Autocreate", ConverBoolToYesNo(autocreate));
-	WriteValueToBuffer(ID, "GuardSlower", ConverBoolToYesNo(guardslower));
-	WriteValueToBuffer(ID, "OnTransOnly", ConverBoolToYesNo(ontransonly));
-	WriteValueToBuffer(ID, "AvoidThreats", ConverBoolToYesNo(avoidthreats));
-	WriteValueToBuffer(ID, "LooseRecruit", ConverBoolToYesNo(looserecruit));
-	WriteValueToBuffer(ID, "VeteranLevel", IntToStr(veteranlevel));
-	WriteValueToBuffer(ID, "IsBaseDefense", ConverBoolToYesNo(isbasedefense));
-	WriteValueToBuffer(ID, "OnlyTargetHouseEnemy", ConverBoolToYesNo(onlytargethousenemy));
-	WriteValueToBuffer(ID, "TransportsReturnOnUnload", ConverBoolToYesNo(transportsreturnonunload));
-	WriteValueToBuffer(ID, "AreTeamMembersRecruitable", ConverBoolToYesNo(areteammembersrecruitable));
+	writeLineToBuffer(ID, "Full", converBoolToYesNo(full));
+	writeLineToBuffer(ID, "Name", name);
+	writeLineToBuffer(ID, "Group", intToStr(group));
+	writeLineToBuffer(ID, "House", house);
+	writeLineToBuffer(ID, "Script", scriptID);
+	writeLineToBuffer(ID, "Whiner", converBoolToYesNo(whiner));
+	writeLineToBuffer(ID, "Droppod", converBoolToYesNo(droppod));
+	writeLineToBuffer(ID, "Suicide", converBoolToYesNo(suicide));
+	writeLineToBuffer(ID, "Loadable", converBoolToYesNo(loadable));
+	writeLineToBuffer(ID, "Prebuild", converBoolToYesNo(prebuild));
+	writeLineToBuffer(ID, "Priority", intToStr(priority));
+	writeLineToBuffer(ID, "Waypoint", wPoint);
+	writeLineToBuffer(ID, "Annoyance", converBoolToYesNo(annoyance));
+	writeLineToBuffer(ID, "IonImmune", converBoolToYesNo(ionimmune));
+	writeLineToBuffer(ID, "Recruiter", converBoolToYesNo(recruiter));
+	writeLineToBuffer(ID, "Reinforce", converBoolToYesNo(reinforce));
+	writeLineToBuffer(ID, "TaskForce", taskForceID);
+	writeLineToBuffer(ID, "TechLevel", intToStr(techlevel));
+	writeLineToBuffer(ID, "Aggressive", converBoolToYesNo(aggressive));
+	writeLineToBuffer(ID, "Autocreate", converBoolToYesNo(autocreate));
+	writeLineToBuffer(ID, "GuardSlower", converBoolToYesNo(guardslower));
+	writeLineToBuffer(ID, "OnTransOnly", converBoolToYesNo(ontransonly));
+	writeLineToBuffer(ID, "AvoidThreats", converBoolToYesNo(avoidthreats));
+	writeLineToBuffer(ID, "LooseRecruit", converBoolToYesNo(looserecruit));
+	writeLineToBuffer(ID, "VeteranLevel", intToStr(veteranlevel));
+	writeLineToBuffer(ID, "IsBaseDefense", converBoolToYesNo(isbasedefense));
+	writeLineToBuffer(ID, "OnlyTargetHouseEnemy", converBoolToYesNo(onlytargethousenemy));
+	writeLineToBuffer(ID, "TransportsReturnOnUnload", converBoolToYesNo(transportsreturnonunload));
+	writeLineToBuffer(ID, "AreTeamMembersRecruitable", converBoolToYesNo(areteammembersrecruitable));
+}
+
+std::string Team::getName() const
+{
+	return name;
+}
+
+std::string Team::getID() const
+{
+	return ID;
 }

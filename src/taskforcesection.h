@@ -9,39 +9,39 @@ class TaskforceSection : public QDockWidget
 {
 	Q_OBJECT
 	
-public:
-	explicit TaskforceSection(QWidget *parent = 0);
-	~TaskforceSection();
+	public:
+		explicit TaskforceSection(QWidget *parent = 0);
+		~TaskforceSection();
 
-	void UpdateUi();
+		void updateUi();
 
-	private slots:
+		private slots:
 
-	void on_TaskforceList_itemSelectionChanged();
+		void on_TaskforceList_itemSelectionChanged();
 
-	void on_NewTaskforce_clicked();
+		void on_NewTaskforce_clicked();
 
-	void on_DeleteTaskforce_clicked();
+		void on_DeleteTaskforce_clicked();
 
-	void on_editTaskforceName_clicked();
+		void on_editTaskforceName_clicked();
 
-	void on_cloneTaskforce_clicked();
+		void on_cloneTaskforce_clicked();
 
-	void on_UnitList_itemSelectionChanged();
+		void on_UnitList_itemSelectionChanged();
 
-	void on_UnitBox_activated();
+		void on_UnitBox_activated();
 
-	void on_UnitNumberBox_editingFinished();
+		void on_UnitNumberBox_editingFinished();
 
-	void on_AddUnit_clicked();
+		void on_AddUnit_clicked();
 
-	void on_DeleteUnit_clicked();
+		void on_DeleteUnit_clicked();
 
-	void mousePressEvent(QMouseEvent *event);
+		void mousePressEvent(QMouseEvent *event);
 
 	private:
 
-	Ui::TaskforceSection *ui;
+		Ui::TaskforceSection *ui;
 
 };
 

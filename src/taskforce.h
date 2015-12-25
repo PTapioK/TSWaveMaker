@@ -5,47 +5,47 @@
 
 class Taskforce
 {
-public:
-	Taskforce(string nID);
-	Taskforce(string nID, string nName);
-	Taskforce(string nID, Taskforce *tF);
-	~Taskforce();
+	public:
+		Taskforce(std::string nID);
+		Taskforce(std::string nID, std::string nName);
+		Taskforce(std::string nID, Taskforce *tF);
+		~Taskforce();
 
-	std::string getID() { return ID; }
+		void addLine(std::string type, short amount);
+		void deleteLine(short lineID);
 
-	void NewLine(string type, short amount);
-	void DeleteLine(short lineID);
+		void setGroup(int32_t nGroup) { group = nGroup; }
+		void setName(std::string nName) { name = nName; }
 
-	void setGroup(int32_t nGroup) { group = nGroup; }
-	void setName(string nName) { name = nName; }
+		void save();
 
-	string getName() { return name; }
+		std::string getID() const;
 
-	uint32_t getLineAmount() { return lineCounter; }
+		std::string getName() const;
 
-	void Save();
+		uint16_t getLineAmount() const;
 
-private:
+	private:
 
-	friend class TaskforceSection;
+		friend class TaskforceSection;
 
-	std::string ID;
+		std::string ID;
 
-	std::string name;
-	int32_t group;
+		std::string name;
+		int32_t group;
 
-	struct TaskforceLine
-	{
-		string type;
-		short amount;
+		struct TaskforceLine
+		{
+			std::string type;
+			short amount;
 
-		short ID;
-	};
+			short ID;
+		};
 
-	std::vector <TaskforceLine*> tlines;
-	typedef std::vector <TaskforceLine*>::iterator tlineIT;
+		std::vector <TaskforceLine*> tlines;
+		typedef std::vector <TaskforceLine*>::iterator tlineIT;
 
-	short lineCounter;
+		uint16_t lineCounter;
 
 };
 

@@ -5,59 +5,59 @@
 
 class Team
 {
-public:
-	Team(string nID, int nmax, string ntagid, bool nfull, string nname, int ngroup, string nhouse, string nscriptID, bool nwhiner, bool ndroppod,
-		 bool nsuicide, bool nloadable, bool nprebuild, int nprioirity, string nwpoint, bool nannoyance, bool nionimmune,
-		 bool nrecruiter, bool nreinforce, string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
-		 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
-		 bool nareteammemberrecruitable);
-	Team(string nID, string nname = "New Team");
-	Team(string nID, Team* nTeam);
-	~Team();
+	public:
+		Team(std::string nID, int nmax, std::string ntagid, bool nfull, std::string nname, int ngroup, std::string nhouse, std::string nscriptID, bool nwhiner, bool ndroppod,
+			 bool nsuicide, bool nloadable, bool nprebuild, int nprioirity, std::string nwpoint, bool nannoyance, bool nionimmune,
+			 bool nrecruiter, bool nreinforce, std::string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
+			 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
+			 bool nareteammemberrecruitable);
+		Team(std::string nID, std::string nname = "New Team");
+		Team(std::string nID, Team* nTeam);
+		~Team();
 
-	string getName() { return name; }
-	string getID() { return ID; }
+		void setName(std::string newName);
 
-	void setName(string nname) { name = nname; }
+		void save();
 
-	void Save();
+		std::string getName() const;
+		std::string getID() const;
 
-private:
+	private:
 
-	friend class TeamSection;
+		friend class TeamSection;
 
-	std::string ID;
-	int max;
-	string tagID;
-	bool full;
-	string name;
-	int group;
-	string house;
-	string scriptID;
-	bool whiner;
-	bool droppod;
-	bool suicide;
-	bool loadable;
-	bool prebuild;
-	int priority;
-	string wPoint;
-	bool annoyance;
-	bool ionimmune;
-	bool recruiter;
-	bool reinforce;
-	string taskForceID;
-	int techlevel;
-	bool aggressive;
-	bool autocreate;
-	bool guardslower;
-	bool ontransonly;
-	bool avoidthreats;
-	bool looserecruit;
-	int veteranlevel;
-	bool isbasedefense;
-	bool onlytargethousenemy;
-	bool transportsreturnonunload;
-	bool areteammembersrecruitable;
+		std::string ID;
+		int max;
+		std::string tagID;
+		bool full;
+		std::string name;
+		int group;
+		std::string house;
+		std::string scriptID;
+		bool whiner;
+		bool droppod;
+		bool suicide;
+		bool loadable;
+		bool prebuild;
+		int priority;
+		std::string wPoint;
+		bool annoyance;
+		bool ionimmune;
+		bool recruiter;
+		bool reinforce;
+		std::string taskForceID;
+		int techlevel;
+		bool aggressive;
+		bool autocreate;
+		bool guardslower;
+		bool ontransonly;
+		bool avoidthreats;
+		bool looserecruit;
+		int veteranlevel;
+		bool isbasedefense;
+		bool onlytargethousenemy;
+		bool transportsreturnonunload;
+		bool areteammembersrecruitable;
 
 };
 

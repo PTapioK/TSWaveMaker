@@ -1,6 +1,6 @@
 #include "tag.h"
 
-Tag::Tag(std::string tname, string trigID)
+Tag::Tag(std::string tname, std::string trigID)
 {
 	name = tname;
 	ID = fffID();
@@ -9,7 +9,7 @@ Tag::Tag(std::string tname, string trigID)
 
 }
 
-Tag::Tag(Tag *oTag, string trigID)
+Tag::Tag(Tag *oTag, std::string trigID)
 {
 	*this = *oTag;
 	setID(fffID());
@@ -17,7 +17,7 @@ Tag::Tag(Tag *oTag, string trigID)
 
 }
 
-Tag::Tag(string nID, string nName, string nTrigID, int32_t nmode)
+Tag::Tag(std::string nID, std::string nName, std::string nTrigID, int32_t nmode)
 {
 	ID = nID;
 	name = nName;
@@ -27,27 +27,32 @@ Tag::Tag(string nID, string nName, string nTrigID, int32_t nmode)
 
 Tag::~Tag()
 {
-	DeleteValueInBuffer("Tags", ID);
+	deleteLineFromBuffer("Tags", ID);
 }
 
-string Tag::getID() {
+std::string Tag::getID() const {
 	return ID;
 }
 
-void Tag::setID(string nID) {
+void Tag::setID(std::string nID) {
 	ID = nID;
 }
 
-string Tag::getTriggerID() {
+std::string Tag::getTriggerID() const {
 	return triggerID;
 }
 
-void Tag::Save() {
-	stringstream valueSS;
+void Tag::save() {
+	std::stringstream valueSS;
 	valueSS << mode << "," << name << "," << triggerID;
-	WriteValueToBuffer("Tags", ID, valueSS.str());
+	writeLineToBuffer("Tags", ID, valueSS.str());
 }
 
-void Tag::setName(string nName) {
+std::string Tag::getName() const
+{
+	return name;
+}
+
+void Tag::setName(std::string nName) {
 	name = nName;
 }

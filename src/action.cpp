@@ -1,150 +1,118 @@
 #include "action.h"
 
-Action::Action(string nID)
+Action::Action(std::string newID)
 {
-	ID = nID;
-	aType = 0;
-	wPoint = DecToWaypointID(0);
-	p1 = "0";
-	p2 = "0";
-	p3 = "0";
-	p4 = "0";
-	p5 = "0";
-	p6 = "0";
+	ID = newID;
+	type = 0;
+	waypoint = decToWaypointID(0);
+	params.fill("0");
 }
 
-Action::Action(string nID, int32_t naType, int32_t nwPoint = 0, int32_t pa1 = 0, int32_t pa2 = 0, int32_t pa3 = 0, int32_t pa4 = 0, int32_t pa5 = 0, int32_t pa6 = 0)
+Action::Action(std::string newID, int32_t newType, int32_t newWayPoint = 0)
 {
-	ID = nID;
-	aType = naType;
-	wPoint = DecToWaypointID(nwPoint);
-	editP1(pa1);
-	editP2(pa2);
-	editP3(pa3);
-	editP4(pa4);
-	editP5(pa5);
-	editP6(pa6);
-
+	ID = newID;
+	type = newType;
+	waypoint = decToWaypointID(newWayPoint);
 }
 
-Action::Action(string nID, int32_t naType, int32_t nwPoint = 0, int32_t pa1 = 0, string pa2 = 0, int32_t pa3 = 0, int32_t pa4 = 0, int32_t pa5 = 0, int32_t pa6 = 0)
+Action::Action(std::string newID, int32_t newType, int32_t newWayPoint, std::string parameter1, std::string parameter2, std::string parameter3, std::string parameter4, std::string parameter5, std::string parameter6)
 {
-	ID = nID;
-	aType = naType;
-	wPoint = DecToWaypointID(nwPoint);
-	editP1(pa1);
-	editP2(pa2);
-	editP3(pa3);
-	editP4(pa4);
-	editP5(pa5);
-	editP6(pa6);
-
+	ID = newID;
+	type = newType;
+	waypoint = decToWaypointID(newWayPoint);
+	params[0] = parameter1;
+	params[1] = parameter2;
+	params[2] = parameter3;
+	params[3] = parameter4;
+	params[4] = parameter5;
+	params[5] = parameter6;
 }
 
-Action::Action(Action *oAct, string nID)
+Action::Action(std::string newID, int32_t newType, std::array<std::string, 6> newParameters, int32_t newWaypoint = 0)
 {
-	*this = *oAct;
-	ID = nID;
+	ID = newID;
+	type = newType;
+	waypoint = decToWaypointID(newWaypoint);
+	params = newParameters;
 }
 
-void Action::Save(int32_t count) {
+Action::Action(Action *otherAction, std::string newID)
+{
+	*this = *otherAction;
+	ID = newID;
+}
+
+void Action::save(int32_t count) {
 	if(count == 1) {
-		stringstream vSS;
-		vSS << count
-			<< ","
-			<< aType
-			<< ","
-			<< p1
-			<< ","
-			<< p2
-			<< ","
-			<< p3
-			<< ","
-			<< p4
-			<< ","
-			<< p5
-			<< ","
-			<< p6
-			<< ","
-			<< wPoint;
-		WriteValueToBuffer("Actions", ID, vSS.str());
+		std::stringstream valueSS;
+		valueSS << count
+				<< ","
+				<< type
+				<< ","
+				<< params[0]
+				<< ","
+				<< params[1]
+				<< ","
+				<< params[2]
+				<< ","
+				<< params[3]
+				<< ","
+				<< params[4]
+				<< ","
+				<< params[5]
+				<< ","
+				<< waypoint;
+		writeLineToBuffer("Actions", ID, valueSS.str());
 	} else if (count > 1) {
-		stringstream vSS;
-		vSS	<< aType
-			<< ","
-			<< p1
-			<< ","
-			<< p2
-			<< ","
-			<< p3
-			<< ","
-			<< p4
-			<< ","
-			<< p5
-			<< ","
-			<< p6
-			<< ","
-			<< wPoint;
-		EditValueInBuffer("Actions", ID, vSS.str(), count);
+		std::stringstream valueSS;
+		valueSS	<< type
+				<< ","
+				<< params[0]
+				<< ","
+				<< params[1]
+				<< ","
+				<< params[2]
+				<< ","
+				<< params[3]
+				<< ","
+				<< params[4]
+				<< ","
+				<< params[5]
+				<< ","
+				<< waypoint;
+		editValueInBuffer("Actions", ID, valueSS.str(), count);
 	}
 }
 
-void Action::editType(int32_t type) {
-	aType = type;
+void Action::setType(int32_t newType) {
+	type = newType;
 }
 
-void Action::editWPoint(int32_t wayP) {
-	wPoint = DecToWaypointID(wayP);
+void Action::setWayPoint(int32_t newWaypoint) {
+	waypoint = decToWaypointID(newWaypoint);
 }
 
-void Action::editP1(int32_t pa1) {
-	stringstream ss;
-	ss << pa1;
-	p1 = ss.str();
+void Action::setParameter(int i, std::string data)
+{
+	assert(i > 0 && i < 6);
+	params[i-1] = data;
 }
 
-void Action::editP2(int32_t pa2) {
-	stringstream ss;
-	ss << pa2;
-	p2 = ss.str();
+void Action::setParameter(int i, int32_t data)
+{
+	assert(i > 0 && i < 6);
+	params[i-1] = intToStr(data);
 }
 
-void Action::editP2(string pa2) {
-	p2 = pa2;
+int32_t Action::getType() const {
+	return type;
 }
 
-void Action::editP3(int32_t pa3) {
-	stringstream ss;
-	ss << pa3;
-	p3 = ss.str();
+int32_t Action::getWaypoint() const {
+	return waypointIDToDec(waypoint);
 }
 
-void Action::editP4(int32_t pa4) {
-	stringstream ss;
-	ss << pa4;
-	p4 = ss.str();
-}
-
-void Action::editP5(int32_t pa5) {
-	stringstream ss;
-	ss << pa5;
-	p5 = ss.str();
-}
-
-void Action::editP6(int32_t pa6) {
-	stringstream ss;
-	ss << pa6;
-	p6 = ss.str();
-}
-
-int32_t Action::getType() {
-	return aType;
-}
-
-int32_t Action::getWaypoint() {
-	return WaypointIDToDec(wPoint);
-}
-
-string Action::getP2() {
-	return p2;
+std::string Action::getParameter(int i) const {
+	assert(i > 0 && i < 6);
+	return params[i-1];
 }

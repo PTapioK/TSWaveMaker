@@ -11,33 +11,33 @@ class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 	
-public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	public:
+		explicit MainWindow(QWidget *parent = 0);
+		~MainWindow();
 
-private slots:
-	void NewFile();
-	void OpenFile();
-	void SaveFile();
-	void SaveFileAs();
+	private slots:
+		void newFile();
+		void openFile();
+		void saveFile();
+		void saveFileAs();
 
-	void Info();
-	void Settings();
+		void info();
+		void settings();
 
-private:
+	private:
 
-	friend class TriggerSection;
-	friend class TeamSection;
-	friend class ScriptSection;
-	friend class TaskforceSection;
-	friend class Settings;
+		friend class TriggerSection;
+		friend class TeamSection;
+		friend class ScriptSection;
+		friend class TaskforceSection;
+		friend class Settings;
 
-	Ui::MainWindow *ui;
+		Ui::MainWindow *ui;
 
-	TriggerSection * trgS;
-	TeamSection * tamS;
-	ScriptSection * srtS;
-	TaskforceSection * tskS;
+		TriggerSection * triggerSct;
+		TeamSection * teamSct;
+		ScriptSection * scriptSct;
+		TaskforceSection * taskforceSct;
 
 };
 

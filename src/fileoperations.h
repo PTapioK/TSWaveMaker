@@ -3,19 +3,19 @@
 
 #include "main.h"
 
-void SaveAllToBuffer();
-void WriteValueToBuffer(std::string section, std::string ID, string value);
-void EditValueInBuffer(std::string section, std::string ID, string value, int count);
-void ReadFileToBuffer();
-void DeleteValueInBuffer(string section, string ID);
-void DeleteSectionInBuffer(string section);
-void ParseSections();
-void ParseRules();
+void saveAllToBuffer();
+void writeLineToBuffer(std::string section, std::string ID, std::string value);
+void editValueInBuffer(std::string section, std::string ID, std::string value, int count);
+void readFileToBuffer();
+void deleteLineFromBuffer(std::string section, std::string ID);
+void deleteSectionFromBuffer(std::string section);
+void parseSections();
+void parseRules();
 
-Team* FindNewTeamFromFile(string teamID);
-Script* FindNewScriptFromFile(string scriptID);
-Taskforce* FindNewTaskforceFromFile(string taskforceID);
+Team* findNewTeamFromFile(std::string teamID);
+Script* findNewScriptFromFile(std::string scriptID);
+Taskforce* findNewTaskforceFromFile(std::string taskforceID);
 
-string GetUnitNameFromFile(string unitID, CDataFile *file);
+std::string getUnitNameFromFile(std::string unitID, CDataFile *file);
 
 #endif // FILEOPERATIONS_H

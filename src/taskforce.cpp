@@ -1,6 +1,6 @@
 #include "taskforce.h"
 
-Taskforce::Taskforce(string nID)
+Taskforce::Taskforce(std::string nID)
 {
 	ID = nID;
 
@@ -11,7 +11,7 @@ Taskforce::Taskforce(string nID)
 	name = "";
 }
 
-Taskforce::Taskforce(string nID, string nName)
+Taskforce::Taskforce(std::string nID, std::string nName)
 {
 	ID = nID;
 
@@ -22,7 +22,7 @@ Taskforce::Taskforce(string nID, string nName)
 	name = nName;
 }
 
-Taskforce::Taskforce(string nID, Taskforce *tF)
+Taskforce::Taskforce(std::string nID, Taskforce *tF)
 {
 	ID = nID;
 
@@ -41,10 +41,10 @@ Taskforce::Taskforce(string nID, Taskforce *tF)
 
 Taskforce::~Taskforce()
 {
-	DeleteSectionInBuffer(ID);
+	deleteSectionFromBuffer(ID);
 }
 
-void Taskforce::NewLine(string type, short amount)
+void Taskforce::addLine(std::string type, short amount)
 {
 	TaskforceLine *nLine = new TaskforceLine();
 	nLine->type = type;
@@ -56,7 +56,7 @@ void Taskforce::NewLine(string type, short amount)
 	++lineCounter;
 }
 
-void Taskforce::DeleteLine(short lineID)
+void Taskforce::deleteLine(short lineID)
 {
 	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
 		if((*IT)->ID == lineID) {
@@ -72,16 +72,31 @@ void Taskforce::DeleteLine(short lineID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	DeleteValueInBuffer(ID, IntToStr(lineID));
+	deleteLineFromBuffer(ID, intToStr(lineID));
 }
 
-void Taskforce::Save()
+void Taskforce::save()
 {
 	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
-		stringstream valueSS;
+		std::stringstream valueSS;
 		valueSS << (*IT)->amount << "," << (*IT)->type;
-		WriteValueToBuffer(ID, IntToStr((*IT)->ID), valueSS.str());
+		writeLineToBuffer(ID, intToStr((*IT)->ID), valueSS.str());
 	}
-	WriteValueToBuffer(ID, "Name", name);
-	WriteValueToBuffer(ID, "Group", IntToStr(group));
+	writeLineToBuffer(ID, "Name", name);
+	writeLineToBuffer(ID, "Group", intToStr(group));
+}
+
+std::string Taskforce::getID() const
+{
+	return ID;
+}
+
+std::string Taskforce::getName() const
+{
+	return name;
+}
+
+uint16_t Taskforce::getLineAmount() const
+{
+	return lineCounter;
 }
