@@ -1,15 +1,15 @@
 #include "containers.h"
 
-const std::string settingsFilePath = "settings.ini";
-CDataFile settingsFileData(settingsFilePath);
+const QString settingsFilePath = "settings.ini";
+QSettings settings(settingsFilePath, QSettings::IniFormat);
 
 std::string currentFilePath;
 CDataFile currentFileData;
 
-std::string tsRulesPath;
-std::string fsRulesPath;
+QString tsRulesPath;
+QString fsRulesPath;
 
-std::string lastUsedPath = ".";
+QString lastUsedPath = ".";
 
 std::map <std::string, Trigger*> triggers;
 std::map <std::string, Tag*> tags;

@@ -35,8 +35,7 @@ extern std::string converBoolToYesNo(bool boolean);
 extern std::string intToStr(int integer);
 extern void clearContainers();
 extern void loadSettings(bool ask = true);
-extern std::string rulesPathForTS(std::string path);
-extern std::string rulesPathForFS(std::string path);
+extern QString getRulesPathFor(QString fileName, QString path);
 extern std::string getNameWithNextMark(std::string name, int iter = 0, int numIter = -1000000);
 extern std::string getUnitNameByUnitID(std::string unitID);
 

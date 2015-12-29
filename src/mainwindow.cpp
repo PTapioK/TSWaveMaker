@@ -16,9 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->actionSaveFileAs, SIGNAL(triggered()), this, SLOT(saveFileAs()));
 	connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 	// Connect edit menu
-	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settings()));
+	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settingsDialog()));
 	// Connect info menu
-	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(info()));
+	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(infoDialog()));
 
 	triggerSct		= new TriggerSection(this);
 	teamSct			= new TeamSection(this);
@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	// Save settings before quitting
-	settingsFileData.SetValue("lastUsedPath", lastUsedPath);
-	settingsFileData.Save();
+	settings.setValue("lastUsedPath", lastUsedPath);
+	settings.sync();
 
 	delete ui;
 }
@@ -50,9 +50,9 @@ void MainWindow::newFile()
 
 	parseRules();
 
-	triggerSct->UpdateUi();
+	triggerSct->updateUi();
 	teamSct->updateUi();
-	scriptSct->UpdateUi();
+	scriptSct->updateUi();
 	taskforceSct->updateUi();
 }
 
@@ -60,7 +60,7 @@ void MainWindow::openFile()
 {
 	QFileDialog fDG(this);
 
-	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 
 	if(currentFilePath.empty()) {
 		return;
@@ -71,13 +71,13 @@ void MainWindow::openFile()
 	readFileToBuffer();
 	parseSections();
 
-	triggerSct->UpdateUi();
+	triggerSct->updateUi();
 	teamSct->updateUi();
-	scriptSct->UpdateUi();
+	scriptSct->updateUi();
 	taskforceSct->updateUi();
 
 	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
-	lastUsedPath = QFileInfo(currentFilePath.c_str()).path().toStdString();
+	lastUsedPath = QFileInfo(currentFilePath.c_str()).path();
 }
 
 void MainWindow::saveFile()
@@ -94,22 +94,22 @@ void MainWindow::saveFile()
 void MainWindow::saveFileAs()
 {
 	QFileDialog fDG(this);
-	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath.c_str(), tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
 	if(currentFilePath.empty()) {
 		return;
 	}
 	saveFile();
 	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
-	lastUsedPath = QFileInfo(currentFilePath.c_str()).path().toStdString();
+	lastUsedPath = QFileInfo(currentFilePath.c_str()).path();
 }
 
-void MainWindow::info()
+void MainWindow::infoDialog()
 {
 	InfoDialog * dialog = new InfoDialog;
 	dialog->show();
 }
 
-void MainWindow::settings()
+void MainWindow::settingsDialog()
 {
 	SettingsDialog * dialog = new SettingsDialog;
 	dialog->show();

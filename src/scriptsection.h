@@ -17,7 +17,7 @@ class ScriptSection : public QDockWidget
 		explicit ScriptSection(QWidget *parent = 0);
 		~ScriptSection();
 
-		void UpdateUi();
+		void updateUi();
 	private slots:
 		void on_ScriptList_itemSelectionChanged();
 

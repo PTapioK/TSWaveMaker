@@ -21,8 +21,8 @@ class MainWindow : public QMainWindow
 		void saveFile();
 		void saveFileAs();
 
-		void info();
-		void settings();
+		void infoDialog();
+		void settingsDialog();
 
 	private:
 

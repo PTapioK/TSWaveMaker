@@ -621,7 +621,7 @@ void parseRules()
 	uint16_t i = 0;
 
 	// Tiberian Sun rules
-	CDataFile ts_rules_data(tsRulesPath);
+	CDataFile ts_rules_data(tsRulesPath.toStdString());
 	{
 		t_Section * buildSec = ts_rules_data.GetSection("BuildingTypes");
 
@@ -746,7 +746,7 @@ void parseRules()
 	ts_rules_data.~CDataFile();
 
 	// Tiberian Sun Firestorm rules
-	CDataFile fs_rules_data(fsRulesPath);
+	CDataFile fs_rules_data(fsRulesPath.toStdString());
 	{
 		t_Section * buildSec = fs_rules_data.GetSection("BuildingTypes");
 

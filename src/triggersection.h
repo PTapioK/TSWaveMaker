@@ -15,7 +15,7 @@ class TriggerSection : public QDockWidget
 
 	public slots:
 
-		void UpdateUi();
+		void updateUi();
 
 	private slots:
 

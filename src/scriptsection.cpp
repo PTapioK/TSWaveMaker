@@ -362,7 +362,7 @@ void ScriptSection::on_delS_clicked()
 			delete getScriptByName(name);
 			scripts.erase(ID);
 		}
-		UpdateUi();
+		updateUi();
 	}
 }
 
@@ -461,7 +461,7 @@ void ScriptSection::on_delSA_clicked()
 	}
 }
 
-void ScriptSection::UpdateUi()
+void ScriptSection::updateUi()
 {
 	ui->ScriptList->clearSelection();
 	ui->ScriptActionList->setCurrentRow(-1);

@@ -16,16 +16,16 @@ struct variableContainer {
 
 extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
 
-extern const std::string settingsFilePath;
-extern CDataFile settingsFileData;
+extern const QString settingsFilePath;
+extern QSettings settings;
 
 extern std::string currentFilePath;
 extern CDataFile currentFileData;
 
-extern std::string tsRulesPath;
-extern std::string fsRulesPath;
+extern QString tsRulesPath;
+extern QString fsRulesPath;
 
-extern std::string lastUsedPath;
+extern QString lastUsedPath;
 
 extern std::map <std::string, Trigger*> triggers;
 extern std::map <std::string, Tag*> tags;

@@ -706,51 +706,43 @@ void clearContainers()
 
 void loadSettings(bool ask)
 {
-	std::string ts_rules_path = settingsFileData.GetString("rulesPath", "rules");
-	std::string fs_rules_path = settingsFileData.GetString("firestrmPath", "rules");
+	QString ts_rules_path = settings.value("rules/rulesPath").toString();
+	QString fs_rules_path = settings.value("rules/firestrmPath").toString();
 
-	cloneOfNaming = settingsFileData.GetBool("cloneOfNaming");
-	ascNumNaming  = settingsFileData.GetBool("increaseNumberNaming");
-	alphabetNaming = settingsFileData.GetBool("alphabetsInOrderNaming");
+	cloneOfNaming = settings.value("cloneOfNaming").toBool();
+	ascNumNaming  = settings.value("increaseNumberNaming").toBool();
+	alphabetNaming = settings.value("alphabetsInOrderNaming").toBool();
 
-	lastUsedPath = settingsFileData.GetString("lastUsedPath");
+	lastUsedPath = settings.value("lastUsedPath", ".").toString();
 
 	if(ask) {
-		if(ts_rules_path.empty()) {
+		if(ts_rules_path.isEmpty()) {
 			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				ts_rules_path = rulesPathForTS(ts_rules_path);
+				ts_rules_path = getRulesPathFor("rules.ini", ts_rules_path);
 			}
 		}
-		if(fs_rules_path.empty()) {
+		if(fs_rules_path.isEmpty()) {
 			if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				fs_rules_path = rulesPathForFS(fs_rules_path);
+				fs_rules_path = getRulesPathFor("rules.ini", fs_rules_path);
 			}
 		}
 	}
 
-	settingsFileData.SetValue("rulesPath", ts_rules_path, "", "rules");
-	settingsFileData.SetValue("firestrmPath", fs_rules_path, "", "rules");
+	settings.setValue("rules/rulesPath", ts_rules_path);
+	settings.setValue("rules/firestrmPath", fs_rules_path);
 
 	tsRulesPath = ts_rules_path + "/rules.ini";
 	fsRulesPath = fs_rules_path + "/firestrm.ini";
 
-	settingsFileData.Save();
+	settings.sync();
 }
 
-std::string rulesPathForTS(std::string path)
+QString getRulesPathFor(QString fileName, QString path)
 {
 	QFileDialog fDG(NULL);
 	fDG.setFileMode(QFileDialog::Directory);
 	fDG.setOption(QFileDialog::ShowDirsOnly, true);
-	return fDG.getExistingDirectory(NULL, "Select directory containing rules.ini", path.c_str()).toStdString();
-}
-
-std::string rulesPathForFS(std::string path)
-{
-	QFileDialog fDG(NULL);
-	fDG.setFileMode(QFileDialog::Directory);
-	fDG.setOption(QFileDialog::ShowDirsOnly, true);
-	return fDG.getExistingDirectory(NULL, "Select directory containing firestrm.ini", path.c_str()).toStdString();
+	return fDG.getExistingDirectory(NULL, "Select directory containing " + fileName, path);
 }
 
 std::string getNameWithNextMark(std::string name, int iter, int numIter)
