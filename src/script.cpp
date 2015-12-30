@@ -40,7 +40,8 @@ Script::~Script()
 	deleteSectionFromBuffer(ID);
 }
 
-void Script::addLine(short type, int parameter) {
+void Script::addLine(short type, int parameter)
+{
 	ScriptLine *newLine = new ScriptLine();
 	newLine->param = parameter;
 	newLine->type = type;

@@ -461,7 +461,8 @@ void ScriptSection::on_delSA_clicked()
 	}
 }
 
-void ScriptSection::UpdateUi() {
+void ScriptSection::UpdateUi()
+{
 	ui->ScriptList->clearSelection();
 	ui->ScriptActionList->setCurrentRow(-1);
 	ui->ScriptList->clear();

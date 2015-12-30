@@ -2,7 +2,8 @@
 
 
 // Find First Free ID
-std::string fffID() {
+std::string fffID()
+{
 	std::string nextID;
 	std::stringstream ssID;
 
@@ -60,7 +61,6 @@ std::string fffID() {
 			a = (*IDIT);
 		}
 
-
 		if(a == nextID) {
 			++i;
 		} else {
@@ -72,7 +72,6 @@ std::string fffID() {
 		} else {
 			break;
 		}
-
 	}
 
 	ssID.str("");
@@ -82,14 +81,16 @@ std::string fffID() {
 	return nextID;
 }
 
-std::string getValueStr(std::string line) {
+std::string getValueStr(std::string line)
+{
 	std::string::size_type pos;
 	pos = line.find("=");
 	line = line.substr(pos+1);
 	return line.substr(0, line.find('\n'));
 }
 
-bool isFirstTrigger(std::string ID) {
+bool isFirstTrigger(std::string ID)
+{
 	bool retVal = true;
 	triggerIT IT = triggers.begin();
 	if((*IT).second->getID() != ID) {
@@ -98,7 +99,8 @@ bool isFirstTrigger(std::string ID) {
 	return retVal;
 }
 
-Tag* findTag(std::string trigID) {
+Tag* findTag(std::string trigID)
+{
 	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
 		if((*IT).second->getTriggerID() == trigID) {
 			return (*IT).second;
@@ -107,7 +109,8 @@ Tag* findTag(std::string trigID) {
 	return NULL;
 }
 
-std::string decToWaypointID(int dec) {
+std::string decToWaypointID(int dec)
+{
 	std::string retVal;
 	dec=dec+1;
 	while(dec != 0) {
@@ -130,7 +133,8 @@ std::string convertToSmallAlphas(int32_t dec)
 	return retVal;
 }
 
-std::string getTriggerNameByID(std::string trigID) {
+std::string getTriggerNameByID(std::string trigID)
+{
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getID() == trigID) {
 			return IT->second->getName().toStdString();
@@ -139,7 +143,8 @@ std::string getTriggerNameByID(std::string trigID) {
 	return NULL;
 }
 
-std::string getTriggerIDByName(std::string name) {
+std::string getTriggerIDByName(std::string name)
+{
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName().toStdString() == name) {
 			return IT->second->getID();
@@ -148,7 +153,8 @@ std::string getTriggerIDByName(std::string name) {
 	return std::string ("");
 }
 
-Trigger* getTriggerByName(std::string name) {
+Trigger* getTriggerByName(std::string name)
+{
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName().toStdString() == name) {
 			return IT->second;
@@ -157,7 +163,8 @@ Trigger* getTriggerByName(std::string name) {
 	return NULL;
 }
 
-int32_t waypointIDToDec(std::string wID) {
+int32_t waypointIDToDec(std::string wID)
+{
 	int32_t value = 0;
 	int i = wID.length();
 	while(1) {
@@ -177,7 +184,8 @@ int32_t waypointIDToDec(std::string wID) {
 	return value-1;
 }
 
-bool convertToBool(std::string str) {
+bool convertToBool(std::string str)
+{
 	if(str == "yes") {
 		return true;
 	}
@@ -194,7 +202,8 @@ bool convertToBool(std::string str) {
 	return false;
 }
 
-std::string converBoolToYesNo(bool boolean) {
+std::string converBoolToYesNo(bool boolean)
+{
 	if(boolean == true) {
 		return "yes";
 	} else {
@@ -208,7 +217,8 @@ std::string intToStr(int integer) {
 	return ss.str();
 }
 
-std::string getTeamNameByID(std::string ID) {
+std::string getTeamNameByID(std::string ID)
+{
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
@@ -217,7 +227,8 @@ std::string getTeamNameByID(std::string ID) {
 	return std::string ("");
 }
 
-Trigger* findNearestTimerTrigger(std::string trigID) {
+Trigger* findNearestTimerTrigger(std::string trigID)
+{
 	triggerIT IT = triggers.find(trigID);
 	while(IT != triggers.begin()) {
 		--IT;
@@ -237,7 +248,8 @@ Trigger* findNearestTimerTrigger(std::string trigID) {
 	return NULL;
 }
 
-Team* getTeamByName(std::string name) {
+Team* getTeamByName(std::string name)
+{
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
@@ -246,7 +258,8 @@ Team* getTeamByName(std::string name) {
 	return NULL;
 }
 
-std::string getTeamIDByName(std::string name) {
+std::string getTeamIDByName(std::string name)
+{
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
@@ -255,7 +268,8 @@ std::string getTeamIDByName(std::string name) {
 	return std::string ("");
 }
 
-std::string getScriptNameByID(std::string ID) {
+std::string getScriptNameByID(std::string ID)
+{
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
@@ -264,7 +278,8 @@ std::string getScriptNameByID(std::string ID) {
 	return "";
 }
 
-std::string getScriptIDByName(std::string name) {
+std::string getScriptIDByName(std::string name)
+{
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
@@ -273,7 +288,8 @@ std::string getScriptIDByName(std::string name) {
 	return "";
 }
 
-std::string getTaskforceNameByID(std::string ID) {
+std::string getTaskforceNameByID(std::string ID)
+{
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
@@ -282,7 +298,8 @@ std::string getTaskforceNameByID(std::string ID) {
 	return "";
 }
 
-std::string getTaskforceIDByName(std::string name) {
+std::string getTaskforceIDByName(std::string name)
+{
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
@@ -303,7 +320,8 @@ Taskforce *getTaskforceByName(std::string name)
 }
 
 
-Script* getScriptByName(std::string name) {
+Script* getScriptByName(std::string name)
+{
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
@@ -313,7 +331,8 @@ Script* getScriptByName(std::string name) {
 }
 
 
-std::string getScriptNameByPosition(uint16_t pos) {
+std::string getScriptNameByPosition(uint16_t pos)
+{
 	int i = 0;
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(i == pos) {
@@ -336,7 +355,8 @@ std::string getTaskforceNameByPosition(uint16_t pos)
 	return 0;
 }
 
-QString getScriptActionMeaning(uint8_t ID) {
+QString getScriptActionMeaning(uint8_t ID)
+{
 	switch(ID) {
 	case 0:
 		return "Attack a kind of target";
@@ -453,7 +473,8 @@ QString getScriptActionMeaning(uint8_t ID) {
 	}
 }
 
-SATargetType getScriptActionTargetType(uint8_t ID) {
+SATargetType getScriptActionTargetType(uint8_t ID)
+{
 	switch(ID) {
 	case 0:
 		return TARGET;
@@ -507,7 +528,8 @@ SATargetType getScriptActionTargetType(uint8_t ID) {
 	}
 }
 
-QStringList getScriptActionTargetStrings(SATargetType type) {
+QStringList getScriptActionTargetStrings(SATargetType type)
+{
 	QStringList list;
 	switch(type) {
 	case TARGET:
@@ -619,7 +641,8 @@ QStringList getScriptActionTargetStrings(SATargetType type) {
 	return list;
 }
 
-uint32_t getStringListMaxWidth(QStringList list, QFont font) {
+uint32_t getStringListMaxWidth(QStringList list, QFont font)
+{
 	if(!list.empty()) {
 		std::vector <uint32_t> widths;
 		QFontMetrics metr(font);

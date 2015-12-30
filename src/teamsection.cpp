@@ -312,7 +312,8 @@ void TeamSection::on_SAOButton_clicked()
 	}
 }
 
-void TeamSection::updateUi() {
+void TeamSection::updateUi()
+{
 	ui->TeamList->clearSelection();
 	ui->TeamList->clear();
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {

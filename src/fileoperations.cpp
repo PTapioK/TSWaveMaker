@@ -1,7 +1,8 @@
 #include "fileoperations.h"
 
 
-void saveAllToBuffer() {
+void saveAllToBuffer()
+{
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		(*IT).second->save();
 	}
@@ -39,11 +40,13 @@ void saveAllToBuffer() {
 
 }
 
-void writeLineToBuffer(std::string section, std::string ID, std::string value) {
+void writeLineToBuffer(std::string section, std::string ID, std::string value)
+{
 	currentFileData.SetValue(ID, value, "", section);
 }
 
-void editValueInBuffer(std::string section, std::string ID, std::string value, int count) {
+void editValueInBuffer(std::string section, std::string ID, std::string value, int count)
+{
 
 	std::string rawEx = currentFileData.GetValue(ID, section);
 	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
@@ -56,15 +59,18 @@ void readFileToBuffer() {
 	currentFileData.Load(currentFilePath);
 }
 
-void deleteLineFromBuffer(std::string section, std::string ID) {
+void deleteLineFromBuffer(std::string section, std::string ID)
+{
 	currentFileData.DeleteKey(ID, section);
 }
 
-void deleteSectionFromBuffer(std::string section) {
+void deleteSectionFromBuffer(std::string section)
+{
 	currentFileData.DeleteSection(section);
 }
 
-void parseSections() {
+void parseSections()
+{
 
 	t_Section * trSec = currentFileData.GetSection("Triggers");
 
@@ -446,7 +452,8 @@ void parseSections() {
 
 }
 
-Taskforce* findNewTaskforceFromFile(std::string taskforceID) {
+Taskforce* findNewTaskforceFromFile(std::string taskforceID)
+{
 
 	t_Section * cTaskF = currentFileData.GetSection(taskforceID);
 	if(cTaskF != NULL) {
@@ -486,7 +493,8 @@ Taskforce* findNewTaskforceFromFile(std::string taskforceID) {
 	return NULL;
 }
 
-Script *findNewScriptFromFile(std::string scriptID) {
+Script *findNewScriptFromFile(std::string scriptID)
+{
 
 	t_Section * cScript = currentFileData.GetSection(scriptID);
 
@@ -524,7 +532,8 @@ Script *findNewScriptFromFile(std::string scriptID) {
 	return NULL;
 }
 
-Team *findNewTeamFromFile(std::string teamID) {
+Team *findNewTeamFromFile(std::string teamID)
+{
 	t_Section * cTeam = currentFileData.GetSection(teamID);
 
 	if(cTeam != NULL) {

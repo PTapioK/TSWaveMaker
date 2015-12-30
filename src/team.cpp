@@ -14,7 +14,8 @@ Team::Team(std::string nID, int nmax, std::string ntagID, bool nfull, std::strin
 {
 }
 
-Team::Team(std::string nID, std::string nname) {
+Team::Team(std::string nID, std::string nname)
+{
 	ID = nID;
 	max = 0;
 	full = false;

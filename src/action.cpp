@@ -13,6 +13,7 @@ Action::Action(std::string newID, int32_t newType, int32_t newWayPoint = 0)
 	ID = newID;
 	type = newType;
 	waypoint = decToWaypointID(newWayPoint);
+	params.fill("0");
 }
 
 Action::Action(std::string newID, int32_t newType, int32_t newWayPoint, std::string parameter1, std::string parameter2, std::string parameter3, std::string parameter4, std::string parameter5, std::string parameter6)
@@ -42,7 +43,8 @@ Action::Action(Action *otherAction, std::string newID)
 	ID = newID;
 }
 
-void Action::save(int32_t count) {
+void Action::save(int32_t count)
+{
 	if(count == 1) {
 		std::stringstream valueSS;
 		valueSS << count
@@ -84,11 +86,13 @@ void Action::save(int32_t count) {
 	}
 }
 
-void Action::setType(int32_t newType) {
+void Action::setType(int32_t newType)
+{
 	type = newType;
 }
 
-void Action::setWayPoint(int32_t newWaypoint) {
+void Action::setWayPoint(int32_t newWaypoint)
+{
 	waypoint = decToWaypointID(newWaypoint);
 }
 
@@ -104,15 +108,18 @@ void Action::setParameter(int i, int32_t data)
 	params[i-1] = intToStr(data);
 }
 
-int32_t Action::getType() const {
+int32_t Action::getType() const
+{
 	return type;
 }
 
-int32_t Action::getWaypoint() const {
+int32_t Action::getWaypoint() const
+{
 	return waypointIDToDec(waypoint);
 }
 
-std::string Action::getParameter(int i) const {
+std::string Action::getParameter(int i) const
+{
 	assert(i > 0 && i < 6);
 	return params[i-1];
 }

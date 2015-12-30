@@ -517,7 +517,8 @@ void TriggerSection::on_anyEventWave_clicked()
 	}
 }
 
-void TriggerSection::UpdateUi() {
+void TriggerSection::UpdateUi()
+{
 	ui->TriggerList->setCurrentRow(-1);
 	ui->ActionList->setCurrentRow(-1);
 	ui->TriggerList->clear();
