@@ -103,8 +103,8 @@ void ScriptSection::on_SATargetBox_activated()
 							cur_script->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex()+1;
 							break;
 						case HOUSE:
-							for(std::map<uint16_t, std::string>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
-								if((*IT).second == ui->SATargetBox->currentText().toStdString()) {
+							for(std::map<uint16_t, QString>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+								if((*IT).second == ui->SATargetBox->currentText()) {
 									cur_script->scriptLines[rowNum]->param = (*IT).first;
 									break;
 								}
@@ -165,19 +165,19 @@ void ScriptSection::update_SATargetBox()
 				ui->defaultTarget->setDisabled(false);
 
 				if(param < 65536) {
-					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[getBuildingTypePosByKey(param)].name.c_str()));
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[getBuildingTypePosByKey(param)].name));
 					ui->defaultTarget->toggle();
 				} else if (param >= 65536 && param < 131072) {
-					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-65536].name.c_str()));
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-65536].name));
 					ui->lowThreat->toggle();
 				} else if (param >= 131072 && param < 196608) {
-					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-131072].name.c_str()));
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-131072].name));
 					ui->bigThreat->toggle();
 				} else if (param >= 196608 && param < 262144) {
-					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-196608].name.c_str()));
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-196608].name));
 					ui->nearTarget->toggle();
 				} else if (param >= 262144) {
-					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-262144].name.c_str()));
+					ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(buildings[param-262144].name));
 					ui->farTarget->toggle();
 				}
 				break;
@@ -185,7 +185,7 @@ void ScriptSection::update_SATargetBox()
 				ui->SATargetBox->setCurrentIndex(param-1);
 				break;
 			case HOUSE:
-				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(houses[param].c_str()));
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(houses[param]));
 				break;
 			default:
 				ui->SATargetBox->setCurrentIndex(param);

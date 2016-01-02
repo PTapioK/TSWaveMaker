@@ -60,9 +60,9 @@ void MainWindow::openFile()
 {
 	QFileDialog fDG(this);
 
-	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
+	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
 
-	if(currentFilePath.empty()) {
+	if(currentFilePath.isEmpty()) {
 		return;
 	}
 
@@ -76,17 +76,17 @@ void MainWindow::openFile()
 	scriptSct->updateUi();
 	taskforceSct->updateUi();
 
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
-	lastUsedPath = QFileInfo(currentFilePath.c_str()).path();
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath);
+	lastUsedPath = QFileInfo(currentFilePath).path();
 }
 
 void MainWindow::saveFile()
 {
-	if(currentFilePath.empty()) {
+	if(currentFilePath.isEmpty()) {
 		saveFileAs();
 		return;
 	}
-	currentFileData.SetFileName(currentFilePath);
+	currentFileData.SetFileName(currentFilePath.toStdString());
 	saveAllToBuffer();
 	currentFileData.Save();
 }
@@ -94,13 +94,13 @@ void MainWindow::saveFile()
 void MainWindow::saveFileAs()
 {
 	QFileDialog fDG(this);
-	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)")).toStdString();
-	if(currentFilePath.empty()) {
+	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
+	if(currentFilePath.isEmpty()) {
 		return;
 	}
 	saveFile();
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath.c_str());
-	lastUsedPath = QFileInfo(currentFilePath.c_str()).path();
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath);
+	lastUsedPath = QFileInfo(currentFilePath).path();
 }
 
 void MainWindow::infoDialog()

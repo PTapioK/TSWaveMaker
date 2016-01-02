@@ -3,7 +3,7 @@
 const QString settingsFilePath = "settings.ini";
 QSettings settings(settingsFilePath, QSettings::IniFormat);
 
-std::string currentFilePath;
+QString currentFilePath;
 CDataFile currentFileData;
 
 QString tsRulesPath;
@@ -19,11 +19,11 @@ std::map <std::string, Taskforce*> taskforces;
 std::map <std::string, std::string > aitriggers;
 
 std::map <uint16_t, unitContainer> buildings;
-std::map <std::string, unitContainer> vehicles;
-std::map <std::string, unitContainer> infantry;
-std::map <std::string, unitContainer> aircraft;
+std::map <QString, unitContainer> vehicles;
+std::map <QString, unitContainer> infantry;
+std::map <QString, unitContainer> aircraft;
 
-std::map <uint16_t, std::string > houses;
+std::map <uint16_t, QString> houses;
 
 std::map <uint16_t, variableContainer> localvariables;
 std::map <uint16_t, variableContainer> globalvariables;

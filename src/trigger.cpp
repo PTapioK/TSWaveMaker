@@ -10,9 +10,10 @@ Trigger::Trigger(std::string newName)
 	isMedium = true;
 	isHard = true;
 	isDis = false;
+	unknown = 0;
 }
 
-Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, std::string newName, bool nIsDis, bool newIsEas, bool newIsMed, bool newIsHar)
+Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown)
 {
 	name = newName;
 	ID = nID;
@@ -21,8 +22,8 @@ Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, s
 	isEasy = newIsEas;
 	isMedium = newIsMed;
 	isHard = newIsHar;
-	isDis = nIsDis;
-
+	isDis = newIsDis;
+	unknown = unknown;
 }
 
 Trigger::Trigger(Trigger *otherTrigger)
@@ -65,6 +66,7 @@ Trigger::Trigger(std::string newID, std::string newName)
 	isMedium = true;
 	isHard = true;
 	isDis = false;
+	unknown = 0;
 }
 
 Trigger::~Trigger()
@@ -96,7 +98,7 @@ void Trigger::setID(std::string newID)
 void Trigger::save()
 {
 	std::stringstream valueSS;
-	valueSS << house << "," << attachID << "," << name << "," << isDis << "," << isEasy << "," << isMedium << "," << isHard << "," << "0";
+	valueSS << house << "," << attachID << "," << name << "," << isDis << "," << isEasy << "," << isMedium << "," << isHard << "," << unknown;
 	writeLineToBuffer("Triggers", ID, valueSS.str());
 
 	int i = 0;

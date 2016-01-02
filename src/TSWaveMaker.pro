@@ -53,5 +53,5 @@ FORMS    += mainwindow.ui \
 	taskforcesection.ui \
     settingsdialog.ui
 
-DEFINES += VERSION='"\\\"$$system(git describe --abbrev=0)\\\""'
-DEFINES += GIT_VERSION='"\\\"$$system(git describe --tags --long)\\\""'
+DEFINES += VERSION='"\\\"$$system(git describe --tags --abbrev=0)\\\""'
+DEFINES += GIT_VERSION='"\\\"$$system(git describe --tags)\\\""'

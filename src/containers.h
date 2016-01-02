@@ -4,14 +4,14 @@
 #include "main.h"
 
 struct unitContainer {
-		std::string unitID;
-		std::string name;
+		QString unitID;
+		QString name;
 		uint16_t key;
 };
 
 struct variableContainer {
 		bool set;
-		std::string name;
+		QString name;
 };
 
 extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
@@ -19,7 +19,7 @@ extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
 extern const QString settingsFilePath;
 extern QSettings settings;
 
-extern std::string currentFilePath;
+extern QString currentFilePath;
 extern CDataFile currentFileData;
 
 extern QString tsRulesPath;
@@ -35,11 +35,11 @@ extern std::map <std::string, Taskforce*> taskforces;
 extern std::map <std::string, std::string> aitriggers;
 
 extern std::map <uint16_t, unitContainer> buildings;
-extern std::map <std::string, unitContainer> vehicles;
-extern std::map <std::string, unitContainer> infantry;
-extern std::map <std::string, unitContainer> aircraft;
+extern std::map <QString, unitContainer> vehicles;
+extern std::map <QString, unitContainer> infantry;
+extern std::map <QString, unitContainer> aircraft;
 
-extern std::map <uint16_t, std::string> houses;
+extern std::map <uint16_t, QString> houses;
 
 extern std::map <uint16_t, variableContainer> localvariables;
 extern std::map <uint16_t, variableContainer> globalvariables;
@@ -57,6 +57,6 @@ typedef std::vector <Action*>::const_iterator actionIT;
 typedef std::vector <Event*>::const_iterator eventIT;
 typedef std::vector <int32_t>::const_iterator waypointIT;
 
-typedef std::map <std::string, unitContainer>::iterator unitIT;
+typedef std::map <QString, unitContainer>::iterator unitIT;
 
 #endif // CONTAINERS_H

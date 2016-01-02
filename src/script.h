@@ -33,10 +33,10 @@ class Script
 
 		struct ScriptLine
 		{
-			short type;
-			int param;
+			int16_t type;
+			int32_t param;
 
-			short ID;
+			int16_t ID;
 		};
 
 		std::vector <ScriptLine*> scriptLines;

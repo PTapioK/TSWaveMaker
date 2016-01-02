@@ -45,18 +45,16 @@ void writeLineToBuffer(std::string section, std::string ID, std::string value)
 	currentFileData.SetValue(ID, value, "", section);
 }
 
-void editValueInBuffer(std::string section, std::string ID, std::string value, int count)
+void editCountableValueInBuffer(std::string section, std::string ID, std::string value, int count)
 {
-
 	std::string rawEx = currentFileData.GetValue(ID, section);
 	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
 	std::string newVal = intToStr(count) + "," + exvalue + "," + value;
 	currentFileData.SetValue(ID, newVal, "", section);
-
 }
 
 void readFileToBuffer() {
-	currentFileData.Load(currentFilePath);
+	currentFileData.Load(currentFilePath.toStdString());
 }
 
 void deleteLineFromBuffer(std::string section, std::string ID)
@@ -80,35 +78,24 @@ void parseSections()
 		for(KeyItor keyIT = trigs->begin(); keyIT < trigs->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string cur_line = currentFileData.GetString(Key, "Triggers");
+			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Triggers")).split(",");
 
-			std::string ID = Key;
+			if(curLine.size() == 8) {
+				std::string ID = Key;
 
-			std::string house = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
+				std::string house = curLine[0].toStdString();
+				std::string attachID = curLine[1].toStdString();
+				std::string name = curLine[2].toStdString();
+				bool isDisabled = curLine[3].toInt();
+				bool isEasy = curLine[4].toInt();
+				bool isMedium = curLine[5].toInt();
+				bool isHard = curLine[6].toInt();
+				int16_t unknown = curLine[7].toShort();
 
-			std::string attachID = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-
-			std::string name = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-
-			std::string isDisabled_s = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-			bool isDisabled = atoi(isDisabled_s.c_str());
-
-			std::string isEasy_s = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-			bool isEasy = atoi(isEasy_s.c_str());
-
-			std::string isMedium_s = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-			bool isMedium = atoi(isMedium_s.c_str());
-
-			std::string isHard_s = cur_line;
-			bool isHard = atoi(isHard_s.c_str());
-
-			triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard);
+				triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard, unknown);
+			} else {
+				qDebug() << "Error parsing trigger line: " + curLine.join(",");
+			}
 		}
 
 	}
@@ -121,19 +108,19 @@ void parseSections()
 		for(KeyItor keyIT = tagsl->begin(); keyIT < tagsl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string cur_line = currentFileData.GetString(Key, "Tags");
+			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Tags")).split(",");
 
-			std::string ID = Key;
+			if(curLine.size() == 3) {
+				std::string ID = Key;
 
-			int32_t mode = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-			cur_line = cur_line.substr(cur_line.find(",")+1);
+				int32_t mode = curLine[0].toInt();
+				std::string name = curLine[1].toStdString();
+				std::string triggerID = curLine[2].toStdString();
 
-			std::string name = cur_line.substr(0, cur_line.find(","));
-			cur_line = cur_line.substr(cur_line.find(",")+1);
-
-			std::string triggerID = cur_line;
-
-			tags[name] = new Tag(ID, name, triggerID, mode);
+				tags[name] = new Tag(ID, name, triggerID, mode);
+			} else {
+				qDebug() << "Error parsing tag line: " + curLine.join(",");
+			}
 		}
 	}
 
@@ -158,9 +145,9 @@ void parseSections()
 		KeyList * teaml = teamSec->GetKeyList();
 		for(KeyItor keyIT = teaml->begin(); keyIT < teaml->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string cur_line = currentFileData.GetString(Key, "TeamTypes");
+			std::string curLine = currentFileData.GetString(Key, "TeamTypes");
 
-			std::string teamID = cur_line.substr(0, 8);
+			std::string teamID = curLine.substr(0, 8);
 			Team *nTeam = findNewTeamFromFile(teamID);
 
 			if(nTeam != NULL) {
@@ -194,9 +181,9 @@ void parseSections()
 		KeyList * taskl = taskSec->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string cur_line = currentFileData.GetString(Key, "TaskForces");
+			std::string curLine = currentFileData.GetString(Key, "TaskForces");
 
-			std::string taskforceID = cur_line.substr(0, 8);
+			std::string taskforceID = curLine.substr(0, 8);
 			Taskforce *nTaskforce = findNewTaskforceFromFile(taskforceID);
 
 			if(nTaskforce != NULL) {
@@ -211,29 +198,20 @@ void parseSections()
 		for(KeyItor keyIT = eventl->begin(); keyIT < eventl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string cur_line = currentFileData.GetString(Key, "Events");
+			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Events")).split(",");
 
 			std::string ID = Key;
 
-			int32_t count = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-			cur_line = cur_line.substr(cur_line.find(",")+1);
+			int32_t count = curLine[0].toInt();
 
 			for(int i = 0; i != count; ++i) {
-				int32_t eType = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				int32_t eType = curLine[1 + i*3].toInt();
 
-				//int32_t nullparam = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				int32_t unknown = curLine[2 + i*3].toShort();
 
-				int32_t param = 0;
-				if(i != count-1) {
-					param = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-					cur_line = cur_line.substr(cur_line.find(",")+1);
-				} else {
-					param = atoi(cur_line.c_str());
-				}
+				int32_t param = curLine[3 + i*3].toInt();
 
-				triggers[ID]->addEvent(new Event(eType, param, ID));
+				triggers[ID]->addEvent(new Event(eType, param, ID, unknown));
 			}
 
 		}
@@ -246,45 +224,30 @@ void parseSections()
 		for(KeyItor keyIT = actl->begin(); keyIT < actl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string cur_line = currentFileData.GetString(Key, "Actions");
+			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Actions")).split(",");
 
 			std::string ID = Key;
 
-			int32_t count = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-			cur_line = cur_line.substr(cur_line.find(",")+1);
+			int32_t count = curLine[0].toInt();
 
 			std::array<std::string, 6> params;
 
 			for(int i = 0; i != count; ++i) {
-				int32_t aType = atoi(cur_line.substr(0, cur_line.find(",")).c_str());
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				int32_t aType = curLine[1 + i*8].toInt();
 
-				params[0] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[0] = curLine[2 + i*8].toStdString();
 
-				params[1] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[1] = curLine[3 + i*8].toStdString();
 
-				params[2] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[2] = curLine[4 + i*8].toStdString();
 
-				params[3] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[3] = curLine[5 + i*8].toStdString();
 
-				params[4] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[4] = curLine[6 + i*8].toStdString();
 
-				params[5] = cur_line.substr(0, cur_line.find(","));
-				cur_line = cur_line.substr(cur_line.find(",")+1);
+				params[5] = curLine[7 + i*8].toStdString();
 
-				int32_t wPoint = 0;
-
-				if(i != count-1) {
-					wPoint = waypointIDToDec(cur_line.substr(0, cur_line.find(",")).c_str());
-					cur_line = cur_line.substr(cur_line.find(",")+1);
-				} else {
-					wPoint = waypointIDToDec(cur_line.c_str());
-				}
+				int32_t wPoint = curLine[8 + i*8].toInt();
 
 				triggers[ID]->addAction(new Action(ID, aType, params, wPoint));
 			}
@@ -298,158 +261,53 @@ void parseSections()
 		for(KeyItor keyIT = aiTrigl->begin(); keyIT < aiTrigl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string cur_line = currentFileData.GetString(Key, "Actions");
+			std::string curLine = currentFileData.GetString(Key, "AITriggerTypes");
 
 			std::string ID = Key;
 
-			aitriggers[ID] = cur_line;
+			aitriggers[ID] = curLine;
 		}
 	}
 
-	// Rules inside map
-	t_Section * buildSec = currentFileData.GetSection("BuildingTypes");
+	QSettings currentMapSettings(currentFilePath, QSettings::IniFormat);
 
-	if (buildSec != NULL) {
-		KeyList * buildl = buildSec->GetKeyList();
-		for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
+	uint16_t index = 0;
+	parseBuildingTypes(currentMapSettings, index, 0, true);
 
-			std::string buildingSec = currentFileData.GetString(Key, "BuildingTypes");
-			std::string name = getUnitNameFromFile(buildingSec, &currentFileData);
+	parseUnitTypesToMap(currentMapSettings, vehicles, "VehicleTypes");
+	parseUnitTypesToMap(currentMapSettings, infantry, "InfantryTypes");
+	parseUnitTypesToMap(currentMapSettings, aircraft, "AircraftTypes");
 
-			if(name != "") {
-				unitContainer cont;
-				cont.unitID = buildingSec;
-				cont.name = name;
-				cont.key = atoi(Key.c_str());
+	parseVariablesToMap(currentMapSettings, localvariables);
 
-				buildings[atoi(Key.c_str())] = cont;
-			}
-		}
-	}
+	parseHouseTypes(currentMapSettings);
+}
 
-	t_Section * vehSec = currentFileData.GetSection("VehicleTypes");
+void parseRules()
+{
 
+	// Structure ID counter
+	uint16_t buildingIndex = 0;
 
-	if (vehSec != NULL) {
-		KeyList * vehl = vehSec->GetKeyList();
-		for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
+	// Tiberian Sun rules
+	QSettings tsRulesData(tsRulesPath, QSettings::IniFormat);
+	parseBuildingTypes(tsRulesData, buildingIndex);
 
-			std::string vehicleID = currentFileData.GetString(Key, "VehicleTypes");
-			std::string name = getUnitNameFromFile(vehicleID, &currentFileData);
+	parseUnitTypesToMap(tsRulesData, vehicles, "VehicleTypes");
+	parseUnitTypesToMap(tsRulesData, infantry, "InfantryTypes");
+	parseUnitTypesToMap(tsRulesData, aircraft, "AircraftTypes");
 
-			if(name != "") {
-				unitContainer cont;
-				cont.unitID = vehicleID;
-				cont.name = name;
-				cont.key = atoi(Key.c_str());
+	parseVariablesToMap(tsRulesData, globalvariables);
 
-				vehicles[vehicleID] = cont;
-			}
-		}
-	}
+	parseHouseTypes(tsRulesData);
 
-	t_Section * infSec = currentFileData.GetSection("InfantryTypes");
+	// Tiberian Sun Firestorm rules
+	QSettings fsRulesData(fsRulesPath, QSettings::IniFormat);
+	parseBuildingTypes(fsRulesData, buildingIndex, 169);
 
-	if (infSec != NULL) {
-		KeyList * infl = infSec->GetKeyList();
-		for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
-
-			std::string infID = currentFileData.GetString(Key, "InfantryTypes");
-			std::string name = getUnitNameFromFile(infID, &currentFileData);
-
-			if(name != "") {
-				unitContainer cont;
-				cont.unitID = infID;
-				cont.name = name;
-
-				infantry[infID] = cont;
-			}
-		}
-	}
-
-	t_Section * airSec = currentFileData.GetSection("AircraftTypes");
-
-	if (airSec != NULL) {
-		KeyList * airl = airSec->GetKeyList();
-		for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
-
-			std::string airID = currentFileData.GetString(Key, "AircraftTypes");
-			std::string name = getUnitNameFromFile(airID, &currentFileData);
-
-			if(name != "") {
-				unitContainer cont;
-				cont.unitID = airID;
-				cont.name = name;
-
-				aircraft[airID] = cont;
-			}
-		}
-	}
-
-	t_Section * localSec = currentFileData.GetSection("VariableNames");
-
-	if (localSec != NULL) {
-		KeyList * locall = localSec->GetKeyList();
-		for(KeyItor keyIT = locall->begin(); keyIT < locall->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
-
-			std::string localstr = currentFileData.GetString(Key, "VariableNames");
-
-			std::string name = localstr.substr(0, localstr.find(","));
-			localstr = localstr.substr(localstr.find(",")+1);
-
-			bool set = atoi(localstr.c_str());
-
-			variableContainer cont;
-			cont.set = set;
-			cont.name = name;
-
-			localvariables[atoi(Key.c_str())] = cont;
-		}
-	}
-
-	t_Section * houseSec = currentFileData.GetSection("Houses");
-
-	if (houseSec != NULL) {
-		KeyList * housel = houseSec->GetKeyList();
-		for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
-			std::string Key = keyIT->szKey;
-
-			std::string housename = currentFileData.GetString(Key, "Houses");
-
-			houses[atoi(Key.c_str())] = housename;
-		}
-	}
-
-	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
-		t_Section * curSec = currentFileData.GetSection(IT->first);
-		if(curSec != NULL) {
-			std::string name = currentFileData.GetString("Name", IT->first);
-			if(name != "")
-				IT->second.name = name;
-		}
-	}
-	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
-		t_Section * curSec = currentFileData.GetSection(IT->first);
-		if(curSec != NULL) {
-			std::string name = currentFileData.GetString("Name", IT->first);
-			if(name != "")
-				IT->second.name = name;
-		}
-	}
-	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
-		t_Section * curSec = currentFileData.GetSection(IT->first);
-		if(curSec != NULL) {
-			std::string name = currentFileData.GetString("Name", IT->first);
-			if(name != "")
-				IT->second.name = name;
-		}
-	}
-
+	parseUnitTypesToMap(fsRulesData, vehicles, "VehicleTypes");
+	parseUnitTypesToMap(fsRulesData, infantry, "InfantryTypes");
+	parseUnitTypesToMap(fsRulesData, aircraft, "AircraftTypes");
 }
 
 Taskforce* findNewTaskforceFromFile(std::string taskforceID)
@@ -507,17 +365,16 @@ Script *findNewScriptFromFile(std::string scriptID)
 		KeyList * scriptl = cScript->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string cur_line = currentFileData.GetString(Key, scriptID);
+			std::string curLine = currentFileData.GetString(Key, scriptID);
 
-			short type = 0;
-			int param = 0;
+			int16_t type = 0;
+			int32_t param = 0;
 
 			if(Key == "Name") {
-				name = cur_line;
+				name = curLine;
 				nScript->setName(name);
 			} else {
-
-				std::string val = cur_line;
+				std::string val = curLine;
 				type = atoi(val.substr(0, val.find(",")).c_str());
 
 				val = val.substr(val.find(",")+1);
@@ -612,236 +469,96 @@ Team *findNewTeamFromFile(std::string teamID)
 	return NULL;
 }
 
+// Finds and adds units to given container
+void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type) {
+	rules.beginGroup(type);
+	QStringList unitList = rules.childKeys();
+	rules.endGroup();
 
+	if (!unitList.isEmpty()) {
+		for(QStringList::ConstIterator keyIT = unitList.begin(); keyIT != unitList.end(); ++keyIT) {
 
-void parseRules()
-{
+			QString unitID = rules.value(type + "/" + *keyIT).toString();
+			QString unitName = rules.value(unitID + "/name").toString();
 
-	// Structure ID counter
-	uint16_t i = 0;
+			if(unitName != "") {
+				unitContainer cont;
+				cont.unitID = unitID;
+				cont.name = unitName;
+				cont.key = (*keyIT).toShort();
 
-	// Tiberian Sun rules
-	CDataFile ts_rules_data(tsRulesPath.toStdString());
-	{
-		t_Section * buildSec = ts_rules_data.GetSection("BuildingTypes");
-
-		if (buildSec != NULL) {
-			KeyList * buildl = buildSec->GetKeyList();
-			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string buildingID = ts_rules_data.GetString(Key, "BuildingTypes");
-				std::string name = getUnitNameFromFile(buildingID, &ts_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = buildingID;
-					cont.name = name;
-					cont.key = atoi(Key.c_str());
-
-					buildings[i] = cont;
-				}
-
-				++i;
+				unitMap[unitID] = cont;
 			}
 		}
-
-		t_Section * vehSec = ts_rules_data.GetSection("VehicleTypes");
-
-		if (vehSec != NULL) {
-			KeyList * vehl = vehSec->GetKeyList();
-			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string vehicleID = ts_rules_data.GetString(Key, "VehicleTypes");
-				std::string name = getUnitNameFromFile(vehicleID, &ts_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = vehicleID;
-					cont.name = name;
-
-					vehicles[vehicleID] = cont;
-				}
-			}
-		}
-
-		t_Section * infSec = ts_rules_data.GetSection("InfantryTypes");
-
-		if (infSec != NULL) {
-			KeyList * infl = infSec->GetKeyList();
-			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string infID = ts_rules_data.GetString(Key, "InfantryTypes");
-				std::string name = getUnitNameFromFile(infID, &ts_rules_data);
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = infID;
-					cont.name = name;
-
-					infantry[infID] = cont;
-				}
-			}
-		}
-
-		t_Section * airSec = ts_rules_data.GetSection("AircraftTypes");
-
-		if (airSec != NULL) {
-			KeyList * airl = airSec->GetKeyList();
-			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string airID = ts_rules_data.GetString(Key, "AircraftTypes");
-				std::string name = getUnitNameFromFile(airID, &ts_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = airID;
-					cont.name = name;
-
-					aircraft[airID] = cont;
-				}
-			}
-		}
-
-		t_Section * globalSec = ts_rules_data.GetSection("VariableNames");
-
-		if (globalSec != NULL) {
-			KeyList * globall = globalSec->GetKeyList();
-			for(KeyItor keyIT = globall->begin(); keyIT < globall->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string globalstr = ts_rules_data.GetString(Key, "VariableNames");
-
-				std::string name = globalstr.substr(0, globalstr.find(","));
-				globalstr = globalstr.substr(globalstr.find(",")+1);
-
-				bool set = atoi(globalstr.c_str());
-
-				variableContainer cont;
-				cont.set = set;
-				cont.name = name;
-
-				globalvariables[atoi(Key.c_str())] = cont;
-			}
-		}
-
-		t_Section * houseSec = ts_rules_data.GetSection("Houses");
-
-		if (houseSec != NULL) {
-			KeyList * housel = houseSec->GetKeyList();
-			for(KeyItor keyIT = housel->begin(); keyIT < housel->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string housename = ts_rules_data.GetString(Key, "Houses");
-
-				houses[atoi(Key.c_str())] = housename;
-			}
-		}
-
-	}
-
-	ts_rules_data.Clear();
-	ts_rules_data.~CDataFile();
-
-	// Tiberian Sun Firestorm rules
-	CDataFile fs_rules_data(fsRulesPath.toStdString());
-	{
-		t_Section * buildSec = fs_rules_data.GetSection("BuildingTypes");
-
-		if (buildSec != NULL) {
-			KeyList * buildl = buildSec->GetKeyList();
-			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string buildingSec = fs_rules_data.GetString(Key, "BuildingTypes");
-				std::string name = getUnitNameFromFile(buildingSec, &fs_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = buildingSec;
-					cont.name = name;
-					cont.key = atoi(Key.c_str()) + 169;
-
-					buildings[i] = cont;
-				}
-				++i;
-			}
-		}
-
-
-		t_Section * vehSec = fs_rules_data.GetSection("VehicleTypes");
-
-		if (vehSec != NULL) {
-			KeyList * vehl = vehSec->GetKeyList();
-			for(KeyItor keyIT = vehl->begin(); keyIT < vehl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string vehicleID = fs_rules_data.GetString(Key, "VehicleTypes");
-				std::string name = getUnitNameFromFile(vehicleID, &fs_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = vehicleID;
-					cont.name = name;
-
-					vehicles[vehicleID] = cont;
-				}
-			}
-		}
-
-		t_Section * infSec = fs_rules_data.GetSection("InfantryTypes");
-
-		if (infSec != NULL) {
-			KeyList * infl = infSec->GetKeyList();
-			for(KeyItor keyIT = infl->begin(); keyIT < infl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string infID = fs_rules_data.GetString(Key, "InfantryTypes");
-				std::string name = getUnitNameFromFile(infID, &fs_rules_data);
-
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = infID;
-					cont.name = name;
-
-					infantry[infID] = cont;
-				}
-			}
-		}
-
-		t_Section * airSec = fs_rules_data.GetSection("AircraftTypes");
-
-		if (airSec != NULL) {
-			KeyList * airl = airSec->GetKeyList();
-			for(KeyItor keyIT = airl->begin(); keyIT < airl->end(); ++keyIT) {
-				std::string Key = keyIT->szKey;
-
-				std::string airID = fs_rules_data.GetString(Key, "AircraftTypes");
-				std::string name = getUnitNameFromFile(airID, &fs_rules_data);
-				if(name != "") {
-					unitContainer cont;
-					cont.unitID = airID;
-					cont.name = name;
-
-					aircraft[airID] = cont;
-				}
-			}
-		}
-
-		fs_rules_data.Clear();
-		fs_rules_data.~CDataFile();
 	}
 }
 
+void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap) {
+	rules.beginGroup("VariableNames");
+	QStringList variableSec = rules.childKeys();
+	rules.endGroup();
 
-std::string getUnitNameFromFile(std::string unitID, CDataFile *file)
-{
-	t_Section * cUnit = file->GetSection(unitID);
-	if(cUnit != NULL) {
-		return file->GetString("Name", unitID);
+	if (!variableSec.isEmpty()) {
+		for(QStringList::ConstIterator keyIT = variableSec.begin(); keyIT != variableSec.end(); ++keyIT) {
+			QString Key = *keyIT;
+
+			QStringList values = rules.value("VariableNames/" + Key).toString().split(",");
+
+			QString name = values.at(0);
+
+			bool set = false;
+			if(values.size() == 2)
+				set = values.at(1).toInt();
+
+			variableContainer cont;
+			cont.set = set;
+			cont.name = name;
+
+			variableMap[Key.toShort()] = cont;
+		}
 	}
+}
 
-	return std::string("");
+void parseBuildingTypes(QSettings &rules, uint16_t &index, int16_t keyPlus, bool useKeyInstead) {
+	rules.beginGroup("BuildingTypes");
+	QStringList buildSec = rules.childKeys();
+	rules.endGroup();
+
+	if (!buildSec.isEmpty()) {
+		for(QStringList::ConstIterator keyIT = buildSec.begin(); keyIT != buildSec.end(); ++keyIT) {
+			QString Key = *keyIT;
+
+			QString buildingID = rules.value("BuildingTypes/" + Key).toString();
+			QString name = rules.value(buildingID + "/name").toString();
+
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = buildingID;
+				cont.name = name;
+				cont.key = Key.toShort() + keyPlus;
+
+				if(useKeyInstead) {
+					buildings[Key.toShort()] = cont;
+				} else {
+					buildings[index] = cont;
+				}
+			}
+
+			++index;
+		}
+	}
+}
+
+void parseHouseTypes(QSettings &rules) {
+	rules.beginGroup("Houses");
+	QStringList houseSec = rules.childKeys();
+	rules.endGroup();
+
+	if (!houseSec.isEmpty()) {
+		for(QStringList::ConstIterator keyIT = houseSec.begin(); keyIT != houseSec.end(); ++keyIT) {
+			QString Key = *keyIT;
+			QString name = rules.value("Houses/" + Key).toString();
+			houses[Key.toShort()] = name;
+		}
+	}
 }

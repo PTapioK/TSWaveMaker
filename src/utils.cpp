@@ -591,7 +591,7 @@ QStringList getScriptActionTargetStrings(SATargetType type)
 		break;
 	case BUILDING:
 		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
-			list << (*IT).second.name.c_str();
+			list << (*IT).second.name;
 		}
 		break;
 	case BALLOON:
@@ -611,12 +611,12 @@ QStringList getScriptActionTargetStrings(SATargetType type)
 		break;
 	case LOCAL:
 		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
-			list << (*IT).second.name.c_str();
+			list << (*IT).second.name;
 		}
 		break;
 	case GLOBAL:
 		for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
-			list << (*IT).second.name.c_str();
+			list << (*IT).second.name;
 		}
 		break;
 	case SCRIPT:
@@ -630,8 +630,8 @@ QStringList getScriptActionTargetStrings(SATargetType type)
 		}
 		break;
 	case HOUSE:
-		for(std::map<uint16_t, std::string >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
-			list << (*IT).second.c_str();
+		for(std::map<uint16_t, QString >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+			list << (*IT).second;
 		}
 		break;
 	case EDITABLE:
@@ -800,18 +800,18 @@ std::string getNameWithNextMark(std::string name, int iter, int numIter)
 std::string getUnitNameByUnitID(std::string unitID)
 {
 	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
-		if(IT->second.unitID == unitID) {
-			return IT->second.name;
+		if(IT->second.unitID.toStdString() == unitID) {
+			return IT->second.name.toStdString();
 		}
 	}
 	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
-		if(IT->second.unitID == unitID) {
-			return IT->second.name;
+		if(IT->second.unitID.toStdString() == unitID) {
+			return IT->second.name.toStdString();
 		}
 	}
 	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
-		if(IT->second.unitID == unitID) {
-			return IT->second.name;
+		if(IT->second.unitID.toStdString() == unitID) {
+			return IT->second.name.toStdString();
 		}
 	}
 	return std::string ("");

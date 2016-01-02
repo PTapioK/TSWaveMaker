@@ -11,6 +11,7 @@
 #include <QMap>
 #include <QString>
 #include <QSettings>
+#include <QDebug>
 
 #include <iostream>
 #include <string>

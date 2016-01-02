@@ -82,7 +82,7 @@ void Action::save(int32_t count)
 				<< params[5]
 				<< ","
 				<< waypoint;
-		editValueInBuffer("Actions", ID, valueSS.str(), count);
+		editCountableValueInBuffer("Actions", ID, valueSS.str(), count);
 	}
 }
 

@@ -13,7 +13,7 @@ class Trigger
 		std::vector <Event*> events;
 
 		Trigger(std::string newName);
-		Trigger(std::string newID, std::string newHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar);
+		Trigger(std::string newID, std::string newHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown = 0);
 		Trigger(Trigger* otherTrigger);
 		Trigger(std::string newID, Trigger* otherTrigger);
 		Trigger(std::string newID, std::string newName);
@@ -59,6 +59,7 @@ class Trigger
 
 		bool isDis;
 		bool isEasy, isMedium, isHard;
+		int16_t unknown;
 
 };
 
