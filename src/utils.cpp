@@ -305,120 +305,13 @@ QString getTaskforceNameByPosition(uint16_t pos)
 
 QString getScriptActionMeaning(uint8_t ID)
 {
-	switch(ID) {
-	case 0:
-		return "Attack a kind of target";
-	case 1:
-		return "Attack the waypoint";
-	case 2:
-		return "Go berzerk";
-	case 3:
-		return "Move to the waypoint";
-	case 4:
-		return "Move to coordinates...";
-	case 5:
-		return "Guard area for timer ticks...";
-	case 6:
-		return "Jump to line...";
-	case 7:
-		return "Player wins";
-	case 8:
-		return "Unload transports";
-	case 9:
-		return "Deploy";
-	case 10:
-		return "Follow friendlies";
-	case 11:
-		return "Execute mission";
-	case 12:
-		return "Set a global variable";
-	case 13:
-		return "Idle anim...";
-	case 14:
-		return "Transporter loads freight";
-	case 15:
-		return "Attack building at waypoint";
-	case 16:
-		return "Patrol to waypoint";
-	case 17:
-		return "Change to another script";
-	case 18:
-		return "Join with other Taskforce";
-	case 19:
-		return "Panic";
-	case 20:
-		return "Change the house";
-	case 21:
-		return "Scatter";
-	case 22:
-		return "Run into shroud";
-	case 23:
-		return "Player looses";
-	case 24:
-		return "Voice message";
-	case 25:
-		return "Play sound";
-	case 26:
-		return "Play movie";
-	case 27:
-		return "Play a song";
-	case 28:
-		return "Reduce tiberium";
-	case 29:
-		return "Begin production";
-	case 30:
-		return "Fire sale";
-	case 31:
-		return "Commit suicide";
-	case 32:
-		return "Ion storm...";
-	case 33:
-		return "Ion storm end";
-	case 34:
-		return "Center view on team (speed)...";
-	case 35:
-		return "Shroud map";
-	case 36:
-		return "Reveal map";
-	case 37:
-		return "Delete team members";
-	case 38:
-		return "Clear a global variable";
-	case 39:
-		return "Set a local variable";
-	case 40:
-		return "Clear a local variable";
-	case 41:
-		return "End panic";
-	case 42:
-		return "Change unit facing";
-	case 43:
-		return "Transport waits until fully loaded";
-	case 44:
-		return "Unload truck";
-	case 45:
-		return "Load truck";
-	case 46:
-		return "Attack enemy building";
-	case 47:
-		return "Move to enemy building";
-	case 48:
-		return "Scout";
-	case 49:
-		return "Success";
-	case 50:
-		return "Flash taskforce";
-	case 51:
-		return "Animate taskforce...";
-	case 52:
-		return "Talk bubble";
-	case 53:
-		return "Gather at enemy";
-	case 54:
-		return "Gather at base";
-	default:
-		return "Not Implemented!";
-	}
+	QString retVal;
+
+	QSettings strings("scriptactionscriptStrings.ini", QSettings::IniFormat);
+	retVal = scriptStrings.value("Actions/" + QString::number(ID), QString("Not Implemented!")).toString();
+
+	return retVal;
+
 }
 
 SATargetType getScriptActionTargetType(uint8_t ID)
@@ -479,19 +372,17 @@ SATargetType getScriptActionTargetType(uint8_t ID)
 QStringList getScriptActionTargetStrings(SATargetType type)
 {
 	QStringList list;
+	QStringList strList;
+
 	switch(type) {
 	case TARGET:
-		list << "Cancel attack";
-		list << "Everything";
-		list << "Buildings";
-		list << "Harvester";
-		list << "Infantry";
-		list << "Vehicles";
-		list << "Factories";
-		list << "Buildings of base defense";
-		list << "Everything which threatens the own base";
-		list << "Power plants";
-		list << "Conquer buildings";
+		scriptStrings.beginGroup("Target");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
 		break;
 	case WAYPOINT:
 		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
@@ -499,41 +390,22 @@ QStringList getScriptActionTargetStrings(SATargetType type)
 		}
 		break;
 	case UNLOAD:
-		list << "The remaining script commands are valid for both, the transport and its freight";
-		list << "The remaining script commands are valid only for the transport, not for its freight";
-		list << "The remaining script commands are valid only for the freight, not for the transport";
-		list << "The remaining script commands are not executed";
+		scriptStrings.beginGroup("Unload");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
 		break;
 	case MISSION:
-		list << "Deaktivate the taskforce. Further commands do not work";
-		list << "Attack the nearest enemy";
-		list << "Move";
-		list << "QMove";
-		list << "Retreat. The units may leave the map";
-		list << "Defend the position. If necessary follow the opponent in order to attack him, but come back asap";
-		list << "Defend the position. Do not move";
-		list << "Enter a building or transport within Sight range";
-		list << "Capture any buildings in the neighborhood";
-		list << "Begin to harvest Tiberium (-waste)";
-		list << "Defend the location in Sight range. If necessary follow the opponent in order to attack him, but no need to come back";
-		list << "Return to the place where this unit was spawned. Effective for harvesters (HARV) only...";
-		list << "Stop";
-		list << "Ambush (wait until discovered)";
-		list << "Hunt";
-		list << "Unload";
-		list << "Sabotage (move in & destroy)";
-		list << "Construction";
-		list << "Deconstruction";
-		list << "Repair";
-		list << "Rescue";
-		list << "Missile";
-		list << "Harmless";
-		list << "Open";
-		list << "Patrol";
-		list << "Paradrop approach drop zone";
-		list << "Paradrop overlay drop zone";
-		list << "Wait";
-		list << "Attack move";
+		scriptStrings.beginGroup("Mission");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
 		break;
 	case BUILDING:
 		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
@@ -541,19 +413,22 @@ QStringList getScriptActionTargetStrings(SATargetType type)
 		}
 		break;
 	case BALLOON:
-		list << "'*'";
-		list << "'?'";
-		list << "'!'";
+		scriptStrings.beginGroup("Balloon");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
 		break;
 	case FACING:
-		list << "North";
-		list << "North-East";
-		list << "East";
-		list << "South-East";
-		list << "South";
-		list << "South-West";
-		list << "West";
-		list << "North-West";
+		scriptStrings.beginGroup("Facing");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
 		break;
 	case LOCAL:
 		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
@@ -765,3 +640,9 @@ QString getUnitNameByUnitID(QString unitID)
 	return QString("");
 }
 
+
+
+bool lessThanQString(const QString &str1, const QString &str2)
+{
+	return str1.toInt() < str2.toInt();
+}

@@ -34,5 +34,6 @@ extern void loadSettings(bool ask = true);
 extern QString getRulesPathFor(QString fileName, QString path);
 extern QString getNameWithNextMark(QString name, int iter = 0, int numIter = -1000000);
 extern QString getUnitNameByUnitID(QString unitID);
+extern bool lessThanQString(const QString &str1, const QString &str2);
 
 #endif // UTILS_H

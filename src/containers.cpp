@@ -3,6 +3,9 @@
 const QString settingsFilePath = "settings.ini";
 QSettings settings(settingsFilePath, QSettings::IniFormat);
 
+const QString scriptStringsPath = "scriptstrings.ini";
+QSettings scriptStrings(scriptStringsPath, QSettings::IniFormat);
+
 QString currentFilePath;
 CDataFile currentFileData;
 

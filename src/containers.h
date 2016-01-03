@@ -19,6 +19,9 @@ extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
 extern const QString settingsFilePath;
 extern QSettings settings;
 
+extern const QString scriptStringsPath;
+extern QSettings scriptStrings;
+
 extern QString currentFilePath;
 extern CDataFile currentFileData;
 

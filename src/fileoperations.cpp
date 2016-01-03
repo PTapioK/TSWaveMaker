@@ -271,8 +271,27 @@ void parseSections()
 
 	QSettings currentMapSettings(currentFilePath, QSettings::IniFormat);
 
-	uint16_t index = 0;
-	parseBuildingTypes(currentMapSettings, index, 0, true);
+	// BuildingTypes list should not be sorted...
+	t_Section * buildSec = currentFileData.GetSection("BuildingTypes");
+
+	if (buildSec != NULL) {
+		KeyList * buildl = buildSec->GetKeyList();
+		for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+			std::string Key = keyIT->szKey;
+
+			std::string buildingID = currentFileData.GetString(Key, "BuildingTypes");
+			std::string name = currentFileData.GetString("Name", buildingID);
+
+			if(name != "") {
+				unitContainer cont;
+				cont.unitID = QString::fromStdString(buildingID);
+				cont.name = QString::fromStdString(name);
+				cont.key = atoi(Key.c_str());
+
+				buildings[atoi(Key.c_str())] = cont;
+			}
+		}
+	}
 
 	parseUnitTypesToMap(currentMapSettings, vehicles, "VehicleTypes");
 	parseUnitTypesToMap(currentMapSettings, infantry, "InfantryTypes");
@@ -290,9 +309,34 @@ void parseRules()
 	uint16_t buildingIndex = 0;
 
 	// Tiberian Sun rules
-	QSettings tsRulesData(tsRulesPath, QSettings::IniFormat);
-	parseBuildingTypes(tsRulesData, buildingIndex);
+	// BuildingTypes list should not be sorted...
+	CDataFile tsRulesCData(tsRulesPath.toStdString());
+	{
+		t_Section * buildSec = tsRulesCData.GetSection("BuildingTypes");
 
+		if (buildSec != NULL) {
+			KeyList * buildl = buildSec->GetKeyList();
+			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+				std::string Key = keyIT->szKey;
+
+				std::string buildingID = tsRulesCData.GetString(Key, "BuildingTypes");
+				std::string name = tsRulesCData.GetString("Name", buildingID);
+
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = QString::fromStdString(buildingID);
+					cont.name = QString::fromStdString(name);
+					cont.key = atoi(Key.c_str());
+
+					buildings[buildingIndex] = cont;
+				}
+
+				++buildingIndex;
+			}
+		}
+	}
+
+	QSettings tsRulesData(tsRulesPath, QSettings::IniFormat);
 	parseUnitTypesToMap(tsRulesData, vehicles, "VehicleTypes");
 	parseUnitTypesToMap(tsRulesData, infantry, "InfantryTypes");
 	parseUnitTypesToMap(tsRulesData, aircraft, "AircraftTypes");
@@ -302,9 +346,34 @@ void parseRules()
 	parseHouseTypes(tsRulesData);
 
 	// Tiberian Sun Firestorm rules
-	QSettings fsRulesData(fsRulesPath, QSettings::IniFormat);
-	parseBuildingTypes(fsRulesData, buildingIndex, 169);
+	// BuildingTypes list should not be sorted...
+	CDataFile fsRulesCData(fsRulesPath.toStdString());
+	{
+		t_Section * buildSec = fsRulesCData.GetSection("BuildingTypes");
 
+		if (buildSec != NULL) {
+			KeyList * buildl = buildSec->GetKeyList();
+			for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
+				std::string Key = keyIT->szKey;
+
+				std::string buildingID = fsRulesCData.GetString(Key, "BuildingTypes");
+				std::string name = fsRulesCData.GetString("Name", buildingID);
+
+				if(name != "") {
+					unitContainer cont;
+					cont.unitID = QString::fromStdString(buildingID);
+					cont.name = QString::fromStdString(name);
+					cont.key = atoi(Key.c_str()) + 169;
+
+					buildings[buildingIndex] = cont;
+				}
+
+				++buildingIndex;
+			}
+		}
+	}
+
+	QSettings fsRulesData(fsRulesPath, QSettings::IniFormat);
 	parseUnitTypesToMap(fsRulesData, vehicles, "VehicleTypes");
 	parseUnitTypesToMap(fsRulesData, infantry, "InfantryTypes");
 	parseUnitTypesToMap(fsRulesData, aircraft, "AircraftTypes");
@@ -514,36 +583,6 @@ void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer>
 			cont.name = name;
 
 			variableMap[Key.toShort()] = cont;
-		}
-	}
-}
-
-void parseBuildingTypes(QSettings &rules, uint16_t &index, int16_t keyPlus, bool useKeyInstead) {
-	rules.beginGroup("BuildingTypes");
-	QStringList buildSec = rules.childKeys();
-	rules.endGroup();
-
-	if (!buildSec.isEmpty()) {
-		for(QStringList::ConstIterator keyIT = buildSec.begin(); keyIT != buildSec.end(); ++keyIT) {
-			QString Key = *keyIT;
-
-			QString buildingID = rules.value("BuildingTypes/" + Key).toString();
-			QString name = rules.value(buildingID + "/name").toString();
-
-			if(name != "") {
-				unitContainer cont;
-				cont.unitID = buildingID;
-				cont.name = name;
-				cont.key = Key.toShort() + keyPlus;
-
-				if(useKeyInstead) {
-					buildings[Key.toShort()] = cont;
-				} else {
-					buildings[index] = cont;
-				}
-			}
-
-			++index;
 		}
 	}
 }

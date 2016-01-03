@@ -17,7 +17,6 @@ void parseSections();
 void parseRules();
 void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);
 void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap);
-void parseBuildingTypes(QSettings &rules, uint16_t &index, int16_t keyPlus = 0, bool useKeyInstead = false);
 void parseHouseTypes(QSettings &rules);
 
 Team* findNewTeamFromFile(std::string teamID);
