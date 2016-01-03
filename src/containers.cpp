@@ -11,12 +11,12 @@ QString fsRulesPath;
 
 QString lastUsedPath = ".";
 
-std::map <std::string, Trigger*> triggers;
-std::map <std::string, Tag*> tags;
-std::map <std::string, Team*> teams;
-std::map <std::string, Script*> scripts;
-std::map <std::string, Taskforce*> taskforces;
-std::map <std::string, std::string > aitriggers;
+std::map <QString, Trigger*> triggers;
+std::map <QString, Tag*> tags;
+std::map <QString, Team*> teams;
+std::map <QString, Script*> scripts;
+std::map <QString, Taskforce*> taskforces;
+std::map <QString, QString > aitriggers;
 
 std::map <uint16_t, unitContainer> buildings;
 std::map <QString, unitContainer> vehicles;

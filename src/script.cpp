@@ -1,15 +1,15 @@
 #include "script.h"
 
-Script::Script(std::string newID)
+Script::Script(QString newID)
 {
-	name = std::string("");
+	name = QString("");
 
 	ID = newID;
 
 	lineCounter = 0;
 }
 
-Script::Script(std::string newID, std::string newName)
+Script::Script(QString newID, QString newName)
 {
 	name = newName;
 
@@ -18,7 +18,7 @@ Script::Script(std::string newID, std::string newName)
 	lineCounter = 0;
 }
 
-Script::Script(std::string newID, Script *currentScript)
+Script::Script(QString newID, Script *currentScript)
 {
 	ID = newID;
 
@@ -40,7 +40,7 @@ Script::~Script()
 	deleteSectionFromBuffer(ID);
 }
 
-void Script::addLine(short type, int parameter)
+void Script::addLine(int16_t type, int32_t parameter)
 {
 	ScriptLine *newLine = new ScriptLine();
 	newLine->param = parameter;
@@ -52,7 +52,7 @@ void Script::addLine(short type, int parameter)
 	++lineCounter;
 }
 
-void Script::insertLine(short type, short parameter, short ID)
+void Script::insertLine(int16_t type, int16_t parameter, int16_t ID)
 {
 	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
 		if((*IT)->ID >= ID) {
@@ -71,7 +71,7 @@ void Script::insertLine(short type, short parameter, short ID)
 
 }
 
-void Script::deleteLine(short lineID)
+void Script::deleteLine(int16_t lineID)
 {
 
 	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
@@ -88,10 +88,10 @@ void Script::deleteLine(short lineID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	deleteLineFromBuffer(ID, intToStr(lineID));
+	deleteLineFromBuffer(ID, QString::number(lineID));
 }
 
-void Script::setName(std::string newName)
+void Script::setName(QString newName)
 {
 	name = newName;
 }
@@ -99,19 +99,20 @@ void Script::setName(std::string newName)
 void Script::save()
 {
 	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
-		std::stringstream valueSS;
+		QString str;
+		QTextStream valueSS(&str);
 		valueSS << (*IT)->type << "," << (*IT)->param;
-		writeLineToBuffer(ID, intToStr((*IT)->ID), valueSS.str());
+		writeLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
 	}
 	writeLineToBuffer(ID, "Name", name);
 }
 
-std::string Script::getName() const
+QString Script::getName() const
 {
 	return name;
 }
 
-std::string Script::getID() const {
+QString Script::getID() const {
 	return ID;
 }
 

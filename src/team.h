@@ -6,46 +6,46 @@
 class Team
 {
 	public:
-		Team(std::string nID, int nmax, std::string ntagid, bool nfull, std::string nname, int ngroup, std::string nhouse, std::string nscriptID, bool nwhiner, bool ndroppod,
-			 bool nsuicide, bool nloadable, bool nprebuild, int nprioirity, std::string nwpoint, bool nannoyance, bool nionimmune,
-			 bool nrecruiter, bool nreinforce, std::string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
+		Team(QString nID, int nmax, QString ntagid, bool nfull, QString nname, int ngroup, QString nhouse, QString nscriptID, bool nwhiner, bool ndroppod,
+			 bool nsuicide, bool nloadable, bool nprebuild, int nprioirity, QString nwpoint, bool nannoyance, bool nionimmune,
+			 bool nrecruiter, bool nreinforce, QString ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
 			 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
 			 bool nareteammemberrecruitable);
-		Team(std::string nID, std::string nname = "New Team");
-		Team(std::string nID, Team* nTeam);
+		Team(QString nID, QString nname = "New Team");
+		Team(QString nID, Team* nTeam);
 		~Team();
 
-		void setName(std::string newName);
+		void setName(QString newName);
 
 		void save();
 
-		std::string getName() const;
-		std::string getID() const;
+		QString getName() const;
+		QString getID() const;
 
 	private:
 
 		friend class TeamSection;
 
-		std::string ID;
+		QString ID;
 		int max;
-		std::string tagID;
+		QString tagID;
 		bool full;
-		std::string name;
+		QString name;
 		int group;
-		std::string house;
-		std::string scriptID;
+		QString house;
+		QString scriptID;
 		bool whiner;
 		bool droppod;
 		bool suicide;
 		bool loadable;
 		bool prebuild;
 		int priority;
-		std::string wPoint;
+		QString wPoint;
 		bool annoyance;
 		bool ionimmune;
 		bool recruiter;
 		bool reinforce;
-		std::string taskForceID;
+		QString taskForceID;
 		int techlevel;
 		bool aggressive;
 		bool autocreate;

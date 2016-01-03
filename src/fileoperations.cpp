@@ -13,7 +13,7 @@ void saveAllToBuffer()
 	int i = 0;
 	deleteSectionFromBuffer("TeamTypes");
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
-		writeLineToBuffer("TeamTypes", intToStr(i), IT->second->getID());
+		writeLineToBuffer("TeamTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
@@ -22,7 +22,7 @@ void saveAllToBuffer()
 	i = 0;
 	deleteSectionFromBuffer("ScriptTypes");
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		writeLineToBuffer("ScriptTypes", intToStr(i), IT->second->getID());
+		writeLineToBuffer("ScriptTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
@@ -31,7 +31,7 @@ void saveAllToBuffer()
 	i = 0;
 	deleteSectionFromBuffer("TaskForces");
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		writeLineToBuffer("TaskForces", intToStr(i), IT->second->getID());
+		writeLineToBuffer("TaskForces", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
@@ -40,31 +40,31 @@ void saveAllToBuffer()
 
 }
 
-void writeLineToBuffer(std::string section, std::string ID, std::string value)
+void writeLineToBuffer(QString section, QString ID, QString value)
 {
-	currentFileData.SetValue(ID, value, "", section);
+	currentFileData.SetValue(ID.toStdString(), value.toStdString(), "", section.toStdString());
 }
 
-void editCountableValueInBuffer(std::string section, std::string ID, std::string value, int count)
+void editCountableValueInBuffer(QString section, QString ID, QString value, int count)
 {
-	std::string rawEx = currentFileData.GetValue(ID, section);
+	std::string rawEx = currentFileData.GetValue(ID.toStdString(), section.toStdString());
 	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
-	std::string newVal = intToStr(count) + "," + exvalue + "," + value;
-	currentFileData.SetValue(ID, newVal, "", section);
+	std::string newVal = intToStr(count) + "," + exvalue + "," + value.toStdString();
+	currentFileData.SetValue(ID.toStdString(), newVal, "", section.toStdString());
 }
 
 void readFileToBuffer() {
 	currentFileData.Load(currentFilePath.toStdString());
 }
 
-void deleteLineFromBuffer(std::string section, std::string ID)
+void deleteLineFromBuffer(QString section, QString ID)
 {
-	currentFileData.DeleteKey(ID, section);
+	currentFileData.DeleteKey(ID.toStdString(), section.toStdString());
 }
 
-void deleteSectionFromBuffer(std::string section)
+void deleteSectionFromBuffer(QString section)
 {
-	currentFileData.DeleteSection(section);
+	currentFileData.DeleteSection(section.toStdString());
 }
 
 void parseSections()
@@ -81,11 +81,11 @@ void parseSections()
 			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Triggers")).split(",");
 
 			if(curLine.size() == 8) {
-				std::string ID = Key;
+				QString ID = QString::fromStdString(Key);
 
-				std::string house = curLine[0].toStdString();
-				std::string attachID = curLine[1].toStdString();
-				std::string name = curLine[2].toStdString();
+				QString house = curLine[0];
+				QString attachID = curLine[1];
+				QString name = curLine[2];
 				bool isDisabled = curLine[3].toInt();
 				bool isEasy = curLine[4].toInt();
 				bool isMedium = curLine[5].toInt();
@@ -111,11 +111,11 @@ void parseSections()
 			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Tags")).split(",");
 
 			if(curLine.size() == 3) {
-				std::string ID = Key;
+				QString ID = QString::fromStdString(Key);
 
 				int32_t mode = curLine[0].toInt();
-				std::string name = curLine[1].toStdString();
-				std::string triggerID = curLine[2].toStdString();
+				QString name = curLine[1];
+				QString triggerID = curLine[2];
 
 				tags[name] = new Tag(ID, name, triggerID, mode);
 			} else {
@@ -151,7 +151,7 @@ void parseSections()
 			Team *nTeam = findNewTeamFromFile(teamID);
 
 			if(nTeam != NULL) {
-				teams[teamID] = nTeam;
+				teams[QString::fromStdString(teamID)] = nTeam;
 			}
 
 		}
@@ -163,13 +163,13 @@ void parseSections()
 		KeyList * scriptl = scriptSec->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string cur_line = currentFileData.GetString(Key, "ScriptTypes");
+			std::string curLine = currentFileData.GetString(Key, "ScriptTypes");
 
-			std::string scriptID = cur_line.substr(0, 8);
+			std::string scriptID = curLine.substr(0, 8);
 			Script *nScript = findNewScriptFromFile(scriptID);
 
 			if(nScript != NULL) {
-				scripts[scriptID] = nScript;
+				scripts[QString::fromStdString(scriptID)] = nScript;
 			}
 
 		}
@@ -187,7 +187,7 @@ void parseSections()
 			Taskforce *nTaskforce = findNewTaskforceFromFile(taskforceID);
 
 			if(nTaskforce != NULL) {
-				taskforces[taskforceID] = nTaskforce;
+				taskforces[QString::fromStdString(taskforceID)] = nTaskforce;
 			}
 		}
 	}
@@ -200,7 +200,7 @@ void parseSections()
 
 			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Events")).split(",");
 
-			std::string ID = Key;
+			QString ID = QString::fromStdString(Key);
 
 			int32_t count = curLine[0].toInt();
 
@@ -226,26 +226,26 @@ void parseSections()
 
 			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Actions")).split(",");
 
-			std::string ID = Key;
+			QString ID = QString::fromStdString(Key);
 
 			int32_t count = curLine[0].toInt();
 
-			std::array<std::string, 6> params;
+			std::array<QString, 6> params;
 
 			for(int i = 0; i != count; ++i) {
 				int32_t aType = curLine[1 + i*8].toInt();
 
-				params[0] = curLine[2 + i*8].toStdString();
+				params[0] = curLine[2 + i*8];
 
-				params[1] = curLine[3 + i*8].toStdString();
+				params[1] = curLine[3 + i*8];
 
-				params[2] = curLine[4 + i*8].toStdString();
+				params[2] = curLine[4 + i*8];
 
-				params[3] = curLine[5 + i*8].toStdString();
+				params[3] = curLine[5 + i*8];
 
-				params[4] = curLine[6 + i*8].toStdString();
+				params[4] = curLine[6 + i*8];
 
-				params[5] = curLine[7 + i*8].toStdString();
+				params[5] = curLine[7 + i*8];
 
 				int32_t wPoint = curLine[8 + i*8].toInt();
 
@@ -265,7 +265,7 @@ void parseSections()
 
 			std::string ID = Key;
 
-			aitriggers[ID] = curLine;
+			aitriggers[QString::fromStdString(ID)] = QString::fromStdString(curLine);
 		}
 	}
 
@@ -312,19 +312,18 @@ void parseRules()
 
 Taskforce* findNewTaskforceFromFile(std::string taskforceID)
 {
-
 	t_Section * cTaskF = currentFileData.GetSection(taskforceID);
 	if(cTaskF != NULL) {
 
 		std::string name = "New Taskforce";
 		int32_t group = -1;
 
-		Taskforce *nTaskforce = new Taskforce(taskforceID);
+		Taskforce *nTaskforce = new Taskforce(QString::fromStdString(taskforceID));
 
 		KeyList * taskl = cTaskF->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string cur_line = currentFileData.GetString(Key, taskforceID);
+			std::string curLine = currentFileData.GetString(Key, taskforceID);
 
 			std::string type = "";
 			short amount = 0;
@@ -333,16 +332,16 @@ Taskforce* findNewTaskforceFromFile(std::string taskforceID)
 				group = currentFileData.GetInt(Key, taskforceID);
 				nTaskforce->setGroup(group);
 			} else if (Key == "Name") {
-				name = cur_line;
-				nTaskforce->setName(name);
+				name = curLine;
+				nTaskforce->setName(QString::fromStdString(name));
 			} else {
-				std::string val = getValueStr(cur_line);
+				std::string val = curLine;
 				amount = atoi(val.substr(0, val.find(",")).c_str());
 
 				val = val.substr(val.find(",")+1);
 				type = val;
 
-				nTaskforce->addLine(type, amount);
+				nTaskforce->addLine(QString::fromStdString(type), amount);
 			}
 		}
 		return nTaskforce;
@@ -360,7 +359,7 @@ Script *findNewScriptFromFile(std::string scriptID)
 
 		std::string name = "New Script";
 
-		Script *nScript = new Script(scriptID);
+		Script *nScript = new Script(QString::fromStdString(scriptID));
 
 		KeyList * scriptl = cScript->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
@@ -372,7 +371,7 @@ Script *findNewScriptFromFile(std::string scriptID)
 
 			if(Key == "Name") {
 				name = curLine;
-				nScript->setName(name);
+				nScript->setName(QString::fromStdString(name));
 			} else {
 				std::string val = curLine;
 				type = atoi(val.substr(0, val.find(",")).c_str());
@@ -395,25 +394,25 @@ Team *findNewTeamFromFile(std::string teamID)
 
 	if(cTeam != NULL) {
 		int max = 0;
-		std::string tag;
+		QString tag;
 		bool full = false;
-		std::string name;
+		QString name;
 		int group = -1;
-		std::string house;
-		std::string script;
+		QString house;
+		QString script;
 		bool whiner = false;
 		bool droppod = false;
 		bool suicide = false;
 		bool loadable = false;
 		bool prebuild = false;
 		int priority = 1;
-		std::string waypoint;
+		QString waypoint;
 		bool annoyance = false;
 		bool ionimmune = false;
 		bool recruiter = false;
 		bool reinforce = false;
-		std::string taskforce;
-		int techlevel;
+		QString taskforce;
+		int techlevel = 0;
 		bool aggressive = false;
 		bool autocreate = false;
 		bool guardslower = false;
@@ -427,24 +426,24 @@ Team *findNewTeamFromFile(std::string teamID)
 		bool areteammembersrecruitable = true;
 
 		max = currentFileData.GetInt("Max", teamID);
-		tag = currentFileData.GetString("Tag", teamID);
+		tag = QString::fromStdString(currentFileData.GetString("Tag", teamID));
 		full = convertToBool(currentFileData.GetString("Full", teamID));
-		name = currentFileData.GetString("Name", teamID);
+		name = QString::fromStdString(currentFileData.GetString("Name", teamID));
 		group = currentFileData.GetInt("Group", teamID);
-		house = currentFileData.GetString("House", teamID);
-		script = currentFileData.GetString("Script", teamID);
+		house = QString::fromStdString(currentFileData.GetString("House", teamID));
+		script = QString::fromStdString(currentFileData.GetString("Script", teamID));
 		whiner = convertToBool(currentFileData.GetString("Whiner", teamID));
 		droppod = convertToBool(currentFileData.GetString("Droppod", teamID));
 		suicide = convertToBool(currentFileData.GetString("Suicide", teamID));
 		loadable = convertToBool(currentFileData.GetString("Loadable", teamID));
 		prebuild = convertToBool(currentFileData.GetString("Prebuild", teamID));
 		priority = currentFileData.GetInt("Priority", teamID);
-		waypoint = currentFileData.GetString("Waypoint", teamID);
+		waypoint = QString::fromStdString(currentFileData.GetString("Waypoint", teamID));
 		annoyance = convertToBool(currentFileData.GetString("Annoyance", teamID));
 		ionimmune = convertToBool(currentFileData.GetString("IonImmune", teamID));
 		recruiter = convertToBool(currentFileData.GetString("Recruiter", teamID));
 		reinforce = convertToBool(currentFileData.GetString("Reinforce", teamID));
-		taskforce = currentFileData.GetString("TaskForce", teamID);
+		taskforce = QString::fromStdString(currentFileData.GetString("TaskForce", teamID));
 		techlevel = currentFileData.GetInt("TechLevel", teamID);
 		aggressive = convertToBool(currentFileData.GetString("Aggressive", teamID));
 		autocreate = convertToBool(currentFileData.GetString("Autocreate", teamID));
@@ -459,7 +458,7 @@ Team *findNewTeamFromFile(std::string teamID)
 		areteammembersrecruitable = convertToBool(currentFileData.GetString("AreTeamMembersRecruitable", teamID));
 
 
-		return new Team(teamID, max, tag, full, name, group, house, script, whiner, droppod, suicide,
+		return new Team(QString::fromStdString(teamID), max, tag, full, name, group, house, script, whiner, droppod, suicide,
 						loadable, prebuild, priority, waypoint, annoyance, ionimmune, recruiter,
 						reinforce, taskforce, techlevel, aggressive, autocreate, guardslower,
 						ontransonly, avoidthreats, looserecruit, veteranlevel, isbasedefense,

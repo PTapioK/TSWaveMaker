@@ -6,30 +6,30 @@
 class Script
 {
 	public:
-		Script(std::string newID);
-		Script(std::string newID, std::string newName);
-		Script(std::string newID, Script *currentScript);
+		Script(QString newID);
+		Script(QString newID, QString newName);
+		Script(QString newID, Script *currentScript);
 		~Script();
 
-		void addLine(short type, int parameter);
-		void insertLine(short type, short parameter, short ID);
-		void deleteLine(short lineID);
+		void addLine(int16_t type, int32_t parameter);
+		void insertLine(int16_t type, int16_t parameter, int16_t ID);
+		void deleteLine(int16_t lineID);
 
-		void setName(std::string newName);
+		void setName(QString newName);
 
 		void save();
 
-		std::string getName() const;
-		std::string getID() const;
+		QString getName() const;
+		QString getID() const;
 		uint16_t getLineAmount() const;
 
 	private:
 
 		friend class ScriptSection;
 
-		std::string ID;
+		QString ID;
 
-		std::string name;
+		QString name;
 
 		struct ScriptLine
 		{

@@ -12,6 +12,7 @@
 #include <QString>
 #include <QSettings>
 #include <QDebug>
+#include <QTextStream>
 
 #include <iostream>
 #include <string>

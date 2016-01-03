@@ -1,6 +1,6 @@
 #include "trigger.h"
 
-Trigger::Trigger(std::string newName)
+Trigger::Trigger(QString newName)
 {
 	name = newName;
 	ID = fffID();
@@ -13,7 +13,7 @@ Trigger::Trigger(std::string newName)
 	unknown = 0;
 }
 
-Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown)
+Trigger::Trigger(QString nID, QString nHouse, QString newAttachID, QString newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown)
 {
 	name = newName;
 	ID = nID;
@@ -23,7 +23,7 @@ Trigger::Trigger(std::string nID, std::string nHouse, std::string newAttachID, s
 	isMedium = newIsMed;
 	isHard = newIsHar;
 	isDis = newIsDis;
-	unknown = unknown;
+	unknown = newUnknown;
 }
 
 Trigger::Trigger(Trigger *otherTrigger)
@@ -41,7 +41,7 @@ Trigger::Trigger(Trigger *otherTrigger)
 
 }
 
-Trigger::Trigger(std::string newID, Trigger *otherTrigger)
+Trigger::Trigger(QString newID, Trigger *otherTrigger)
 {
 	*this = *otherTrigger;
 	setID(newID);
@@ -56,7 +56,7 @@ Trigger::Trigger(std::string newID, Trigger *otherTrigger)
 
 }
 
-Trigger::Trigger(std::string newID, std::string newName)
+Trigger::Trigger(QString newID, QString newName)
 {
 	name = newName;
 	ID = newID;
@@ -85,21 +85,22 @@ Trigger::~Trigger()
 	deleteLineFromBuffer("Triggers", ID);
 }
 
-std::string Trigger::getID() const
+QString Trigger::getID() const
 {
 	return ID;
 }
 
-void Trigger::setID(std::string newID)
+void Trigger::setID(QString newID)
 {
 	ID = newID;
 }
 
 void Trigger::save()
 {
-	std::stringstream valueSS;
+	QString str;
+	QTextStream valueSS(&str);
 	valueSS << house << "," << attachID << "," << name << "," << isDis << "," << isEasy << "," << isMedium << "," << isHard << "," << unknown;
-	writeLineToBuffer("Triggers", ID, valueSS.str());
+	writeLineToBuffer("Triggers", ID, valueSS.readAll());
 
 	int i = 0;
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
@@ -120,7 +121,7 @@ bool Trigger::isDisabled() const
 
 QString Trigger::getName() const
 {
-	return name.c_str();
+	return name;
 }
 
 void Trigger::setDis(bool dis)
@@ -128,7 +129,7 @@ void Trigger::setDis(bool dis)
 	isDis = dis;
 }
 
-void Trigger::setName(std::string nName)
+void Trigger::setName(QString nName)
 {
 	name = nName;
 }

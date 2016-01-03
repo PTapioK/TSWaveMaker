@@ -7,12 +7,12 @@ CONFIG += c++11
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
-FORMS   += src/*.ui
-
 SOURCES += src/*.cpp
-HEADERS += src/*.h
 SOURCES += src/CDataFile/*.cpp
+HEADERS += src/*.h
 HEADERS += src/CDataFile/*.h
+
+FORMS   += src/*.ui
 
 release:DESTDIR = build/release
 release:OBJECTS_DIR = build/release/.obj

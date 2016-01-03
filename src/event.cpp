@@ -1,6 +1,6 @@
 #include "event.h"
 
-Event::Event(std::string newID)
+Event::Event(QString newID)
 {
 	type = 0;
 	param = "0";
@@ -8,22 +8,22 @@ Event::Event(std::string newID)
 	unknown = 0;
 }
 
-Event::Event(Event *otherEvent, std::string newID) {
+Event::Event(Event *otherEvent, QString newID) {
 	type = otherEvent->type;
 	param = otherEvent->param;
 	ID = newID;
 	unknown = 0;
 }
 
-Event::Event(int32_t newType, int32_t newParameter, std::string newID, int16_t newUnknown)
+Event::Event(int32_t newType, int32_t newParameter, QString newID, int16_t newUnknown)
 {
 	type = newType;
-	param = intToStr(newParameter);
+	param = QString::number(newParameter);
 	ID = newID;
 	unknown = newUnknown;
 }
 
-void Event::setParameter(std::string parameter)
+void Event::setParameter(QString parameter)
 {
 	param = parameter;
 }
@@ -35,17 +35,19 @@ void Event::setType(int32_t newType)
 
 void Event::save(int32_t count) {
 	if(count == 1) {
-		std::stringstream vSS;
+		QString str;
+		QTextStream vSS(&str);
 		vSS << count << "," << type << "," << unknown << "," << param;
-		writeLineToBuffer("Events", ID, vSS.str());
+		writeLineToBuffer("Events", ID, vSS.readAll());
 	} else if (count > 1) {
-		std::stringstream vSS;
+		QString str;
+		QTextStream vSS(&str);
 		vSS << type << "," << unknown << "," << param;
-		editCountableValueInBuffer("Events", ID, vSS.str(), count);
+		editCountableValueInBuffer("Events", ID, vSS.readAll(), count);
 	}
 }
 
-std::string Event::getParameter() const
+QString Event::getParameter() const
 {
 	return param;
 }

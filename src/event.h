@@ -6,20 +6,20 @@
 class Event
 {
 	public:
-		Event(std::string newID);
-		Event(Event* otherEvent, std::string newID);
-		Event(int32_t newType, int32_t newParameter, std::string newID, int16_t newUnknown = 0);
+		Event(QString newID);
+		Event(Event* otherEvent, QString newID);
+		Event(int32_t newType, int32_t newParameter, QString newID, int16_t newUnknown = 0);
 
-		void setParameter(std::string parameter);
+		void setParameter(QString parameter);
 		void setType(int32_t newType);
 		void save(int32_t count);
 
-		std::string getParameter() const;
+		QString getParameter() const;
 		int32_t getType() const;
 	private:
 		int32_t type;
-		std::string param;
-		std::string ID;
+		QString param;
+		QString ID;
 		int16_t unknown;
 };
 

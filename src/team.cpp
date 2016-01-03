@@ -1,9 +1,9 @@
 #include "team.h"
 
 
-Team::Team(std::string nID, int nmax, std::string ntagID, bool nfull, std::string nname, int ngroup, std::string nhouse, std::string nscriptID, bool nwhiner, bool ndroppod, bool nsuicide, bool nloadable, bool nprebuild,
-		   int nprioirity, std::string nwpoint, bool nannoyance, bool nionimmune, bool nrecruiter,
-		   bool nreinforce, std::string ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly, bool navoidthreats, bool
+Team::Team(QString nID, int nmax, QString ntagID, bool nfull, QString nname, int ngroup, QString nhouse, QString nscriptID, bool nwhiner, bool ndroppod, bool nsuicide, bool nloadable, bool nprebuild,
+		   int nprioirity, QString nwpoint, bool nannoyance, bool nionimmune, bool nrecruiter,
+		   bool nreinforce, QString ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly, bool navoidthreats, bool
 		   nlooserecruit, int nveteranlevel, bool nisbasedefense,
 		   bool nonlytargethouseenemy, bool ntransportsreturnonunload, bool nareteammemberrecruitable) :
 	ID(nID), max(nmax), tagID(ntagID), full(nfull), name(nname), group(ngroup), house(nhouse), scriptID(nscriptID), whiner(nwhiner), droppod(ndroppod), suicide(nsuicide),
@@ -14,7 +14,7 @@ Team::Team(std::string nID, int nmax, std::string ntagID, bool nfull, std::strin
 {
 }
 
-Team::Team(std::string nID, std::string nname)
+Team::Team(QString nID, QString nname)
 {
 	ID = nID;
 	max = 0;
@@ -49,7 +49,7 @@ Team::Team(std::string nID, std::string nname)
 	areteammembersrecruitable = true;
 }
 
-Team::Team(std::string nID, Team *nTeam)
+Team::Team(QString nID, Team *nTeam)
 {
 	*this = *nTeam;
 	this->ID = nID;
@@ -60,20 +60,20 @@ Team::~Team()
 	deleteSectionFromBuffer(ID);
 }
 
-void Team::setName(std::string newName)
+void Team::setName(QString newName)
 {
 	name = newName;
 }
 
 void Team::save()
 {
-	writeLineToBuffer(ID, "Max", intToStr(max));
-	if(!tagID.empty()) {
+	writeLineToBuffer(ID, "Max", QString::number(max));
+	if(!tagID.isEmpty()) {
 		writeLineToBuffer(ID, "Tag", tagID);
 	}
 	writeLineToBuffer(ID, "Full", converBoolToYesNo(full));
 	writeLineToBuffer(ID, "Name", name);
-	writeLineToBuffer(ID, "Group", intToStr(group));
+	writeLineToBuffer(ID, "Group", QString::number(group));
 	writeLineToBuffer(ID, "House", house);
 	writeLineToBuffer(ID, "Script", scriptID);
 	writeLineToBuffer(ID, "Whiner", converBoolToYesNo(whiner));
@@ -81,33 +81,33 @@ void Team::save()
 	writeLineToBuffer(ID, "Suicide", converBoolToYesNo(suicide));
 	writeLineToBuffer(ID, "Loadable", converBoolToYesNo(loadable));
 	writeLineToBuffer(ID, "Prebuild", converBoolToYesNo(prebuild));
-	writeLineToBuffer(ID, "Priority", intToStr(priority));
+	writeLineToBuffer(ID, "Priority", QString::number(priority));
 	writeLineToBuffer(ID, "Waypoint", wPoint);
 	writeLineToBuffer(ID, "Annoyance", converBoolToYesNo(annoyance));
 	writeLineToBuffer(ID, "IonImmune", converBoolToYesNo(ionimmune));
 	writeLineToBuffer(ID, "Recruiter", converBoolToYesNo(recruiter));
 	writeLineToBuffer(ID, "Reinforce", converBoolToYesNo(reinforce));
 	writeLineToBuffer(ID, "TaskForce", taskForceID);
-	writeLineToBuffer(ID, "TechLevel", intToStr(techlevel));
+	writeLineToBuffer(ID, "TechLevel", QString::number(techlevel));
 	writeLineToBuffer(ID, "Aggressive", converBoolToYesNo(aggressive));
 	writeLineToBuffer(ID, "Autocreate", converBoolToYesNo(autocreate));
 	writeLineToBuffer(ID, "GuardSlower", converBoolToYesNo(guardslower));
 	writeLineToBuffer(ID, "OnTransOnly", converBoolToYesNo(ontransonly));
 	writeLineToBuffer(ID, "AvoidThreats", converBoolToYesNo(avoidthreats));
 	writeLineToBuffer(ID, "LooseRecruit", converBoolToYesNo(looserecruit));
-	writeLineToBuffer(ID, "VeteranLevel", intToStr(veteranlevel));
+	writeLineToBuffer(ID, "VeteranLevel", QString::number(veteranlevel));
 	writeLineToBuffer(ID, "IsBaseDefense", converBoolToYesNo(isbasedefense));
 	writeLineToBuffer(ID, "OnlyTargetHouseEnemy", converBoolToYesNo(onlytargethousenemy));
 	writeLineToBuffer(ID, "TransportsReturnOnUnload", converBoolToYesNo(transportsreturnonunload));
 	writeLineToBuffer(ID, "AreTeamMembersRecruitable", converBoolToYesNo(areteammembersrecruitable));
 }
 
-std::string Team::getName() const
+QString Team::getName() const
 {
 	return name;
 }
 
-std::string Team::getID() const
+QString Team::getID() const
 {
 	return ID;
 }

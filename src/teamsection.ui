@@ -28,6 +28,11 @@
     <height>340</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
   <property name="floating">
    <bool>false</bool>
   </property>
@@ -48,7 +53,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Team list</string>
+     <string>Teams</string>
     </property>
    </widget>
    <widget class="QListWidget" name="TeamList">

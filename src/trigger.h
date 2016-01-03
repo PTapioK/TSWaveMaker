@@ -12,20 +12,20 @@ class Trigger
 		std::vector <Action*> actions;
 		std::vector <Event*> events;
 
-		Trigger(std::string newName);
-		Trigger(std::string newID, std::string newHouse, std::string newAttachID, std::string newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown = 0);
+		Trigger(QString newName);
+		Trigger(QString newID, QString newHouse, QString newAttachID, QString newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown = 0);
 		Trigger(Trigger* otherTrigger);
-		Trigger(std::string newID, Trigger* otherTrigger);
-		Trigger(std::string newID, std::string newName);
+		Trigger(QString newID, Trigger* otherTrigger);
+		Trigger(QString newID, QString newName);
 		~Trigger();
 
-		void setID(std::string newID);
+		void setID(QString newID);
 
 		void save();
 
 		void setDis(bool dis);
 
-		void setName(std::string nName);
+		void setName(QString nName);
 
 		void addEvent(Event *nEvent);
 		void addAction(Action *nAction);
@@ -45,17 +45,17 @@ class Trigger
 
 		Event* getEventByType(int32_t type);
 
-		std::string getID() const;
+		QString getID() const;
 
 		bool isDisabled() const;
 
 		QString getName() const;
 
 	private:
-		std::string name;
-		std::string house;
-		std::string ID;
-		std::string attachID;
+		QString name;
+		QString house;
+		QString ID;
+		QString attachID;
 
 		bool isDis;
 		bool isEasy, isMedium, isHard;

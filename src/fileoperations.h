@@ -8,11 +8,11 @@ struct unitContainer;
 struct variableContainer;
 
 void saveAllToBuffer();
-void writeLineToBuffer(std::string section, std::string ID, std::string value);
-void editCountableValueInBuffer(std::string section, std::string ID, std::string value, int count);
+void writeLineToBuffer(QString section, QString ID, QString value);
+void editCountableValueInBuffer(QString section, QString ID, QString value, int count);
 void readFileToBuffer();
-void deleteLineFromBuffer(std::string section, std::string ID);
-void deleteSectionFromBuffer(std::string section);
+void deleteLineFromBuffer(QString section, QString ID);
+void deleteSectionFromBuffer(QString section);
 void parseSections();
 void parseRules();
 void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);

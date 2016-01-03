@@ -6,22 +6,22 @@
 class Taskforce
 {
 	public:
-		Taskforce(std::string nID);
-		Taskforce(std::string nID, std::string nName);
-		Taskforce(std::string nID, Taskforce *tF);
+		Taskforce(QString nID);
+		Taskforce(QString nID, QString nName);
+		Taskforce(QString nID, Taskforce *tF);
 		~Taskforce();
 
-		void addLine(std::string type, short amount);
+		void addLine(QString type, short amount);
 		void deleteLine(short lineID);
 
 		void setGroup(int32_t nGroup) { group = nGroup; }
-		void setName(std::string nName) { name = nName; }
+		void setName(QString nName) { name = nName; }
 
 		void save();
 
-		std::string getID() const;
+		QString getID() const;
 
-		std::string getName() const;
+		QString getName() const;
 
 		uint16_t getLineAmount() const;
 
@@ -29,21 +29,21 @@ class Taskforce
 
 		friend class TaskforceSection;
 
-		std::string ID;
+		QString ID;
 
-		std::string name;
+		QString name;
 		int32_t group;
 
 		struct TaskforceLine
 		{
-			std::string type;
-			short amount;
+			QString type;
+			uint16_t amount;
 
-			short ID;
+			uint16_t ID;
 		};
 
-		std::vector <TaskforceLine*> tlines;
-		typedef std::vector <TaskforceLine*>::iterator tlineIT;
+		std::vector <TaskforceLine*> taskforceLines;
+		typedef std::vector <TaskforceLine*>::iterator taskforceLineIT;
 
 		uint16_t lineCounter;
 

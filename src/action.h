@@ -6,30 +6,30 @@
 class Action
 {
 	public:
-		Action(std::string newID);
-		Action(Action *otherAction, std::string newID);
-		Action(std::string newID, int32_t newType, int32_t newWayPoint);
-		Action(std::string newID, int32_t newType, std::array<std::string, 6> newParameters, int32_t newWaypoint);
-		Action(std::string newID, int32_t newType, int32_t newWayPoint,
-			   std::string parameter1, std::string parameter2, std::string parameter3, std::string parameter4, std::string parameter5, std::string parameter6);
+		Action(QString newID);
+		Action(Action *otherAction, QString newID);
+		Action(QString newID, int32_t newType, int32_t newWayPoint);
+		Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, int32_t newWaypoint);
+		Action(QString newID, int32_t newType, int32_t newWayPoint,
+			   QString parameter1, QString parameter2, QString parameter3, QString parameter4, QString parameter5, QString parameter6);
 
 		void save(int32_t count);
 
 		void setType(int32_t newType);
 		void setWayPoint(int32_t newWaypoint);
 
-		void setParameter(int i, std::string data);
+		void setParameter(int i, QString data);
 		void setParameter(int i, int32_t data);
 
 		int32_t getType() const;
 		int32_t getWaypoint() const;
-		std::string getParameter(int i) const;
+		QString getParameter(int i) const;
 
 	private:
-		std::string ID;
+		QString ID;
 		int32_t type;
-		std::array<std::string, 6> params;
-		std::string waypoint;
+		std::array<QString, 6> params;
+		QString waypoint;
 };
 
 #endif // ACTION_H

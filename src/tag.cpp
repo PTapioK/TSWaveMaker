@@ -1,6 +1,6 @@
 #include "tag.h"
 
-Tag::Tag(std::string tname, std::string trigID)
+Tag::Tag(QString tname, QString trigID)
 {
 	name = tname;
 	ID = fffID();
@@ -9,7 +9,7 @@ Tag::Tag(std::string tname, std::string trigID)
 
 }
 
-Tag::Tag(Tag *oTag, std::string trigID)
+Tag::Tag(Tag *oTag, QString trigID)
 {
 	*this = *oTag;
 	setID(fffID());
@@ -17,7 +17,7 @@ Tag::Tag(Tag *oTag, std::string trigID)
 
 }
 
-Tag::Tag(std::string nID, std::string nName, std::string nTrigID, int32_t nmode)
+Tag::Tag(QString nID, QString nName, QString nTrigID, int32_t nmode)
 {
 	ID = nID;
 	name = nName;
@@ -30,29 +30,30 @@ Tag::~Tag()
 	deleteLineFromBuffer("Tags", ID);
 }
 
-std::string Tag::getID() const {
+QString Tag::getID() const {
 	return ID;
 }
 
-void Tag::setID(std::string nID) {
+void Tag::setID(QString nID) {
 	ID = nID;
 }
 
-std::string Tag::getTriggerID() const {
+QString Tag::getTriggerID() const {
 	return triggerID;
 }
 
 void Tag::save() {
-	std::stringstream valueSS;
+	QString str;
+	QTextStream valueSS(&str);
 	valueSS << mode << "," << name << "," << triggerID;
-	writeLineToBuffer("Tags", ID, valueSS.str());
+	writeLineToBuffer("Tags", ID, valueSS.readAll());
 }
 
-std::string Tag::getName() const
+QString Tag::getName() const
 {
 	return name;
 }
 
-void Tag::setName(std::string nName) {
+void Tag::setName(QString nName) {
 	name = nName;
 }

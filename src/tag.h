@@ -6,24 +6,24 @@
 class Tag
 {
 	public:
-		Tag(std::string tname, std::string trigID);
-		Tag(Tag* oTag, std::string trigID);
-		Tag(std::string nID, std::string nName, std::string nTrigID, int32_t nmode);
+		Tag(QString tname, QString trigID);
+		Tag(Tag* oTag, QString trigID);
+		Tag(QString nID, QString nName, QString nTrigID, int32_t nmode);
 		~Tag();
 
-		void setID(std::string nID);
-		void setName(std::string nName);
+		void setID(QString nID);
+		void setName(QString nName);
 
 		void save();
 
-		std::string getTriggerID() const;
-		std::string getName() const;
-		std::string getID() const;
+		QString getTriggerID() const;
+		QString getName() const;
+		QString getID() const;
 
 	private:
-		std::string ID;
-		std::string name;
-		std::string triggerID;
+		QString ID;
+		QString name;
+		QString triggerID;
 		int32_t mode;
 };
 

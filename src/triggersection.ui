@@ -28,6 +28,11 @@
     <height>330</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
   <property name="floating">
    <bool>false</bool>
   </property>
@@ -234,7 +239,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Trigger list</string>
+     <string>Triggers</string>
     </property>
    </widget>
    <widget class="QListWidget" name="ActionList">
@@ -253,14 +258,14 @@
    <widget class="QLabel" name="ActionLabel">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>315</x>
       <y>10</y>
-      <width>46</width>
-      <height>16</height>
+      <width>41</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Action list</string>
+     <string>Actions</string>
     </property>
    </widget>
    <widget class="QPushButton" name="TeamAOButton">

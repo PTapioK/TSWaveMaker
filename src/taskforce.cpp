@@ -1,6 +1,6 @@
 #include "taskforce.h"
 
-Taskforce::Taskforce(std::string nID)
+Taskforce::Taskforce(QString nID)
 {
 	ID = nID;
 
@@ -11,7 +11,7 @@ Taskforce::Taskforce(std::string nID)
 	name = "";
 }
 
-Taskforce::Taskforce(std::string nID, std::string nName)
+Taskforce::Taskforce(QString nID, QString nName)
 {
 	ID = nID;
 
@@ -22,19 +22,19 @@ Taskforce::Taskforce(std::string nID, std::string nName)
 	name = nName;
 }
 
-Taskforce::Taskforce(std::string nID, Taskforce *tF)
+Taskforce::Taskforce(QString nID, Taskforce *tF)
 {
 	ID = nID;
 
 	lineCounter = 0;
 
-	tlines.clear();
-	for(tlineIT IT = tF->tlines.begin(); IT != tF->tlines.end(); ++IT) {
+	taskforceLines.clear();
+	for(taskforceLineIT IT = tF->taskforceLines.begin(); IT != tF->taskforceLines.end(); ++IT) {
 		TaskforceLine *tline = new TaskforceLine();
 		tline->amount = (*IT)->amount;
 		tline->type = (*IT)->type;
 		tline->ID = (*IT)->ID;
-		tlines.push_back(tline);
+		taskforceLines.push_back(tline);
 		++lineCounter;
 	}
 }
@@ -44,54 +44,55 @@ Taskforce::~Taskforce()
 	deleteSectionFromBuffer(ID);
 }
 
-void Taskforce::addLine(std::string type, short amount)
+void Taskforce::addLine(QString type, short amount)
 {
 	TaskforceLine *nLine = new TaskforceLine();
 	nLine->type = type;
 	nLine->amount = amount;
 	nLine->ID = lineCounter;
 
-	tlines.push_back(nLine);
+	taskforceLines.push_back(nLine);
 
 	++lineCounter;
 }
 
 void Taskforce::deleteLine(short lineID)
 {
-	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
+	for(taskforceLineIT IT = taskforceLines.begin(); IT != taskforceLines.end(); ++IT) {
 		if((*IT)->ID == lineID) {
 			delete (*IT);
-			tlines.erase(IT);
+			taskforceLines.erase(IT);
 			break;
 		}
 	}
 
 	lineCounter = 0;
 
-	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
+	for(taskforceLineIT IT = taskforceLines.begin(); IT != taskforceLines.end(); ++IT) {
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	deleteLineFromBuffer(ID, intToStr(lineID));
+	deleteLineFromBuffer(ID, QString::number(lineID));
 }
 
 void Taskforce::save()
 {
-	for(tlineIT IT = tlines.begin(); IT != tlines.end(); ++IT) {
-		std::stringstream valueSS;
+	for(taskforceLineIT IT = taskforceLines.begin(); IT != taskforceLines.end(); ++IT) {
+		QString str;
+		QTextStream valueSS(&str);
 		valueSS << (*IT)->amount << "," << (*IT)->type;
-		writeLineToBuffer(ID, intToStr((*IT)->ID), valueSS.str());
+		writeLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
 	}
 	writeLineToBuffer(ID, "Name", name);
-	writeLineToBuffer(ID, "Group", intToStr(group));
+	writeLineToBuffer(ID, "Group", QString::number(group));
 }
 
-std::string Taskforce::getID() const
+QString Taskforce::getID() const
 {
 	return ID;
 }
 
-std::string Taskforce::getName() const
+QString Taskforce::getName() const
 {
 	return name;
 }

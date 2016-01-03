@@ -23,17 +23,18 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 
 	if(ui->ScriptList->selectedItems().size() != 0) {
 
-		Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
-		if(cur_script == NULL) {
+		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
+		if(curScript == NULL) {
 			if(QMessageBox::question(this, "Fatal Error!", "Fatal Error occured! Continue?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::No) {
 				exit(EXIT_FAILURE);
 			}
+			return;
 		}
 
 		ui->SNameEdit->setText(ui->ScriptList->selectedItems().last()->text());
 
-		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->scriptLines.begin(); IT != cur_script->scriptLines.end(); ++IT) {
-			ui->ScriptActionList->addItem(intToStr((*IT)->ID).c_str());
+		for(std::vector <Script::ScriptLine*>::iterator IT = curScript->scriptLines.begin(); IT != curScript->scriptLines.end(); ++IT) {
+			ui->ScriptActionList->addItem(QString::number((*IT)->ID));
 		}
 	}
 }
@@ -41,7 +42,7 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 void ScriptSection::on_ScriptActionList_itemSelectionChanged()
 {
 	if(ui->ScriptList->selectedItems().size() != 0 && ui->ScriptActionList->currentRow() != -1) {
-		int index = ui->SATypeBox->findText(getScriptActionMeaning(getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type));
+		int index = ui->SATypeBox->findText(getScriptActionMeaning(getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type));
 		if(index != -1) {
 			ui->SATypeBox->setCurrentIndex(index);
 			update_SATargetBox();
@@ -54,10 +55,10 @@ void ScriptSection::on_SATypeBox_activated()
 {
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				cur_script->scriptLines[ui->ScriptActionList->currentRow()]->type = ui->SATypeBox->currentIndex();
+			if(curScript->getLineAmount() >= rowNum+1) {
+				curScript->scriptLines[ui->ScriptActionList->currentRow()]->type = ui->SATypeBox->currentIndex();
 			}
 		}
 		update_SATargetBox();
@@ -70,48 +71,48 @@ void ScriptSection::on_SATargetBox_activated()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->SATargetBox->currentIndex() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[rowNum]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[rowNum]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[rowNum]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[rowNum]->type;
 				if(curtype == type) {
 					switch(getScriptActionTargetType(type)) {
 						case NONE:
-							cur_script->scriptLines[rowNum]->param = 0;
+							curScript->scriptLines[rowNum]->param = 0;
 							break;
 						case WAYPOINT:
-							cur_script->scriptLines[rowNum]->param = waypoints[ui->SATargetBox->currentIndex()];
+							curScript->scriptLines[rowNum]->param = waypoints[ui->SATargetBox->currentIndex()];
 							break;
 						case EDITABLE:
-							cur_script->scriptLines[rowNum]->param = atoi(ui->SATargetBox->currentText().toStdString().c_str());
+							curScript->scriptLines[rowNum]->param = atoi(ui->SATargetBox->currentText().toStdString().c_str());
 							break;
 						case BUILDING:
 							if(ui->defaultTarget->isChecked()) {
-								cur_script->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
+								curScript->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
 							} else if(ui->lowThreat->isChecked()) {
-								cur_script->scriptLines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
+								curScript->scriptLines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
 							} else if (ui->bigThreat->isChecked()) {
-								cur_script->scriptLines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
+								curScript->scriptLines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
 							} else if (ui->nearTarget->isChecked()) {
-								cur_script->scriptLines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
+								curScript->scriptLines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
 							} else if (ui->farTarget->isChecked()) {
-								cur_script->scriptLines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
+								curScript->scriptLines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
 							}
 							break;
 						case BALLOON:
-							cur_script->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex()+1;
+							curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex()+1;
 							break;
 						case HOUSE:
 							for(std::map<uint16_t, QString>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
 								if((*IT).second == ui->SATargetBox->currentText()) {
-									cur_script->scriptLines[rowNum]->param = (*IT).first;
+									curScript->scriptLines[rowNum]->param = (*IT).first;
 									break;
 								}
 							}
 							break;
 						default:
-							cur_script->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex();
+							curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex();
 					}
 				}
 			}
@@ -133,9 +134,9 @@ void ScriptSection::update_SATargetBox()
 	ui->defaultTarget->toggle();
 
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
-		Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
-		short type = cur_script->scriptLines[ui->ScriptActionList->currentRow()]->type;
-		int param = cur_script->scriptLines[ui->ScriptActionList->currentRow()]->param;
+		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
+		short type = curScript->scriptLines[ui->ScriptActionList->currentRow()]->type;
+		int param = curScript->scriptLines[ui->ScriptActionList->currentRow()]->param;
 
 		QStringList targetList = getScriptActionTargetStrings(getScriptActionTargetType(type));
 		ui->SATargetBox->addItems(targetList);
@@ -145,17 +146,17 @@ void ScriptSection::update_SATargetBox()
 			case NONE:
 				break;
 			case WAYPOINT:
-				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(intToStr(param).c_str()));
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(QString::number(param)));
 				break;
 			case EDITABLE:
 				ui->SATargetBox->setEditable(true);
-				ui->SATargetBox->setCurrentText(intToStr(param).c_str());
+				ui->SATargetBox->setCurrentText(QString::number(param));
 				break;
 			case SCRIPT:
-				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getScriptNameByPosition(param).c_str()));
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getScriptNameByPosition(param)));
 				break;
 			case TASKFORCE:
-				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getTaskforceNameByPosition(param).c_str()));
+				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getTaskforceNameByPosition(param)));
 				break;
 			case BUILDING:
 				ui->lowThreat->setDisabled(false);
@@ -199,13 +200,13 @@ void ScriptSection::on_lowThreat_clicked()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					cur_script->scriptLines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
+					curScript->scriptLines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
 				}
 			}
 		}
@@ -218,13 +219,13 @@ void ScriptSection::on_bigThreat_clicked()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					cur_script->scriptLines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
+					curScript->scriptLines[rowNum]->param = 131072 + ui->SATargetBox->currentIndex();
 				}
 			}
 		}
@@ -237,13 +238,13 @@ void ScriptSection::on_nearTarget_clicked()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					cur_script->scriptLines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
+					curScript->scriptLines[rowNum]->param = 196608 + ui->SATargetBox->currentIndex();
 				}
 			}
 		}
@@ -256,13 +257,13 @@ void ScriptSection::on_farTarget_clicked()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					cur_script->scriptLines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
+					curScript->scriptLines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
 				}
 			}
 		}
@@ -275,13 +276,13 @@ void ScriptSection::on_defaultTarget_clicked()
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					cur_script->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
+					curScript->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
 				}
 			}
 		}
@@ -294,14 +295,14 @@ void ScriptSection::on_SATargetBox_editTextChanged(const QString &arg1)
 	if(ui->ScriptActionList->currentRow() != -1 && ui->SATargetBox->currentIndex() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		short type, curtype;
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 			uint32_t rowNum = ui->ScriptActionList->currentRow();
-			if(cur_script->getLineAmount() >= rowNum+1) {
-				type = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
-				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+			if(curScript->getLineAmount() >= rowNum+1) {
+				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
 					if(getScriptActionTargetType(type) == EDITABLE) {
-						cur_script->scriptLines[rowNum]->param = atoi(arg1.toStdString().c_str());
+						curScript->scriptLines[rowNum]->param = arg1.toInt();
 					}
 				}
 			}
@@ -314,20 +315,20 @@ void ScriptSection::on_CLastButton_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			std::string newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a, 0);
+			QString newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text(), a, 0);
 
 			int i = 0;
-			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
+			while(ui->ScriptList->findItems(newName, Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), i);
+				newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text(), i);
 			}
 
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 
-			std::string newID = fffID();
-			scripts[newID] = new Script(newID, cur_script);
+			QString newID = fffID();
+			scripts[newID] = new Script(newID, curScript);
 			scripts[newID]->setName(newName);
-			ui->ScriptList->addItem(newName.c_str());
+			ui->ScriptList->addItem(scripts[newID]->getName());
 
 			std::vector<Script::ScriptLine*> slines;
 
@@ -345,9 +346,9 @@ void ScriptSection::on_CLastButton_clicked()
 void ScriptSection::on_newS_clicked()
 {
 	if(ui->ScriptList->findItems(ui->SNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		std::string name = ui->SNameEdit->text().toStdString();
+		QString name = ui->SNameEdit->text();
 		ui->ScriptList->addItem(ui->SNameEdit->text());
-		std::string nID = fffID();
+		QString nID = fffID();
 		scripts[nID] = new Script(nID, name);
 	}
 }
@@ -357,8 +358,8 @@ void ScriptSection::on_delS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			std::string name = ui->ScriptList->selectedItems().at(a)->text().toStdString();
-			std::string ID = getScriptIDByName(name);
+			QString name = ui->ScriptList->selectedItems().at(a)->text();
+			QString ID = getScriptIDByName(name);
 			delete getScriptByName(name);
 			scripts.erase(ID);
 		}
@@ -371,10 +372,10 @@ void ScriptSection::on_editSN_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		if(ui->ScriptList->findItems(ui->SNameEdit->text(), Qt::MatchExactly).count() == 0) {
-			std::string cur_name = ui->ScriptList->selectedItems().last()->text().toStdString();
-			std::string cur_ID = getScriptIDByName(cur_name);
+			QString curName = ui->ScriptList->selectedItems().last()->text();
+			QString curID = getScriptIDByName(curName);
 
-			scripts[cur_ID]->setName(ui->SNameEdit->text().toStdString());
+			scripts[curID]->setName(ui->SNameEdit->text());
 
 			ui->ScriptList->selectedItems().last()->setText(ui->SNameEdit->text());
 		}
@@ -386,17 +387,17 @@ void ScriptSection::on_cloneS_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			std::string newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), a, 0);
+			QString newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text(), a, 0);
 
 			int i = 0;
-			while(ui->ScriptList->findItems(newName.c_str(), Qt::MatchExactly).count() != 0) {
+			while(ui->ScriptList->findItems(newName, Qt::MatchExactly).count() != 0) {
 				++i;
-				newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text().toStdString(), i);
+				newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text(), i);
 			}
-			std::string newID = fffID();
-			scripts[newID] = new Script(newID, getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString()));
+			QString newID = fffID();
+			scripts[newID] = new Script(newID, getScriptByName(ui->ScriptList->selectedItems().at(a)->text()));
 			scripts[newID]->setName(newName);
-			ui->ScriptList->addItem(newName.c_str());
+			ui->ScriptList->addItem(newName);
 		}
 	}
 }
@@ -406,12 +407,12 @@ void ScriptSection::on_newSA_clicked()
 {
 	if(ui->ScriptList->selectedItems().size() != 0) {
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
-			cur_script->addLine(0, 0);
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
+			curScript->addLine(0, 0);
 		}
-		std::string ID;
-		ID = intToStr((*(getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString())->scriptLines.end()-1))->ID);
-		ui->ScriptActionList->addItem(ID.c_str());
+		QString ID;
+		ID = QString::number((*(getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines.end()-1))->ID);
+		ui->ScriptActionList->addItem(ID);
 	}
 }
 
@@ -421,15 +422,15 @@ void ScriptSection::on_newSA_Bef_clicked()
 	if(ui->ScriptActionList->currentRow() != -1) {
 		uint32_t rowNum = ui->ScriptActionList->currentRow();
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
-			if(cur_script->getLineAmount() >= rowNum) {
-				cur_script->insertLine(0, 0, rowNum);
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
+			if(curScript->getLineAmount() >= rowNum) {
+				curScript->insertLine(0, 0, rowNum);
 			}
 		}
-		Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
+		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
 		ui->ScriptActionList->clear();
-		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->scriptLines.begin(); IT != cur_script->scriptLines.end(); ++IT) {
-			ui->ScriptActionList->addItem(intToStr((*IT)->ID).c_str());
+		for(std::vector <Script::ScriptLine*>::iterator IT = curScript->scriptLines.begin(); IT != curScript->scriptLines.end(); ++IT) {
+			ui->ScriptActionList->addItem(QString::number((*IT)->ID));
 		}
 	}
 }
@@ -447,16 +448,16 @@ void ScriptSection::on_delSA_clicked()
 		uint32_t rowNum = ui->ScriptActionList->currentRow();
 		delete ui->ScriptActionList->item(rowNum);
 		for(int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
-			Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().at(a)->text().toStdString());
+			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 
-			if(cur_script->getLineAmount() >= rowNum) {
-				cur_script->deleteLine(rowNum);
+			if(curScript->getLineAmount() >= rowNum) {
+				curScript->deleteLine(rowNum);
 			}
 		}
-		Script *cur_script = getScriptByName(ui->ScriptList->selectedItems().last()->text().toStdString());
+		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
 		ui->ScriptActionList->clear();
-		for(std::vector <Script::ScriptLine*>::iterator IT = cur_script->scriptLines.begin(); IT != cur_script->scriptLines.end(); ++IT) {
-			ui->ScriptActionList->addItem(intToStr((*IT)->ID).c_str());
+		for(std::vector <Script::ScriptLine*>::iterator IT = curScript->scriptLines.begin(); IT != curScript->scriptLines.end(); ++IT) {
+			ui->ScriptActionList->addItem(QString::number((*IT)->ID));
 		}
 	}
 }
@@ -469,7 +470,7 @@ void ScriptSection::updateUi()
 	ui->SATypeBox->clear();
 	ui->SATargetBox->clear();
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->ScriptList->addItem(IT->second->getName().c_str());
+		ui->ScriptList->addItem(IT->second->getName());
 	}
 	for(int i = 0; i != 54; ++i) {
 		ui->SATypeBox->addItem(getScriptActionMeaning(i));

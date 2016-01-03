@@ -1,6 +1,6 @@
 #include "action.h"
 
-Action::Action(std::string newID)
+Action::Action(QString newID)
 {
 	ID = newID;
 	type = 0;
@@ -8,7 +8,7 @@ Action::Action(std::string newID)
 	params.fill("0");
 }
 
-Action::Action(std::string newID, int32_t newType, int32_t newWayPoint = 0)
+Action::Action(QString newID, int32_t newType, int32_t newWayPoint = 0)
 {
 	ID = newID;
 	type = newType;
@@ -16,7 +16,7 @@ Action::Action(std::string newID, int32_t newType, int32_t newWayPoint = 0)
 	params.fill("0");
 }
 
-Action::Action(std::string newID, int32_t newType, int32_t newWayPoint, std::string parameter1, std::string parameter2, std::string parameter3, std::string parameter4, std::string parameter5, std::string parameter6)
+Action::Action(QString newID, int32_t newType, int32_t newWayPoint, QString parameter1, QString parameter2, QString parameter3, QString parameter4, QString parameter5, QString parameter6)
 {
 	ID = newID;
 	type = newType;
@@ -29,7 +29,7 @@ Action::Action(std::string newID, int32_t newType, int32_t newWayPoint, std::str
 	params[5] = parameter6;
 }
 
-Action::Action(std::string newID, int32_t newType, std::array<std::string, 6> newParameters, int32_t newWaypoint = 0)
+Action::Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, int32_t newWaypoint = 0)
 {
 	ID = newID;
 	type = newType;
@@ -37,7 +37,7 @@ Action::Action(std::string newID, int32_t newType, std::array<std::string, 6> ne
 	params = newParameters;
 }
 
-Action::Action(Action *otherAction, std::string newID)
+Action::Action(Action *otherAction, QString newID)
 {
 	*this = *otherAction;
 	ID = newID;
@@ -46,7 +46,8 @@ Action::Action(Action *otherAction, std::string newID)
 void Action::save(int32_t count)
 {
 	if(count == 1) {
-		std::stringstream valueSS;
+		QString str;
+		QTextStream valueSS(&str);
 		valueSS << count
 				<< ","
 				<< type
@@ -64,9 +65,10 @@ void Action::save(int32_t count)
 				<< params[5]
 				<< ","
 				<< waypoint;
-		writeLineToBuffer("Actions", ID, valueSS.str());
+		writeLineToBuffer("Actions", ID, valueSS.readAll());
 	} else if (count > 1) {
-		std::stringstream valueSS;
+		QString str;
+		QTextStream valueSS(&str);
 		valueSS	<< type
 				<< ","
 				<< params[0]
@@ -82,7 +84,7 @@ void Action::save(int32_t count)
 				<< params[5]
 				<< ","
 				<< waypoint;
-		editCountableValueInBuffer("Actions", ID, valueSS.str(), count);
+		editCountableValueInBuffer("Actions", ID, valueSS.readAll(), count);
 	}
 }
 
@@ -96,7 +98,7 @@ void Action::setWayPoint(int32_t newWaypoint)
 	waypoint = decToWaypointID(newWaypoint);
 }
 
-void Action::setParameter(int i, std::string data)
+void Action::setParameter(int i, QString data)
 {
 	assert(i > 0 && i < 6);
 	params[i-1] = data;
@@ -105,7 +107,7 @@ void Action::setParameter(int i, std::string data)
 void Action::setParameter(int i, int32_t data)
 {
 	assert(i > 0 && i < 6);
-	params[i-1] = intToStr(data);
+	params[i-1] = QString::number(data);
 }
 
 int32_t Action::getType() const
@@ -118,7 +120,7 @@ int32_t Action::getWaypoint() const
 	return waypointIDToDec(waypoint);
 }
 
-std::string Action::getParameter(int i) const
+QString Action::getParameter(int i) const
 {
 	assert(i > 0 && i < 6);
 	return params[i-1];
