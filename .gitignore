@@ -1,3 +1,4 @@
 ./build/*
 build
-/src/*.user
+*.user
+ui_*.h

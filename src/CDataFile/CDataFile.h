@@ -18,6 +18,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cstring>
+#include <climits>
 
 // Globally defined structures, defines, & types
 //////////////////////////////////////////////////////////////////////////////////
