@@ -8,7 +8,7 @@ and taskforce editors are meant to create single functionalities for Tiberian Su
 when TSWaveMaker aims to create series of actions with less clicks.
 
 ## Building
-### External libraries used
+### External libraries:
 * [QT](http://www.qt.io/) 5
 * Modified [CDataFile](http://www.codeguru.com/cpp/data/data-misc/inifiles/article.php/c4583/Handle-Configuration-Files-Using-a--Portable-ClassmdashCDataFile.htm) (included)
 
