@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow
 		friend class TeamSection;
 		friend class ScriptSection;
 		friend class TaskforceSection;
-		friend class Settings;
+		friend class SettingsDialog;
 
 		Ui::MainWindow *ui;
 

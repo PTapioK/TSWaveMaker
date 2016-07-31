@@ -82,7 +82,7 @@ Trigger::~Trigger()
 	}
 	actions.clear();
 
-	deleteLineFromBuffer("Triggers", ID);
+	fileHandler.deleteLineFromBuffer("Triggers", ID);
 }
 
 QString Trigger::getID() const
@@ -100,7 +100,7 @@ void Trigger::save()
 	QString str;
 	QTextStream valueSS(&str);
 	valueSS << house << "," << attachID << "," << name << "," << isDis << "," << isEasy << "," << isMedium << "," << isHard << "," << unknown;
-	writeLineToBuffer("Triggers", ID, valueSS.readAll());
+	fileHandler.writeLineToBuffer("Triggers", ID, valueSS.readAll());
 
 	int i = 0;
 	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
@@ -168,12 +168,12 @@ Action* Trigger::getAction(int32_t count) const
 
 void Trigger::eraseActionsFromBuffer()
 {
-	deleteLineFromBuffer("Actions", ID);
+	fileHandler.deleteLineFromBuffer("Actions", ID);
 }
 
 void Trigger::eraseEventsFromBuffer()
 {
-	deleteLineFromBuffer("Events", ID);
+	fileHandler.deleteLineFromBuffer("Events", ID);
 }
 
 bool Trigger::hasEventType(int32_t type)

@@ -1,5 +1,7 @@
 #include "utils.h"
+#include "settings.h"
 
+using namespace Settings;
 
 // Find First Free ID
 QString fffID()
@@ -171,7 +173,7 @@ bool convertToBool(std::string str)
 	return false;
 }
 
-QString converBoolToYesNo(bool boolean)
+QString convertBoolToYesNo(bool boolean)
 {
 	if(boolean == true) {
 		return "yes";
@@ -306,12 +308,8 @@ QString getTaskforceNameByPosition(uint16_t pos)
 QString getScriptActionMeaning(uint8_t ID)
 {
 	QString retVal;
-
-	QSettings strings("scriptactionscriptStrings.ini", QSettings::IniFormat);
 	retVal = scriptStrings.value("Actions/" + QString::number(ID), QString("Not Implemented!")).toString();
-
 	return retVal;
-
 }
 
 SATargetType getScriptActionTargetType(uint8_t ID)
@@ -520,43 +518,8 @@ void clearContainers()
 	localvariables.clear();
 
 	waypoints.clear();
-
-	currentFileData.Clear();
 }
 
-
-void loadSettings(bool ask)
-{
-	QString ts_rules_path = settings.value("rules/rulesPath").toString();
-	QString fs_rules_path = settings.value("rules/firestrmPath").toString();
-
-	cloneOfNaming = settings.value("cloneOfNaming").toBool();
-	ascNumNaming  = settings.value("increaseNumberNaming").toBool();
-	alphabetNaming = settings.value("alphabetsInOrderNaming").toBool();
-
-	lastUsedPath = settings.value("lastUsedPath", ".").toString();
-
-	if(ask) {
-		if(ts_rules_path.isEmpty()) {
-			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				ts_rules_path = getRulesPathFor("rules.ini", ts_rules_path);
-			}
-		}
-		if(fs_rules_path.isEmpty()) {
-			if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				fs_rules_path = getRulesPathFor("rules.ini", fs_rules_path);
-			}
-		}
-	}
-
-	settings.setValue("rules/rulesPath", ts_rules_path);
-	settings.setValue("rules/firestrmPath", fs_rules_path);
-
-	tsRulesPath = ts_rules_path + "/rules.ini";
-	fsRulesPath = fs_rules_path + "/firestrm.ini";
-
-	settings.sync();
-}
 
 QString getRulesPathFor(QString fileName, QString path)
 {

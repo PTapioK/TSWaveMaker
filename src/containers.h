@@ -14,21 +14,25 @@ struct variableContainer {
 		QString name;
 };
 
-extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
+// Script Action Target Type
+enum SATargetType {
+	NONE = 1,
+	WAYPOINT,
+	TARGET,
+	MISSION,
+	UNLOAD,
+	EDITABLE,
+	GLOBAL,
+	SCRIPT,
+	TASKFORCE,
+	HOUSE,
+	LOCAL,
+	FACING,
+	BUILDING,
+	BALLOON
+};
 
-extern const QString settingsFilePath;
-extern QSettings settings;
-
-extern const QString scriptStringsPath;
-extern QSettings scriptStrings;
-
-extern QString currentFilePath;
-extern CDataFile currentFileData;
-
-extern QString tsRulesPath;
-extern QString fsRulesPath;
-
-extern QString lastUsedPath;
+extern FileHandler fileHandler;
 
 extern std::map <QString, Trigger*> triggers;
 extern std::map <QString, Tag*> tags;

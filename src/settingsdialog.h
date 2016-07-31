@@ -1,5 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef SETTINGSDIALOG_H
+#define SETTINGSDIALOG_H
 
 #include <QDialog>
 
@@ -36,4 +36,4 @@ class SettingsDialog : public QDialog
 		Ui::SettingsDialog *ui;
 };
 
-#endif // SETTINGS_H
+#endif // SETTINGSDIALOG_H

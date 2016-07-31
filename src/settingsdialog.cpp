@@ -1,6 +1,9 @@
 #include "utils.h"
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
+#include "settings.h"
+
+using namespace Settings;
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
 	QDialog(parent),

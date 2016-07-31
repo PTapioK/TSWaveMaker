@@ -1,7 +1,38 @@
-#include "fileoperations.h"
+#include "filehandler.h"
+#include "settings.h"
 
+FileHandler::FileHandler()
+{
+	fileData.m_Flags |= AUTOCREATE_KEYS;
+	fileData.m_Flags |= AUTOCREATE_SECTIONS;
+}
 
-void saveAllToBuffer()
+FileHandler::FileHandler(QString mapFilePath)
+{
+	fileData.m_Flags |= AUTOCREATE_KEYS;
+	fileData.m_Flags |= AUTOCREATE_SECTIONS;
+	filePath = mapFilePath;
+}
+
+void FileHandler::loadFile(QString mapFilePath)
+{
+	filePath = mapFilePath;
+	fileData.SetFileName(mapFilePath.toStdString());
+	readFileToBuffer();
+	parseSections();
+}
+
+void FileHandler::saveFile(QString as)
+{
+	if(!as.isEmpty()) {
+		filePath = as;
+		fileData.SetFileName(as.toStdString());
+	}
+	saveAllToBuffer();
+	fileData.Save();
+}
+
+void FileHandler::saveAllToBuffer()
 {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		(*IT).second->save();
@@ -40,37 +71,37 @@ void saveAllToBuffer()
 
 }
 
-void writeLineToBuffer(QString section, QString ID, QString value)
+void FileHandler::writeLineToBuffer(QString section, QString ID, QString value)
 {
-	currentFileData.SetValue(ID.toStdString(), value.toStdString(), "", section.toStdString());
+	fileData.SetValue(ID.toStdString(), value.toStdString(), "", section.toStdString());
 }
 
-void editCountableValueInBuffer(QString section, QString ID, QString value, int count)
+void FileHandler::editCountableValueInBuffer(QString section, QString ID, QString value, int count)
 {
-	std::string rawEx = currentFileData.GetValue(ID.toStdString(), section.toStdString());
+	std::string rawEx = fileData.GetValue(ID.toStdString(), section.toStdString());
 	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
 	std::string newVal = intToStr(count) + "," + exvalue + "," + value.toStdString();
-	currentFileData.SetValue(ID.toStdString(), newVal, "", section.toStdString());
+	fileData.SetValue(ID.toStdString(), newVal, "", section.toStdString());
 }
 
-void readFileToBuffer() {
-	currentFileData.Load(currentFilePath.toStdString());
+void FileHandler::readFileToBuffer() {
+	fileData.Load(filePath.toStdString());
 }
 
-void deleteLineFromBuffer(QString section, QString ID)
+void FileHandler::deleteLineFromBuffer(QString section, QString ID)
 {
-	currentFileData.DeleteKey(ID.toStdString(), section.toStdString());
+	fileData.DeleteKey(ID.toStdString(), section.toStdString());
 }
 
-void deleteSectionFromBuffer(QString section)
+void FileHandler::deleteSectionFromBuffer(QString section)
 {
-	currentFileData.DeleteSection(section.toStdString());
+	fileData.DeleteSection(section.toStdString());
 }
 
-void parseSections()
+void FileHandler::parseSections()
 {
 
-	t_Section * trSec = currentFileData.GetSection("Triggers");
+	t_Section * trSec = fileData.GetSection("Triggers");
 
 	if(trSec != NULL) {
 		triggers.clear();
@@ -78,7 +109,7 @@ void parseSections()
 		for(KeyItor keyIT = trigs->begin(); keyIT < trigs->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Triggers")).split(",");
+			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Triggers")).split(",");
 
 			if(curLine.size() == 8) {
 				QString ID = QString::fromStdString(Key);
@@ -100,7 +131,7 @@ void parseSections()
 
 	}
 
-	t_Section * tagSec = currentFileData.GetSection("Tags");
+	t_Section * tagSec = fileData.GetSection("Tags");
 
 	if (tagSec != NULL) {
 		tags.clear();
@@ -108,7 +139,7 @@ void parseSections()
 		for(KeyItor keyIT = tagsl->begin(); keyIT < tagsl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Tags")).split(",");
+			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Tags")).split(",");
 
 			if(curLine.size() == 3) {
 				QString ID = QString::fromStdString(Key);
@@ -124,7 +155,7 @@ void parseSections()
 		}
 	}
 
-	t_Section * wpnSec = currentFileData.GetSection("Waypoints");
+	t_Section * wpnSec = fileData.GetSection("Waypoints");
 
 	if (wpnSec != NULL) {
 		waypoints.clear();
@@ -138,14 +169,14 @@ void parseSections()
 
 	}
 
-	t_Section * teamSec = currentFileData.GetSection("TeamTypes");
+	t_Section * teamSec = fileData.GetSection("TeamTypes");
 
 	if (teamSec != NULL) {
 		teams.clear();
 		KeyList * teaml = teamSec->GetKeyList();
 		for(KeyItor keyIT = teaml->begin(); keyIT < teaml->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string curLine = currentFileData.GetString(Key, "TeamTypes");
+			std::string curLine = fileData.GetString(Key, "TeamTypes");
 
 			std::string teamID = curLine.substr(0, 8);
 			Team *nTeam = findNewTeamFromFile(teamID);
@@ -157,13 +188,13 @@ void parseSections()
 		}
 	}
 
-	t_Section * scriptSec = currentFileData.GetSection("ScriptTypes");
+	t_Section * scriptSec = fileData.GetSection("ScriptTypes");
 	if (scriptSec != NULL) {
 		scripts.clear();
 		KeyList * scriptl = scriptSec->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string curLine = currentFileData.GetString(Key, "ScriptTypes");
+			std::string curLine = fileData.GetString(Key, "ScriptTypes");
 
 			std::string scriptID = curLine.substr(0, 8);
 			Script *nScript = findNewScriptFromFile(scriptID);
@@ -175,13 +206,13 @@ void parseSections()
 		}
 	}
 
-	t_Section * taskSec = currentFileData.GetSection("TaskForces");
+	t_Section * taskSec = fileData.GetSection("TaskForces");
 	if (taskSec != NULL) {
 		taskforces.clear();
 		KeyList * taskl = taskSec->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string curLine = currentFileData.GetString(Key, "TaskForces");
+			std::string curLine = fileData.GetString(Key, "TaskForces");
 
 			std::string taskforceID = curLine.substr(0, 8);
 			Taskforce *nTaskforce = findNewTaskforceFromFile(taskforceID);
@@ -192,13 +223,13 @@ void parseSections()
 		}
 	}
 
-	t_Section * eventSec = currentFileData.GetSection("Events");
+	t_Section * eventSec = fileData.GetSection("Events");
 	if(eventSec != NULL) {
 		KeyList * eventl = eventSec->GetKeyList();
 		for(KeyItor keyIT = eventl->begin(); keyIT < eventl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Events")).split(",");
+			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Events")).split(",");
 
 			QString ID = QString::fromStdString(Key);
 
@@ -217,14 +248,14 @@ void parseSections()
 		}
 	}
 
-	t_Section * actionSec = currentFileData.GetSection("Actions");
+	t_Section * actionSec = fileData.GetSection("Actions");
 	if (actionSec != NULL) {
 
 		KeyList * actl = actionSec->GetKeyList();
 		for(KeyItor keyIT = actl->begin(); keyIT < actl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			QStringList curLine = QString::fromStdString(currentFileData.GetString(Key, "Actions")).split(",");
+			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Actions")).split(",");
 
 			QString ID = QString::fromStdString(Key);
 
@@ -255,13 +286,13 @@ void parseSections()
 		}
 	}
 
-	t_Section * aiTrigSec = currentFileData.GetSection("AITriggerTypes");
+	t_Section * aiTrigSec = fileData.GetSection("AITriggerTypes");
 	if(aiTrigSec != NULL) {
 		KeyList * aiTrigl = aiTrigSec->GetKeyList();
 		for(KeyItor keyIT = aiTrigl->begin(); keyIT < aiTrigl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string curLine = currentFileData.GetString(Key, "AITriggerTypes");
+			std::string curLine = fileData.GetString(Key, "AITriggerTypes");
 
 			std::string ID = Key;
 
@@ -269,18 +300,18 @@ void parseSections()
 		}
 	}
 
-	QSettings currentMapSettings(currentFilePath, QSettings::IniFormat);
+	QSettings currentMapSettings(filePath, QSettings::IniFormat);
 
 	// BuildingTypes list should not be sorted...
-	t_Section * buildSec = currentFileData.GetSection("BuildingTypes");
+	t_Section * buildSec = fileData.GetSection("BuildingTypes");
 
 	if (buildSec != NULL) {
 		KeyList * buildl = buildSec->GetKeyList();
 		for(KeyItor keyIT = buildl->begin(); keyIT < buildl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
 
-			std::string buildingID = currentFileData.GetString(Key, "BuildingTypes");
-			std::string name = currentFileData.GetString("Name", buildingID);
+			std::string buildingID = fileData.GetString(Key, "BuildingTypes");
+			std::string name = fileData.GetString("Name", buildingID);
 
 			if(name != "") {
 				unitContainer cont;
@@ -302,7 +333,7 @@ void parseSections()
 	parseHouseTypes(currentMapSettings);
 }
 
-void parseRules()
+void FileHandler::parseRules()
 {
 
 	// Structure ID counter
@@ -310,7 +341,7 @@ void parseRules()
 
 	// Tiberian Sun rules
 	// BuildingTypes list should not be sorted...
-	CDataFile tsRulesCData(tsRulesPath.toStdString());
+	CDataFile tsRulesCData(Settings::tsRulesPath.toStdString());
 	{
 		t_Section * buildSec = tsRulesCData.GetSection("BuildingTypes");
 
@@ -336,7 +367,7 @@ void parseRules()
 		}
 	}
 
-	QSettings tsRulesData(tsRulesPath, QSettings::IniFormat);
+	QSettings tsRulesData(Settings::tsRulesPath, QSettings::IniFormat);
 	parseUnitTypesToMap(tsRulesData, vehicles, "VehicleTypes");
 	parseUnitTypesToMap(tsRulesData, infantry, "InfantryTypes");
 	parseUnitTypesToMap(tsRulesData, aircraft, "AircraftTypes");
@@ -347,7 +378,7 @@ void parseRules()
 
 	// Tiberian Sun Firestorm rules
 	// BuildingTypes list should not be sorted...
-	CDataFile fsRulesCData(fsRulesPath.toStdString());
+	CDataFile fsRulesCData(Settings::fsRulesPath.toStdString());
 	{
 		t_Section * buildSec = fsRulesCData.GetSection("BuildingTypes");
 
@@ -373,15 +404,15 @@ void parseRules()
 		}
 	}
 
-	QSettings fsRulesData(fsRulesPath, QSettings::IniFormat);
+	QSettings fsRulesData(Settings::fsRulesPath, QSettings::IniFormat);
 	parseUnitTypesToMap(fsRulesData, vehicles, "VehicleTypes");
 	parseUnitTypesToMap(fsRulesData, infantry, "InfantryTypes");
 	parseUnitTypesToMap(fsRulesData, aircraft, "AircraftTypes");
 }
 
-Taskforce* findNewTaskforceFromFile(std::string taskforceID)
+Taskforce* FileHandler::findNewTaskforceFromFile(std::string taskforceID)
 {
-	t_Section * cTaskF = currentFileData.GetSection(taskforceID);
+	t_Section * cTaskF = fileData.GetSection(taskforceID);
 	if(cTaskF != NULL) {
 
 		std::string name = "New Taskforce";
@@ -392,13 +423,13 @@ Taskforce* findNewTaskforceFromFile(std::string taskforceID)
 		KeyList * taskl = cTaskF->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string curLine = currentFileData.GetString(Key, taskforceID);
+			std::string curLine = fileData.GetString(Key, taskforceID);
 
 			std::string type = "";
 			short amount = 0;
 
 			if(Key == "Group") {
-				group = currentFileData.GetInt(Key, taskforceID);
+				group = fileData.GetInt(Key, taskforceID);
 				nTaskforce->setGroup(group);
 			} else if (Key == "Name") {
 				name = curLine;
@@ -419,10 +450,10 @@ Taskforce* findNewTaskforceFromFile(std::string taskforceID)
 	return NULL;
 }
 
-Script *findNewScriptFromFile(std::string scriptID)
+Script* FileHandler::findNewScriptFromFile(std::string scriptID)
 {
 
-	t_Section * cScript = currentFileData.GetSection(scriptID);
+	t_Section * cScript = fileData.GetSection(scriptID);
 
 	if(cScript != NULL) {
 
@@ -433,7 +464,7 @@ Script *findNewScriptFromFile(std::string scriptID)
 		KeyList * scriptl = cScript->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-			std::string curLine = currentFileData.GetString(Key, scriptID);
+			std::string curLine = fileData.GetString(Key, scriptID);
 
 			int16_t type = 0;
 			int32_t param = 0;
@@ -457,9 +488,9 @@ Script *findNewScriptFromFile(std::string scriptID)
 	return NULL;
 }
 
-Team *findNewTeamFromFile(std::string teamID)
+Team* FileHandler::findNewTeamFromFile(std::string teamID)
 {
-	t_Section * cTeam = currentFileData.GetSection(teamID);
+	t_Section * cTeam = fileData.GetSection(teamID);
 
 	if(cTeam != NULL) {
 		int max = 0;
@@ -494,37 +525,37 @@ Team *findNewTeamFromFile(std::string teamID)
 		bool transportsreturnonunload = false;
 		bool areteammembersrecruitable = true;
 
-		max = currentFileData.GetInt("Max", teamID);
-		tag = QString::fromStdString(currentFileData.GetString("Tag", teamID));
-		full = convertToBool(currentFileData.GetString("Full", teamID));
-		name = QString::fromStdString(currentFileData.GetString("Name", teamID));
-		group = currentFileData.GetInt("Group", teamID);
-		house = QString::fromStdString(currentFileData.GetString("House", teamID));
-		script = QString::fromStdString(currentFileData.GetString("Script", teamID));
-		whiner = convertToBool(currentFileData.GetString("Whiner", teamID));
-		droppod = convertToBool(currentFileData.GetString("Droppod", teamID));
-		suicide = convertToBool(currentFileData.GetString("Suicide", teamID));
-		loadable = convertToBool(currentFileData.GetString("Loadable", teamID));
-		prebuild = convertToBool(currentFileData.GetString("Prebuild", teamID));
-		priority = currentFileData.GetInt("Priority", teamID);
-		waypoint = QString::fromStdString(currentFileData.GetString("Waypoint", teamID));
-		annoyance = convertToBool(currentFileData.GetString("Annoyance", teamID));
-		ionimmune = convertToBool(currentFileData.GetString("IonImmune", teamID));
-		recruiter = convertToBool(currentFileData.GetString("Recruiter", teamID));
-		reinforce = convertToBool(currentFileData.GetString("Reinforce", teamID));
-		taskforce = QString::fromStdString(currentFileData.GetString("TaskForce", teamID));
-		techlevel = currentFileData.GetInt("TechLevel", teamID);
-		aggressive = convertToBool(currentFileData.GetString("Aggressive", teamID));
-		autocreate = convertToBool(currentFileData.GetString("Autocreate", teamID));
-		guardslower = convertToBool(currentFileData.GetString("GuardSlower", teamID));
-		ontransonly = convertToBool(currentFileData.GetString("OnTransOnly", teamID));
-		avoidthreats = convertToBool(currentFileData.GetString("AvoidThreats", teamID));
-		looserecruit = convertToBool(currentFileData.GetString("LooseRecruit", teamID));
-		veteranlevel = currentFileData.GetInt("VeteranLevel", teamID);
-		isbasedefense = convertToBool(currentFileData.GetString("IsBaseDefense", teamID));
-		onlytargethousenemy = convertToBool(currentFileData.GetString("OnlyTargetHouseEnemy", teamID));
-		transportsreturnonunload = convertToBool(currentFileData.GetString("TransportsReturnOnUnload", teamID));
-		areteammembersrecruitable = convertToBool(currentFileData.GetString("AreTeamMembersRecruitable", teamID));
+		max = fileData.GetInt("Max", teamID);
+		tag = QString::fromStdString(fileData.GetString("Tag", teamID));
+		full = convertToBool(fileData.GetString("Full", teamID));
+		name = QString::fromStdString(fileData.GetString("Name", teamID));
+		group = fileData.GetInt("Group", teamID);
+		house = QString::fromStdString(fileData.GetString("House", teamID));
+		script = QString::fromStdString(fileData.GetString("Script", teamID));
+		whiner = convertToBool(fileData.GetString("Whiner", teamID));
+		droppod = convertToBool(fileData.GetString("Droppod", teamID));
+		suicide = convertToBool(fileData.GetString("Suicide", teamID));
+		loadable = convertToBool(fileData.GetString("Loadable", teamID));
+		prebuild = convertToBool(fileData.GetString("Prebuild", teamID));
+		priority = fileData.GetInt("Priority", teamID);
+		waypoint = QString::fromStdString(fileData.GetString("Waypoint", teamID));
+		annoyance = convertToBool(fileData.GetString("Annoyance", teamID));
+		ionimmune = convertToBool(fileData.GetString("IonImmune", teamID));
+		recruiter = convertToBool(fileData.GetString("Recruiter", teamID));
+		reinforce = convertToBool(fileData.GetString("Reinforce", teamID));
+		taskforce = QString::fromStdString(fileData.GetString("TaskForce", teamID));
+		techlevel = fileData.GetInt("TechLevel", teamID);
+		aggressive = convertToBool(fileData.GetString("Aggressive", teamID));
+		autocreate = convertToBool(fileData.GetString("Autocreate", teamID));
+		guardslower = convertToBool(fileData.GetString("GuardSlower", teamID));
+		ontransonly = convertToBool(fileData.GetString("OnTransOnly", teamID));
+		avoidthreats = convertToBool(fileData.GetString("AvoidThreats", teamID));
+		looserecruit = convertToBool(fileData.GetString("LooseRecruit", teamID));
+		veteranlevel = fileData.GetInt("VeteranLevel", teamID);
+		isbasedefense = convertToBool(fileData.GetString("IsBaseDefense", teamID));
+		onlytargethousenemy = convertToBool(fileData.GetString("OnlyTargetHouseEnemy", teamID));
+		transportsreturnonunload = convertToBool(fileData.GetString("TransportsReturnOnUnload", teamID));
+		areteammembersrecruitable = convertToBool(fileData.GetString("AreTeamMembersRecruitable", teamID));
 
 
 		return new Team(QString::fromStdString(teamID), max, tag, full, name, group, house, script, whiner, droppod, suicide,
@@ -538,7 +569,7 @@ Team *findNewTeamFromFile(std::string teamID)
 }
 
 // Finds and adds units to given container
-void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type) {
+void FileHandler::parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type) {
 	rules.beginGroup(type);
 	QStringList unitList = rules.childKeys();
 	rules.endGroup();
@@ -561,7 +592,7 @@ void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &uni
 	}
 }
 
-void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap) {
+void FileHandler::parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap) {
 	rules.beginGroup("VariableNames");
 	QStringList variableSec = rules.childKeys();
 	rules.endGroup();
@@ -587,7 +618,7 @@ void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer>
 	}
 }
 
-void parseHouseTypes(QSettings &rules) {
+void FileHandler::parseHouseTypes(QSettings &rules) {
 	rules.beginGroup("Houses");
 	QStringList houseSec = rules.childKeys();
 	rules.endGroup();
@@ -599,4 +630,14 @@ void parseHouseTypes(QSettings &rules) {
 			houses[Key.toShort()] = name;
 		}
 	}
+}
+
+void FileHandler::clear()
+{
+	fileData.Clear();
+}
+
+QString FileHandler::getFilePath() const
+{
+	return filePath;
 }

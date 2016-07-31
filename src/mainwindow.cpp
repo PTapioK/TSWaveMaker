@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-	loadSettings();
+	Settings::loadSettings();
 
 	ui->setupUi(this);
 
@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	// Save settings before quitting
-	settings.setValue("lastUsedPath", lastUsedPath);
-	settings.sync();
+	Settings::settings.setValue("lastUsedPath", Settings::lastUsedPath);
+	Settings::settings.sync();
 
 	delete ui;
 }
@@ -46,9 +46,9 @@ void MainWindow::newFile()
 {
 	this->setWindowTitle(CAPTIONBASE);
 
+	fileHandler.clear();
 	clearContainers();
-
-	parseRules();
+	fileHandler.parseRules();
 
 	triggerSct->updateUi();
 	teamSct->updateUi();
@@ -59,48 +59,48 @@ void MainWindow::newFile()
 void MainWindow::openFile()
 {
 	QFileDialog fDG(this);
+	QString newFilePath;
 
-	currentFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
+	newFilePath = fDG.getOpenFileName(this, tr("Open Tiberian Sun map or text file"), Settings::lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
 
-	if(currentFilePath.isEmpty()) {
+	if(newFilePath.isEmpty()) {
 		return;
 	}
 
 	newFile();
-
-	readFileToBuffer();
-	parseSections();
+	fileHandler.loadFile(newFilePath);
 
 	triggerSct->updateUi();
 	teamSct->updateUi();
 	scriptSct->updateUi();
 	taskforceSct->updateUi();
 
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath);
-	lastUsedPath = QFileInfo(currentFilePath).path();
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + newFilePath);
+	Settings::lastUsedPath = QFileInfo(newFilePath).path();
 }
 
 void MainWindow::saveFile()
 {
-	if(currentFilePath.isEmpty()) {
+	if(fileHandler.getFilePath().isEmpty()) {
 		saveFileAs();
 		return;
 	}
-	currentFileData.SetFileName(currentFilePath.toStdString());
-	saveAllToBuffer();
-	currentFileData.Save();
+	fileHandler.saveFile();
 }
 
 void MainWindow::saveFileAs()
 {
 	QFileDialog fDG(this);
-	currentFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
-	if(currentFilePath.isEmpty()) {
+	QString newFilePath;
+
+	newFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), Settings::lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
+	if(newFilePath.isEmpty()) {
 		return;
 	}
-	saveFile();
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + currentFilePath);
-	lastUsedPath = QFileInfo(currentFilePath).path();
+
+	fileHandler.saveFile(newFilePath);
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + newFilePath);
+	Settings::lastUsedPath = QFileInfo(newFilePath).path();
 }
 
 void MainWindow::infoDialog()

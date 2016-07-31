@@ -28,24 +28,9 @@
 
 #include "CDataFile/CDataFile.h"
 
-// Script Action Target Type
-enum SATargetType {
-	NONE = 1,
-	WAYPOINT,
-	TARGET,
-	MISSION,
-	UNLOAD,
-	EDITABLE,
-	GLOBAL,
-	SCRIPT,
-	TASKFORCE,
-	HOUSE,
-	LOCAL,
-	FACING,
-	BUILDING,
-	BALLOON
-};
+enum SATargetType;
 
+#include "settings.h"
 #include "trigger.h"
 #include "tag.h"
 #include "event.h"
@@ -55,6 +40,7 @@ enum SATargetType {
 #include "script.h"
 #include "infodialog.h"
 #include "settingsdialog.h"
+#include "filehandler.h"
 
 namespace Ui {
 class MainWindow;
@@ -66,6 +52,7 @@ class InfoDialog;
 class SettingsDialog;
 }
 
+class FileHandler;
 class Tag;
 class Trigger;
 class Team;
@@ -77,7 +64,6 @@ class Script;
 const char alphas[26] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
 const char small_alphas[26] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
 
-#include "fileoperations.h"
 #include "utils.h"
 
 #define CAPTIONBASE (tr("TSWaveMaker ") + tr(VERSION) + tr(" version"))

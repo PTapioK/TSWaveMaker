@@ -1,0 +1,23 @@
+#ifndef SETTINGS_H
+#define SETTINGS_H
+
+#include "main.h"
+
+namespace Settings
+{
+extern void loadSettings(bool ask = true);
+
+extern const QString settingsFilePath;
+extern const QString scriptStringsPath;
+
+extern QString tsRulesPath;
+extern QString fsRulesPath;
+extern QString lastUsedPath;
+
+extern QSettings settings;
+extern QSettings scriptStrings;
+
+extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
+}
+
+#endif // SETTINGS_H

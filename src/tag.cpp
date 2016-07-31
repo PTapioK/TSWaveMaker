@@ -27,7 +27,7 @@ Tag::Tag(QString nID, QString nName, QString nTrigID, int32_t nmode)
 
 Tag::~Tag()
 {
-	deleteLineFromBuffer("Tags", ID);
+	fileHandler.deleteLineFromBuffer("Tags", ID);
 }
 
 QString Tag::getID() const {
@@ -46,7 +46,7 @@ void Tag::save() {
 	QString str;
 	QTextStream valueSS(&str);
 	valueSS << mode << "," << name << "," << triggerID;
-	writeLineToBuffer("Tags", ID, valueSS.readAll());
+	fileHandler.writeLineToBuffer("Tags", ID, valueSS.readAll());
 }
 
 QString Tag::getName() const

@@ -1,18 +1,6 @@
 #include "containers.h"
 
-const QString settingsFilePath = "settings.ini";
-QSettings settings(settingsFilePath, QSettings::IniFormat);
-
-const QString scriptStringsPath = "scriptstrings.ini";
-QSettings scriptStrings(scriptStringsPath, QSettings::IniFormat);
-
-QString currentFilePath;
-CDataFile currentFileData;
-
-QString tsRulesPath;
-QString fsRulesPath;
-
-QString lastUsedPath = ".";
+FileHandler fileHandler;
 
 std::map <QString, Trigger*> triggers;
 std::map <QString, Tag*> tags;
@@ -32,5 +20,3 @@ std::map <uint16_t, variableContainer> localvariables;
 std::map <uint16_t, variableContainer> globalvariables;
 
 std::vector <int32_t> waypoints;
-
-bool cloneOfNaming, ascNumNaming, alphabetNaming;

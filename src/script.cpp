@@ -37,7 +37,7 @@ Script::Script(QString newID, Script *currentScript)
 
 Script::~Script()
 {
-	deleteSectionFromBuffer(ID);
+	fileHandler.deleteSectionFromBuffer(ID);
 }
 
 void Script::addLine(int16_t type, int32_t parameter)
@@ -88,7 +88,7 @@ void Script::deleteLine(int16_t lineID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	deleteLineFromBuffer(ID, QString::number(lineID));
+	fileHandler.deleteLineFromBuffer(ID, QString::number(lineID));
 }
 
 void Script::setName(QString newName)
@@ -102,9 +102,9 @@ void Script::save()
 		QString str;
 		QTextStream valueSS(&str);
 		valueSS << (*IT)->type << "," << (*IT)->param;
-		writeLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
+		fileHandler.writeLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
 	}
-	writeLineToBuffer(ID, "Name", name);
+	fileHandler.writeLineToBuffer(ID, "Name", name);
 }
 
 QString Script::getName() const
