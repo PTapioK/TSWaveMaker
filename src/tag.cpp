@@ -3,7 +3,7 @@
 Tag::Tag(QString tname, QString trigID)
 {
 	name = tname;
-	ID = fffID();
+	ID = findFirstFreeID();
 	triggerID = trigID;
 	mode = 0;
 
@@ -12,7 +12,7 @@ Tag::Tag(QString tname, QString trigID)
 Tag::Tag(Tag *oTag, QString trigID)
 {
 	*this = *oTag;
-	setID(fffID());
+	setID(findFirstFreeID());
 	triggerID = trigID;
 
 }

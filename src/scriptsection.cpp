@@ -1,6 +1,8 @@
 #include "scriptsection.h"
 #include "ui_scriptsection.h"
 
+using namespace Settings;
+
 ScriptSection::ScriptSection(QWidget *parent) :
 	QDockWidget(parent),
 	ui(new Ui::ScriptSection)
@@ -13,6 +15,21 @@ ScriptSection::~ScriptSection()
 	delete ui;
 }
 
+void ScriptSection::updateUi()
+{
+	ui->ScriptList->clearSelection();
+	ui->ScriptActionList->setCurrentRow(-1);
+	ui->ScriptList->clear();
+	ui->SATypeBox->clear();
+	ui->SATargetBox->clear();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->ScriptList->addItem(IT->second->getName());
+	}
+	for(int i = 0; i != 54; ++i) {
+		ui->SATypeBox->addItem(getScriptActionMeaning(i));
+	}
+	ui->SATypeBox->view()->setMinimumWidth(180);
+}
 
 
 void ScriptSection::on_ScriptList_itemSelectionChanged()
@@ -325,14 +342,14 @@ void ScriptSection::on_CLastButton_clicked()
 
 			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
 
-			QString newID = fffID();
+			QString newID = findFirstFreeID();
 			scripts[newID] = new Script(newID, curScript);
 			scripts[newID]->setName(newName);
 			ui->ScriptList->addItem(scripts[newID]->getName());
 
 			std::vector<Script::ScriptLine*> slines;
 
-			slines = scripts[newID]->GetLinesByType(WAYPOINT);
+			slines = scripts[newID]->getLinesByType(WAYPOINT);
 
 			for(std::vector<Script::ScriptLine*>::iterator IT = slines.begin(); IT != slines.end(); ++IT) {
 				(*IT)->param = (*IT)->param + short(ui->ScriptList->selectedItems().size());
@@ -348,7 +365,7 @@ void ScriptSection::on_newS_clicked()
 	if(ui->ScriptList->findItems(ui->SNameEdit->text(), Qt::MatchExactly).count() == 0) {
 		QString name = ui->SNameEdit->text();
 		ui->ScriptList->addItem(ui->SNameEdit->text());
-		QString nID = fffID();
+		QString nID = findFirstFreeID();
 		scripts[nID] = new Script(nID, name);
 	}
 }
@@ -394,7 +411,7 @@ void ScriptSection::on_cloneS_clicked()
 				++i;
 				newName = getNameWithNextMark(ui->ScriptList->selectedItems().at(a)->text(), i);
 			}
-			QString newID = fffID();
+			QString newID = findFirstFreeID();
 			scripts[newID] = new Script(newID, getScriptByName(ui->ScriptList->selectedItems().at(a)->text()));
 			scripts[newID]->setName(newName);
 			ui->ScriptList->addItem(newName);
@@ -462,18 +479,102 @@ void ScriptSection::on_delSA_clicked()
 	}
 }
 
-void ScriptSection::updateUi()
+QString ScriptSection::getScriptActionMeaning(uint8_t ID)
 {
-	ui->ScriptList->clearSelection();
-	ui->ScriptActionList->setCurrentRow(-1);
-	ui->ScriptList->clear();
-	ui->SATypeBox->clear();
-	ui->SATargetBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->ScriptList->addItem(IT->second->getName());
+	QString retVal;
+	retVal = scriptStrings.value("Actions/" + QString::number(ID), QString("Not Implemented!")).toString();
+	return retVal;
+}
+
+QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
+{
+	QStringList list;
+	QStringList strList;
+
+	switch(type) {
+	case TARGET:
+		scriptStrings.beginGroup("Target");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
+		break;
+	case WAYPOINT:
+		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
+			list << QString::number((*IT));
+		}
+		break;
+	case UNLOAD:
+		scriptStrings.beginGroup("Unload");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
+		break;
+	case MISSION:
+		scriptStrings.beginGroup("Mission");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
+		break;
+	case BUILDING:
+		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
+			list << (*IT).second.name;
+		}
+		break;
+	case BALLOON:
+		scriptStrings.beginGroup("Balloon");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
+		break;
+	case FACING:
+		scriptStrings.beginGroup("Facing");
+		strList = scriptStrings.childKeys();
+		qSort(strList.begin(), strList.end(), lessThanQString);
+		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
+			list << scriptStrings.value((*IT)).toStringList().join(", ");
+		}
+		scriptStrings.endGroup();
+		break;
+	case LOCAL:
+		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+			list << (*IT).second.name;
+		}
+		break;
+	case GLOBAL:
+		for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
+			list << (*IT).second.name;
+		}
+		break;
+	case SCRIPT:
+		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+			list << (*IT).second->getName();
+		}
+		break;
+	case TASKFORCE:
+		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+			list << (*IT).second->getName();
+		}
+		break;
+	case HOUSE:
+		for(std::map<uint16_t, QString >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+			list << (*IT).second;
+		}
+		break;
+	case EDITABLE:
+	default:
+		list << "";
 	}
-	for(int i = 0; i != 54; ++i) {
-		ui->SATypeBox->addItem(getScriptActionMeaning(i));
-	}
-	ui->SATypeBox->view()->setMinimumWidth(180);
+	return list;
 }

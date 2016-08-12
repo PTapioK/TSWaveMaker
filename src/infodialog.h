@@ -17,9 +17,6 @@ class InfoDialog : public QDialog
 	public:
 		explicit InfoDialog(QWidget *parent = 0);
 		~InfoDialog();
-
-	private slots:
-
 	private:
 		Ui::InfoDialog *ui;
 };

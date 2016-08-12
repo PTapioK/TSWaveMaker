@@ -11,8 +11,8 @@ class Taskforce
 		Taskforce(QString nID, Taskforce *tF);
 		~Taskforce();
 
-		void addLine(QString type, short amount);
-		void deleteLine(short lineID);
+		void addLine(QString type, uint16_t amount);
+		void deleteLine(uint16_t lineID);
 
 		void setGroup(int32_t nGroup) { group = nGroup; }
 		void setName(QString nName) { name = nName; }
@@ -24,9 +24,7 @@ class Taskforce
 		QString getName() const;
 
 		uint16_t getLineAmount() const;
-
 	private:
-
 		friend class TaskforceSection;
 
 		QString ID;
@@ -46,7 +44,6 @@ class Taskforce
 		typedef std::vector <TaskforceLine*>::iterator taskforceLineIT;
 
 		uint16_t lineCounter;
-
 };
 
 #endif // TASKFORCE_H

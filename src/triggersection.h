@@ -12,14 +12,9 @@ class TriggerSection : public QDockWidget
 	public:
 		explicit TriggerSection(QWidget *parent = 0);
 		~TriggerSection();
-
 	public slots:
-
 		void updateUi();
-
 	private slots:
-
-
 		void on_TriggerList_itemSelectionChanged();
 
 		void on_NewTrigger_clicked();
@@ -67,7 +62,6 @@ class TriggerSection : public QDockWidget
 		void on_ActionList_itemSelectionChanged();
 
 		void mousePressEvent(QMouseEvent *event);
-
 	private:
 		Ui::TriggerSection *ui;
 
@@ -75,7 +69,6 @@ class TriggerSection : public QDockWidget
 		void clearActionList();
 
 		uint32_t sWPoint;
-
 };
 
 #endif // TRIGGERSECTION_H

@@ -21,9 +21,7 @@ class Team
 
 		QString getName() const;
 		QString getID() const;
-
 	private:
-
 		friend class TeamSection;
 
 		QString ID;
@@ -58,7 +56,6 @@ class Team
 		bool onlytargethousenemy;
 		bool transportsreturnonunload;
 		bool areteammembersrecruitable;
-
 };
 
 #endif // TEAM_H

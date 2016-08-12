@@ -58,8 +58,10 @@ class ScriptSection : public QDockWidget
 		void on_newSA_Bef_clicked();
 
 		void mousePressEvent(QMouseEvent *event);
-
 	private:
+		QString getScriptActionMeaning(uint8_t ID);
+		QStringList getScriptActionTargetStrings(SATargetType type);
+
 		Ui::ScriptSection *ui;
 };
 

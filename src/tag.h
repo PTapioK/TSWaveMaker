@@ -19,7 +19,6 @@ class Tag
 		QString getTriggerID() const;
 		QString getName() const;
 		QString getID() const;
-
 	private:
 		QString ID;
 		QString name;

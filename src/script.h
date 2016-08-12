@@ -12,7 +12,7 @@ class Script
 		~Script();
 
 		void addLine(int16_t type, int32_t parameter);
-		void insertLine(int16_t type, int16_t parameter, int16_t ID);
+		void insertLine(int16_t type, int32_t parameter, int16_t ID);
 		void deleteLine(int16_t lineID);
 
 		void setName(QString newName);
@@ -22,9 +22,7 @@ class Script
 		QString getName() const;
 		QString getID() const;
 		uint16_t getLineAmount() const;
-
 	private:
-
 		friend class ScriptSection;
 
 		QString ID;
@@ -43,9 +41,8 @@ class Script
 		typedef std::vector <ScriptLine*>::iterator slineIT;
 
 		uint16_t lineCounter;
-
 	public:
-		std::vector<Script::ScriptLine*> GetLinesByType(SATargetType type);
+		std::vector<Script::ScriptLine*> getLinesByType(SATargetType type);
 
 };
 

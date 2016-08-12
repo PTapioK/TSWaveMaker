@@ -3,8 +3,7 @@
 
 using namespace Settings;
 
-// Find First Free ID
-QString fffID()
+QString findFirstFreeID()
 {
 	QString nextID;
 	QString value;
@@ -96,7 +95,7 @@ Tag* getTagByTriggerID(QString trigID)
 	return NULL;
 }
 
-QString decToWaypointID(int dec)
+QString decToWaypointID(int32_t dec)
 {
 	QString retVal;
 	dec = dec + 1;
@@ -108,10 +107,10 @@ QString decToWaypointID(int dec)
 	return retVal;
 }
 
-QString convertToSmallAlphas(int32_t dec)
+QString decToSmallAlphas(int32_t dec)
 {
 	QString retVal;
-	dec=dec+1;
+	dec = dec + 1;
 	while(dec != 0) {
 		--dec;
 		retVal = small_alphas[dec % 26] + retVal;
@@ -182,7 +181,7 @@ QString convertBoolToYesNo(bool boolean)
 	}
 }
 
-std::string intToStr(int integer) {
+std::string intToStr(int64_t integer) {
 	std::stringstream ss;
 	ss << integer;
 	return ss.str();
@@ -305,13 +304,6 @@ QString getTaskforceNameByPosition(uint16_t pos)
 	return 0;
 }
 
-QString getScriptActionMeaning(uint8_t ID)
-{
-	QString retVal;
-	retVal = scriptStrings.value("Actions/" + QString::number(ID), QString("Not Implemented!")).toString();
-	return retVal;
-}
-
 SATargetType getScriptActionTargetType(uint8_t ID)
 {
 	switch(ID) {
@@ -367,99 +359,6 @@ SATargetType getScriptActionTargetType(uint8_t ID)
 	}
 }
 
-QStringList getScriptActionTargetStrings(SATargetType type)
-{
-	QStringList list;
-	QStringList strList;
-
-	switch(type) {
-	case TARGET:
-		scriptStrings.beginGroup("Target");
-		strList = scriptStrings.childKeys();
-		qSort(strList.begin(), strList.end(), lessThanQString);
-		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
-			list << scriptStrings.value((*IT)).toStringList().join(", ");
-		}
-		scriptStrings.endGroup();
-		break;
-	case WAYPOINT:
-		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
-			list << QString::number((*IT));
-		}
-		break;
-	case UNLOAD:
-		scriptStrings.beginGroup("Unload");
-		strList = scriptStrings.childKeys();
-		qSort(strList.begin(), strList.end(), lessThanQString);
-		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
-			list << scriptStrings.value((*IT)).toStringList().join(", ");
-		}
-		scriptStrings.endGroup();
-		break;
-	case MISSION:
-		scriptStrings.beginGroup("Mission");
-		strList = scriptStrings.childKeys();
-		qSort(strList.begin(), strList.end(), lessThanQString);
-		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
-			list << scriptStrings.value((*IT)).toStringList().join(", ");
-		}
-		scriptStrings.endGroup();
-		break;
-	case BUILDING:
-		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
-			list << (*IT).second.name;
-		}
-		break;
-	case BALLOON:
-		scriptStrings.beginGroup("Balloon");
-		strList = scriptStrings.childKeys();
-		qSort(strList.begin(), strList.end(), lessThanQString);
-		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
-			list << scriptStrings.value((*IT)).toStringList().join(", ");
-		}
-		scriptStrings.endGroup();
-		break;
-	case FACING:
-		scriptStrings.beginGroup("Facing");
-		strList = scriptStrings.childKeys();
-		qSort(strList.begin(), strList.end(), lessThanQString);
-		for(QStringList::ConstIterator IT = strList.begin(); IT != strList.end(); ++IT) {
-			list << scriptStrings.value((*IT)).toStringList().join(", ");
-		}
-		scriptStrings.endGroup();
-		break;
-	case LOCAL:
-		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
-			list << (*IT).second.name;
-		}
-		break;
-	case GLOBAL:
-		for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
-			list << (*IT).second.name;
-		}
-		break;
-	case SCRIPT:
-		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-			list << (*IT).second->getName();
-		}
-		break;
-	case TASKFORCE:
-		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-			list << (*IT).second->getName();
-		}
-		break;
-	case HOUSE:
-		for(std::map<uint16_t, QString >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
-			list << (*IT).second;
-		}
-		break;
-	case EDITABLE:
-	default:
-		list << "";
-	}
-	return list;
-}
-
 uint32_t getStringListMaxWidth(QStringList list, QFont font)
 {
 	if(!list.empty()) {
@@ -475,7 +374,7 @@ uint32_t getStringListMaxWidth(QStringList list, QFont font)
 }
 
 
-uint16_t getBuildingTypePosByKey(int key)
+uint16_t getBuildingTypePosByKey(uint16_t key)
 {
 	for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
 		if((*IT).second.key == key) {
@@ -520,15 +419,6 @@ void clearContainers()
 	waypoints.clear();
 }
 
-
-QString getRulesPathFor(QString fileName, QString path)
-{
-	QFileDialog fDG(NULL);
-	fDG.setFileMode(QFileDialog::Directory);
-	fDG.setOption(QFileDialog::ShowDirsOnly, true);
-	return fDG.getExistingDirectory(NULL, "Select directory containing " + fileName, path);
-}
-
 QString getNameWithNextMark(QString name, int iter, int numIter)
 {
 	QString oName = name;
@@ -552,10 +442,10 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 			QTextStream ss(&str);
 			ss << " " << small_alphas[i];
 			if(name.contains(ss.readAll())) {
-				name.replace(name.indexOf(ss.readAll()), ss.readAll().length(), QString (" ") + convertToSmallAlphas(i + iter + 1));
+				name.replace(name.indexOf(ss.readAll()), ss.readAll().length(), QString (" ") + decToSmallAlphas(i + iter + 1));
 				break;
 			} else if(*(name.end()-1) == small_alphas[i]) {
-				name.replace(name.length()-1, sizeof(char), convertToSmallAlphas(i + iter + 1));
+				name.replace(name.length()-1, sizeof(char), decToSmallAlphas(i + iter + 1));
 				break;
 			}
 		}
@@ -602,8 +492,6 @@ QString getUnitNameByUnitID(QString unitID)
 	}
 	return QString("");
 }
-
-
 
 bool lessThanQString(const QString &str1, const QString &str2)
 {

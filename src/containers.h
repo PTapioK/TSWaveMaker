@@ -59,11 +59,10 @@ typedef std::map <QString, Team*>::const_iterator teamIT;
 typedef std::map <QString, Script*>::const_iterator scriptIT;
 typedef std::map <QString, Taskforce*>::const_iterator taskforceIT;
 typedef std::map <QString, QString>::const_iterator aitriggerIT;
+typedef std::map <QString, unitContainer>::iterator unitIT;
 
 typedef std::vector <Action*>::const_iterator actionIT;
 typedef std::vector <Event*>::const_iterator eventIT;
 typedef std::vector <int32_t>::const_iterator waypointIT;
-
-typedef std::map <QString, unitContainer>::iterator unitIT;
 
 #endif // CONTAINERS_H

@@ -12,16 +12,12 @@ class TeamSection : public QDockWidget
 	public:
 		explicit TeamSection(QWidget *parent = 0);
 		~TeamSection();
-
 	public slots:
 		void updateUi();
 		void on_New_clicked();
-
 	signals:
 		void newUnit();
-
 	private slots:
-
 		void on_TeamList_itemSelectionChanged();
 
 		void on_Delete_clicked();
@@ -77,7 +73,6 @@ class TeamSection : public QDockWidget
 		void on_isWhiner_clicked();
 
 		void mousePressEvent(QMouseEvent *event);
-
 	private:
 		Ui::TeamSection *ui;
 };

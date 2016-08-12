@@ -8,12 +8,12 @@ class Event;
 class Trigger
 {
 	public:
-
 		std::vector <Action*> actions;
 		std::vector <Event*> events;
 
 		Trigger(QString newName);
-		Trigger(QString newID, QString newHouse, QString newAttachID, QString newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown = 0);
+		Trigger(QString newID, QString newHouse, QString newAttachID, QString newName,
+				bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown = 0);
 		Trigger(Trigger* otherTrigger);
 		Trigger(QString newID, Trigger* otherTrigger);
 		Trigger(QString newID, QString newName);
@@ -50,7 +50,6 @@ class Trigger
 		bool isDisabled() const;
 
 		QString getName() const;
-
 	private:
 		QString name;
 		QString house;
@@ -60,7 +59,6 @@ class Trigger
 		bool isDis;
 		bool isEasy, isMedium, isHard;
 		int16_t unknown;
-
 };
 
 #endif // TRIGGER_H

@@ -14,7 +14,6 @@ class MainWindow : public QMainWindow
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
-
 	private slots:
 		void newFile();
 		void openFile();
@@ -23,15 +22,7 @@ class MainWindow : public QMainWindow
 
 		void infoDialog();
 		void settingsDialog();
-
 	private:
-
-		friend class TriggerSection;
-		friend class TeamSection;
-		friend class ScriptSection;
-		friend class TaskforceSection;
-		friend class SettingsDialog;
-
 		Ui::MainWindow *ui;
 
 		TriggerSection * triggerSct;

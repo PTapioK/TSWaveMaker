@@ -52,7 +52,7 @@ void Script::addLine(int16_t type, int32_t parameter)
 	++lineCounter;
 }
 
-void Script::insertLine(int16_t type, int16_t parameter, int16_t ID)
+void Script::insertLine(int16_t type, int32_t parameter, int16_t ID)
 {
 	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {
 		if((*IT)->ID >= ID) {
@@ -121,7 +121,7 @@ uint16_t Script::getLineAmount() const
 	return lineCounter;
 }
 
-std::vector<Script::ScriptLine *> Script::GetLinesByType(SATargetType type)
+std::vector<Script::ScriptLine *> Script::getLinesByType(SATargetType type)
 {
 	std::vector<ScriptLine*> lines;
 	for(slineIT IT = scriptLines.begin(); IT != scriptLines.end(); ++IT) {

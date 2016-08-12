@@ -8,19 +8,21 @@ Action::Action(QString newID)
 	params.fill("0");
 }
 
-Action::Action(QString newID, int32_t newType, int32_t newWayPoint = 0)
+Action::Action(QString newID, int32_t newType, int32_t newWaypoint = 0)
 {
 	ID = newID;
 	type = newType;
-	waypoint = decToWaypointID(newWayPoint);
+	waypoint = decToWaypointID(newWaypoint);
 	params.fill("0");
 }
 
-Action::Action(QString newID, int32_t newType, int32_t newWayPoint, QString parameter1, QString parameter2, QString parameter3, QString parameter4, QString parameter5, QString parameter6)
+Action::Action(QString newID, int32_t newType, int32_t newWaypoint,
+			   QString parameter1, QString parameter2, QString parameter3,
+			   QString parameter4, QString parameter5, QString parameter6)
 {
 	ID = newID;
 	type = newType;
-	waypoint = decToWaypointID(newWayPoint);
+	waypoint = decToWaypointID(newWaypoint);
 	params[0] = parameter1;
 	params[1] = parameter2;
 	params[2] = parameter3;
@@ -98,13 +100,13 @@ void Action::setWayPoint(int32_t newWaypoint)
 	waypoint = decToWaypointID(newWaypoint);
 }
 
-void Action::setParameter(int i, QString data)
+void Action::setParameter(int32_t i, QString data)
 {
 	assert(i > 0 && i < 6);
 	params[i-1] = data;
 }
 
-void Action::setParameter(int i, int32_t data)
+void Action::setParameter(int32_t i, int32_t data)
 {
 	assert(i > 0 && i < 6);
 	params[i-1] = QString::number(data);

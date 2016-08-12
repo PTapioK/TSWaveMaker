@@ -35,7 +35,7 @@ void TaskforceSection::on_NewTaskforce_clicked()
 	if(ui->TaskforceList->findItems(ui->taskforceNameEdit->text(), Qt::MatchExactly).count() == 0) {
 		QString name = ui->taskforceNameEdit->text();
 		ui->TaskforceList->addItem(ui->taskforceNameEdit->text());
-		QString nID = fffID();
+		QString nID = findFirstFreeID();
 		taskforces[nID] = new Taskforce(nID, name);
 	}
 }
@@ -81,7 +81,7 @@ void TaskforceSection::on_cloneTaskforce_clicked()
 				++i;
 				newName = getNameWithNextMark(ui->TaskforceList->selectedItems().at(a)->text(), i);
 			}
-			QString newID = fffID();
+			QString newID = findFirstFreeID();
 			taskforces[newID] = new Taskforce(newID, getTaskforceByName(ui->TaskforceList->selectedItems().at(a)->text()));
 			taskforces[newID]->setName(newName);
 			ui->TaskforceList->addItem(newName);

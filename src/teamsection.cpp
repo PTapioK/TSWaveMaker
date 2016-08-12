@@ -71,7 +71,7 @@ void TeamSection::on_New_clicked()
 	if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
 		QString name = ui->TNameEdit->text();
 		ui->TeamList->addItem(ui->TNameEdit->text());
-		QString nID = fffID();
+		QString nID = findFirstFreeID();
 		teams[nID] = new Team(nID, name);
 
 	}
@@ -116,7 +116,7 @@ void TeamSection::on_Clone_clicked()
 				++i;
 				newName = getNameWithNextMark(ui->TeamList->selectedItems().at(a)->text(), i);
 			}
-			QString newID = fffID();
+			QString newID = findFirstFreeID();
 			teams[newID] = new Team(newID, getTeamByName(ui->TeamList->selectedItems().at(a)->text()));
 			teams[newID]->setName(newName);
 			ui->TeamList->addItem(newName);

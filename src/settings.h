@@ -6,6 +6,7 @@
 namespace Settings
 {
 extern void loadSettings(bool ask = true);
+extern QString getRulesPathFor(QString fileName, QString path);
 
 extern const QString settingsFilePath;
 extern const QString scriptStringsPath;

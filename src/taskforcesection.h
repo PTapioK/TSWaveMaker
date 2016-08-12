@@ -38,9 +38,7 @@ class TaskforceSection : public QDockWidget
 		void on_DeleteUnit_clicked();
 
 		void mousePressEvent(QMouseEvent *event);
-
 	private:
-
 		Ui::TaskforceSection *ui;
 
 };

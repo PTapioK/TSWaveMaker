@@ -18,7 +18,6 @@ class SettingsDialog : public QDialog
 	public:
 		explicit SettingsDialog(QWidget *parent = 0);
 		~SettingsDialog();
-
 	private slots:
 		void on_rulesFind_clicked();
 
@@ -31,7 +30,6 @@ class SettingsDialog : public QDialog
 		void on_ascNumBox_clicked();
 
 		void on_alphaOrdBox_clicked();
-
 	private:
 		Ui::SettingsDialog *ui;
 };

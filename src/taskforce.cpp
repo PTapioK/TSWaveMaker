@@ -44,7 +44,7 @@ Taskforce::~Taskforce()
 	fileHandler.deleteSectionFromBuffer(ID);
 }
 
-void Taskforce::addLine(QString type, short amount)
+void Taskforce::addLine(QString type, uint16_t amount)
 {
 	TaskforceLine *nLine = new TaskforceLine();
 	nLine->type = type;
@@ -56,7 +56,7 @@ void Taskforce::addLine(QString type, short amount)
 	++lineCounter;
 }
 
-void Taskforce::deleteLine(short lineID)
+void Taskforce::deleteLine(uint16_t lineID)
 {
 	for(taskforceLineIT IT = taskforceLines.begin(); IT != taskforceLines.end(); ++IT) {
 		if((*IT)->ID == lineID) {

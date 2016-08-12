@@ -78,13 +78,13 @@ void TriggerSection::on_NewTrigger_clicked()
 	if(ui->TriggerList->findItems(ui->NEdit->text(), Qt::MatchExactly).count() == 0) {
 		QString name = ui->NEdit->text();
 		ui->TriggerList->addItem(ui->NEdit->text());
-		QString nID = fffID();
+		QString nID = findFirstFreeID();
 		triggers[nID] = new Trigger(nID, name);
 		tags[name + " 1"] = new Tag(name + " 1", triggers[nID]->getID());
 	}
 }
 
-// Edit trigger name
+// Edit trigger's name
 void TriggerSection::on_EditTriggerName_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
@@ -100,7 +100,7 @@ void TriggerSection::on_EditTriggerName_clicked()
 	}
 }
 
-// Is disabled
+// Disable trigger checkbox
 void TriggerSection::on_isDisabledCheck_clicked()
 {
 	if(ui->TriggerList->currentRow() != -1) {
@@ -137,7 +137,7 @@ void TriggerSection::on_CloneTrigger_clicked()
 			newName = getNameWithNextMark(ui->TriggerList->currentItem()->text(), i);
 		}
 
-		QString newID = fffID();
+		QString newID = findFirstFreeID();
 		triggers[newID] = new Trigger(newID, getTriggerByName(ui->TriggerList->currentItem()->text()));
 		triggers[newID]->setName(newName);
 		ui->TriggerList->addItem(newName);

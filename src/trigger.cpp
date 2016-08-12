@@ -3,7 +3,7 @@
 Trigger::Trigger(QString newName)
 {
 	name = newName;
-	ID = fffID();
+	ID = findFirstFreeID();
 	attachID = "<none>";
 	house = "Neutral";
 	isEasy = true;
@@ -13,7 +13,8 @@ Trigger::Trigger(QString newName)
 	unknown = 0;
 }
 
-Trigger::Trigger(QString nID, QString nHouse, QString newAttachID, QString newName, bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown)
+Trigger::Trigger(QString nID, QString nHouse, QString newAttachID, QString newName,
+				 bool newIsDis, bool newIsEas, bool newIsMed, bool newIsHar, int16_t newUnknown)
 {
 	name = newName;
 	ID = nID;
@@ -29,7 +30,7 @@ Trigger::Trigger(QString nID, QString nHouse, QString newAttachID, QString newNa
 Trigger::Trigger(Trigger *otherTrigger)
 {
 	*this = *otherTrigger;
-	setID(fffID());
+	setID(findFirstFreeID());
 	events.clear();
 	for(eventIT IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
 		events.push_back(new Event(*IT, ID));
