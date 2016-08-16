@@ -41,7 +41,7 @@ Taskforce::Taskforce(QString nID, Taskforce *tF)
 
 Taskforce::~Taskforce()
 {
-	fileHandler.deleteSectionFromBuffer(ID);
+	file.deleteSectionFromBuffer(ID);
 }
 
 void Taskforce::addLine(QString type, uint16_t amount)
@@ -72,7 +72,7 @@ void Taskforce::deleteLine(uint16_t lineID)
 		(*IT)->ID = lineCounter;
 		++lineCounter;
 	}
-	fileHandler.deleteLineFromBuffer(ID, QString::number(lineID));
+	file.deleteLineFromBuffer(ID, QString::number(lineID));
 }
 
 void Taskforce::save()
@@ -81,10 +81,10 @@ void Taskforce::save()
 		QString str;
 		QTextStream valueSS(&str);
 		valueSS << (*IT)->amount << "," << (*IT)->type;
-		fileHandler.writeLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
+		file.saveLineToBuffer(ID, QString::number((*IT)->ID), valueSS.readAll());
 	}
-	fileHandler.writeLineToBuffer(ID, "Name", name);
-	fileHandler.writeLineToBuffer(ID, "Group", QString::number(group));
+	file.saveLineToBuffer(ID, "Name", name);
+	file.saveLineToBuffer(ID, "Group", QString::number(group));
 }
 
 QString Taskforce::getID() const

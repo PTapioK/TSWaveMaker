@@ -57,7 +57,7 @@ Team::Team(QString nID, Team *nTeam)
 
 Team::~Team()
 {
-	fileHandler.deleteSectionFromBuffer(ID);
+	file.deleteSectionFromBuffer(ID);
 }
 
 void Team::setName(QString newName)
@@ -67,39 +67,39 @@ void Team::setName(QString newName)
 
 void Team::save()
 {
-	fileHandler.writeLineToBuffer(ID, "Max", QString::number(max));
+	file.saveLineToBuffer(ID, "Max", QString::number(max));
 	if(!tagID.isEmpty()) {
-		fileHandler.writeLineToBuffer(ID, "Tag", tagID);
+		file.saveLineToBuffer(ID, "Tag", tagID);
 	}
-	fileHandler.writeLineToBuffer(ID, "Full", convertBoolToYesNo(full));
-	fileHandler.writeLineToBuffer(ID, "Name", name);
-	fileHandler.writeLineToBuffer(ID, "Group", QString::number(group));
-	fileHandler.writeLineToBuffer(ID, "House", house);
-	fileHandler.writeLineToBuffer(ID, "Script", scriptID);
-	fileHandler.writeLineToBuffer(ID, "Whiner", convertBoolToYesNo(whiner));
-	fileHandler.writeLineToBuffer(ID, "Droppod", convertBoolToYesNo(droppod));
-	fileHandler.writeLineToBuffer(ID, "Suicide", convertBoolToYesNo(suicide));
-	fileHandler.writeLineToBuffer(ID, "Loadable", convertBoolToYesNo(loadable));
-	fileHandler.writeLineToBuffer(ID, "Prebuild", convertBoolToYesNo(prebuild));
-	fileHandler.writeLineToBuffer(ID, "Priority", QString::number(priority));
-	fileHandler.writeLineToBuffer(ID, "Waypoint", wPoint);
-	fileHandler.writeLineToBuffer(ID, "Annoyance", convertBoolToYesNo(annoyance));
-	fileHandler.writeLineToBuffer(ID, "IonImmune", convertBoolToYesNo(ionimmune));
-	fileHandler.writeLineToBuffer(ID, "Recruiter", convertBoolToYesNo(recruiter));
-	fileHandler.writeLineToBuffer(ID, "Reinforce", convertBoolToYesNo(reinforce));
-	fileHandler.writeLineToBuffer(ID, "TaskForce", taskForceID);
-	fileHandler.writeLineToBuffer(ID, "TechLevel", QString::number(techlevel));
-	fileHandler.writeLineToBuffer(ID, "Aggressive", convertBoolToYesNo(aggressive));
-	fileHandler.writeLineToBuffer(ID, "Autocreate", convertBoolToYesNo(autocreate));
-	fileHandler.writeLineToBuffer(ID, "GuardSlower", convertBoolToYesNo(guardslower));
-	fileHandler.writeLineToBuffer(ID, "OnTransOnly", convertBoolToYesNo(ontransonly));
-	fileHandler.writeLineToBuffer(ID, "AvoidThreats", convertBoolToYesNo(avoidthreats));
-	fileHandler.writeLineToBuffer(ID, "LooseRecruit", convertBoolToYesNo(looserecruit));
-	fileHandler.writeLineToBuffer(ID, "VeteranLevel", QString::number(veteranlevel));
-	fileHandler.writeLineToBuffer(ID, "IsBaseDefense", convertBoolToYesNo(isbasedefense));
-	fileHandler.writeLineToBuffer(ID, "OnlyTargetHouseEnemy", convertBoolToYesNo(onlytargethousenemy));
-	fileHandler.writeLineToBuffer(ID, "TransportsReturnOnUnload", convertBoolToYesNo(transportsreturnonunload));
-	fileHandler.writeLineToBuffer(ID, "AreTeamMembersRecruitable", convertBoolToYesNo(areteammembersrecruitable));
+	file.saveLineToBuffer(ID, "Full", convertBoolToYesNo(full));
+	file.saveLineToBuffer(ID, "Name", name);
+	file.saveLineToBuffer(ID, "Group", QString::number(group));
+	file.saveLineToBuffer(ID, "House", house);
+	file.saveLineToBuffer(ID, "Script", scriptID);
+	file.saveLineToBuffer(ID, "Whiner", convertBoolToYesNo(whiner));
+	file.saveLineToBuffer(ID, "Droppod", convertBoolToYesNo(droppod));
+	file.saveLineToBuffer(ID, "Suicide", convertBoolToYesNo(suicide));
+	file.saveLineToBuffer(ID, "Loadable", convertBoolToYesNo(loadable));
+	file.saveLineToBuffer(ID, "Prebuild", convertBoolToYesNo(prebuild));
+	file.saveLineToBuffer(ID, "Priority", QString::number(priority));
+	file.saveLineToBuffer(ID, "Waypoint", wPoint);
+	file.saveLineToBuffer(ID, "Annoyance", convertBoolToYesNo(annoyance));
+	file.saveLineToBuffer(ID, "IonImmune", convertBoolToYesNo(ionimmune));
+	file.saveLineToBuffer(ID, "Recruiter", convertBoolToYesNo(recruiter));
+	file.saveLineToBuffer(ID, "Reinforce", convertBoolToYesNo(reinforce));
+	file.saveLineToBuffer(ID, "TaskForce", taskForceID);
+	file.saveLineToBuffer(ID, "TechLevel", QString::number(techlevel));
+	file.saveLineToBuffer(ID, "Aggressive", convertBoolToYesNo(aggressive));
+	file.saveLineToBuffer(ID, "Autocreate", convertBoolToYesNo(autocreate));
+	file.saveLineToBuffer(ID, "GuardSlower", convertBoolToYesNo(guardslower));
+	file.saveLineToBuffer(ID, "OnTransOnly", convertBoolToYesNo(ontransonly));
+	file.saveLineToBuffer(ID, "AvoidThreats", convertBoolToYesNo(avoidthreats));
+	file.saveLineToBuffer(ID, "LooseRecruit", convertBoolToYesNo(looserecruit));
+	file.saveLineToBuffer(ID, "VeteranLevel", QString::number(veteranlevel));
+	file.saveLineToBuffer(ID, "IsBaseDefense", convertBoolToYesNo(isbasedefense));
+	file.saveLineToBuffer(ID, "OnlyTargetHouseEnemy", convertBoolToYesNo(onlytargethousenemy));
+	file.saveLineToBuffer(ID, "TransportsReturnOnUnload", convertBoolToYesNo(transportsreturnonunload));
+	file.saveLineToBuffer(ID, "AreTeamMembersRecruitable", convertBoolToYesNo(areteammembersrecruitable));
 }
 
 QString Team::getName() const

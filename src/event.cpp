@@ -38,12 +38,12 @@ void Event::save(int32_t count) {
 		QString str;
 		QTextStream vSS(&str);
 		vSS << count << "," << type << "," << unknown << "," << param;
-		fileHandler.writeLineToBuffer("Events", ID, vSS.readAll());
+		file.saveLineToBuffer("Events", ID, vSS.readAll());
 	} else if (count > 1) {
 		QString str;
 		QTextStream vSS(&str);
 		vSS << type << "," << unknown << "," << param;
-		fileHandler.editCountableValueInBuffer("Events", ID, vSS.readAll(), count);
+		file.editCountableValueInBuffer("Events", ID, vSS.readAll(), count);
 	}
 }
 

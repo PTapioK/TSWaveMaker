@@ -14,25 +14,25 @@ FileHandler::FileHandler(QString mapFilePath)
 	filePath = mapFilePath;
 }
 
-void FileHandler::loadFile(QString mapFilePath)
+void FileHandler::load(QString mapFilePath)
 {
 	filePath = mapFilePath;
 	fileData.SetFileName(mapFilePath.toStdString());
-	readFileToBuffer();
+	readToBuffer();
 	parseSections();
 }
 
-void FileHandler::saveFile(QString as)
+void FileHandler::save(QString as)
 {
 	if(!as.isEmpty()) {
 		filePath = as;
 		fileData.SetFileName(as.toStdString());
 	}
-	saveAllToBuffer();
+	saveToBuffer();
 	fileData.Save();
 }
 
-void FileHandler::saveAllToBuffer()
+void FileHandler::saveToBuffer()
 {
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		(*IT).second->save();
@@ -44,7 +44,7 @@ void FileHandler::saveAllToBuffer()
 	int i = 0;
 	deleteSectionFromBuffer("TeamTypes");
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
-		writeLineToBuffer("TeamTypes", QString::number(i), IT->second->getID());
+		saveLineToBuffer("TeamTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
@@ -53,7 +53,7 @@ void FileHandler::saveAllToBuffer()
 	i = 0;
 	deleteSectionFromBuffer("ScriptTypes");
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		writeLineToBuffer("ScriptTypes", QString::number(i), IT->second->getID());
+		saveLineToBuffer("ScriptTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
@@ -62,7 +62,7 @@ void FileHandler::saveAllToBuffer()
 	i = 0;
 	deleteSectionFromBuffer("TaskForces");
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		writeLineToBuffer("TaskForces", QString::number(i), IT->second->getID());
+		saveLineToBuffer("TaskForces", QString::number(i), IT->second->getID());
 		++i;
 	}
 	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
@@ -71,7 +71,7 @@ void FileHandler::saveAllToBuffer()
 
 }
 
-void FileHandler::writeLineToBuffer(QString section, QString ID, QString value)
+void FileHandler::saveLineToBuffer(QString section, QString ID, QString value)
 {
 	fileData.SetValue(ID.toStdString(), value.toStdString(), "", section.toStdString());
 }
@@ -79,12 +79,12 @@ void FileHandler::writeLineToBuffer(QString section, QString ID, QString value)
 void FileHandler::editCountableValueInBuffer(QString section, QString ID, QString value, int count)
 {
 	std::string rawEx = fileData.GetValue(ID.toStdString(), section.toStdString());
-	std::string exvalue = rawEx.substr(rawEx.find(",")+1);
-	std::string newVal = intToStr(count) + "," + exvalue + "," + value.toStdString();
+	std::string exVal = rawEx.substr(rawEx.find(",")+1);
+	std::string newVal = intToStr(count) + "," + exVal + "," + value.toStdString();
 	fileData.SetValue(ID.toStdString(), newVal, "", section.toStdString());
 }
 
-void FileHandler::readFileToBuffer() {
+void FileHandler::readToBuffer() {
 	fileData.Load(filePath.toStdString());
 }
 
@@ -179,7 +179,7 @@ void FileHandler::parseSections()
 			std::string curLine = fileData.GetString(Key, "TeamTypes");
 
 			std::string teamID = curLine.substr(0, 8);
-			Team *nTeam = findNewTeamFromFile(teamID);
+			Team *nTeam = getTeam(teamID);
 
 			if(nTeam != NULL) {
 				teams[QString::fromStdString(teamID)] = nTeam;
@@ -197,7 +197,7 @@ void FileHandler::parseSections()
 			std::string curLine = fileData.GetString(Key, "ScriptTypes");
 
 			std::string scriptID = curLine.substr(0, 8);
-			Script *nScript = findNewScriptFromFile(scriptID);
+			Script *nScript = getScript(scriptID);
 
 			if(nScript != NULL) {
 				scripts[QString::fromStdString(scriptID)] = nScript;
@@ -215,7 +215,7 @@ void FileHandler::parseSections()
 			std::string curLine = fileData.GetString(Key, "TaskForces");
 
 			std::string taskforceID = curLine.substr(0, 8);
-			Taskforce *nTaskforce = findNewTaskforceFromFile(taskforceID);
+			Taskforce *nTaskforce = getTaskforce(taskforceID);
 
 			if(nTaskforce != NULL) {
 				taskforces[QString::fromStdString(taskforceID)] = nTaskforce;
@@ -410,7 +410,7 @@ void FileHandler::parseRules()
 	parseUnitTypesToMap(fsRulesData, aircraft, "AircraftTypes");
 }
 
-Taskforce* FileHandler::findNewTaskforceFromFile(std::string taskforceID)
+Taskforce* FileHandler::getTaskforce(std::string taskforceID)
 {
 	t_Section * cTaskF = fileData.GetSection(taskforceID);
 	if(cTaskF != NULL) {
@@ -450,7 +450,7 @@ Taskforce* FileHandler::findNewTaskforceFromFile(std::string taskforceID)
 	return NULL;
 }
 
-Script* FileHandler::findNewScriptFromFile(std::string scriptID)
+Script* FileHandler::getScript(std::string scriptID)
 {
 
 	t_Section * cScript = fileData.GetSection(scriptID);
@@ -488,7 +488,7 @@ Script* FileHandler::findNewScriptFromFile(std::string scriptID)
 	return NULL;
 }
 
-Team* FileHandler::findNewTeamFromFile(std::string teamID)
+Team* FileHandler::getTeam(std::string teamID)
 {
 	t_Section * cTeam = fileData.GetSection(teamID);
 
@@ -642,7 +642,7 @@ QString FileHandler::getFilePath() const
 	return filePath;
 }
 
-bool FileHandler::convertToBool(std::string str)
+bool FileHandler::convertToBool(std::string str) const
 {
 	if(str == "yes" || str == "true") {
 		return true;
@@ -652,4 +652,10 @@ bool FileHandler::convertToBool(std::string str)
 	}
 
 	return false;
+}
+
+std::string FileHandler::intToStr(int64_t integer) {
+	std::stringstream ss;
+	ss << integer;
+	return ss.str();
 }

@@ -1,6 +1,6 @@
 #include "containers.h"
 
-FileHandler fileHandler;
+FileHandler file;
 
 std::map <QString, Trigger*> triggers;
 std::map <QString, Tag*> tags;

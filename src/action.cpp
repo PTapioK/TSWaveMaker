@@ -67,7 +67,7 @@ void Action::save(int32_t count)
 				<< params[5]
 				<< ","
 				<< waypoint;
-		fileHandler.writeLineToBuffer("Actions", ID, valueSS.readAll());
+		file.saveLineToBuffer("Actions", ID, valueSS.readAll());
 	} else if (count > 1) {
 		QString str;
 		QTextStream valueSS(&str);
@@ -86,7 +86,7 @@ void Action::save(int32_t count)
 				<< params[5]
 				<< ","
 				<< waypoint;
-		fileHandler.editCountableValueInBuffer("Actions", ID, valueSS.readAll(), count);
+		file.editCountableValueInBuffer("Actions", ID, valueSS.readAll(), count);
 	}
 }
 

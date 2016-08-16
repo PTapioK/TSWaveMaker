@@ -46,9 +46,9 @@ void MainWindow::newFile()
 {
 	this->setWindowTitle(CAPTIONBASE);
 
-	fileHandler.clear();
+	file.clear();
 	clearContainers();
-	fileHandler.parseRules();
+	file.parseRules();
 
 	triggerSct->updateUi();
 	teamSct->updateUi();
@@ -68,7 +68,7 @@ void MainWindow::openFile()
 	}
 
 	newFile();
-	fileHandler.loadFile(newFilePath);
+	file.load(newFilePath);
 
 	triggerSct->updateUi();
 	teamSct->updateUi();
@@ -81,11 +81,11 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
-	if(fileHandler.getFilePath().isEmpty()) {
+	if(file.getFilePath().isEmpty()) {
 		saveFileAs();
 		return;
 	}
-	fileHandler.saveFile();
+	file.save();
 }
 
 void MainWindow::saveFileAs()
@@ -98,7 +98,7 @@ void MainWindow::saveFileAs()
 		return;
 	}
 
-	fileHandler.saveFile(newFilePath);
+	file.save(newFilePath);
 	this->setWindowTitle(CAPTIONBASE + tr(" | ") + newFilePath);
 	Settings::lastUsedPath = QFileInfo(newFilePath).path();
 }

@@ -3,6 +3,9 @@
 
 #include "main.h"
 
+const char alphas[26] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+const char small_alphas[26] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
+
 struct unitContainer {
 		QString unitID;
 		QString name;
@@ -32,7 +35,7 @@ enum SATargetType {
 	BALLOON
 };
 
-extern FileHandler fileHandler;
+extern FileHandler file;
 
 extern std::map <QString, Trigger*> triggers;
 extern std::map <QString, Tag*> tags;

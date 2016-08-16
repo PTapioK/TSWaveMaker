@@ -34,7 +34,6 @@ extern int32_t waypointIDToDec(QString wID);
 extern QString getNameWithNextMark(QString name, int iter = 0, int numIter = -1000000);
 
 extern uint32_t getStringListMaxWidth(QStringList list, QFont font);
-extern std::string intToStr(int64_t integer);
 extern bool lessThanQString(const QString &str1, const QString &str2);
 extern void clearContainers();
 

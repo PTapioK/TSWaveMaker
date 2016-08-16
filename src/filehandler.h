@@ -2,6 +2,7 @@
 #define FILEHANDLER_H
 
 #include "main.h"
+#include "CDataFile/CDataFile.h"
 
 struct unitContainer;
 struct variableContainer;
@@ -14,16 +15,16 @@ class FileHandler {
 		FileHandler();
 		FileHandler(QString mapFilePath);
 
-		void loadFile(QString mapFilePath);
-		void saveFile(QString as = "");
-		void saveAllToBuffer();
-		void writeLineToBuffer(QString section, QString ID, QString value);
+		void load(QString mapFilePath);
+		void save(QString as = "");
+		void saveLineToBuffer(QString section, QString ID, QString value);
 		void editCountableValueInBuffer(QString section, QString ID, QString value, int count);
-		void readFileToBuffer();
 		void deleteLineFromBuffer(QString section, QString ID);
 		void deleteSectionFromBuffer(QString section);
+
 		void parseSections();
 		void parseRules();
+
 		void clear();
 
 		QString getFilePath() const;
@@ -31,15 +32,19 @@ class FileHandler {
 		QString filePath;
 		CDataFile fileData;
 
+		void saveToBuffer();
+		void readToBuffer();
+
 		void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);
 		void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap);
 		void parseHouseTypes(QSettings &rules);
 
-		Team* findNewTeamFromFile(std::string teamID);
-		Script* findNewScriptFromFile(std::string scriptID);
-		Taskforce* findNewTaskforceFromFile(std::string taskforceID);
+		Team* getTeam(std::string teamID);
+		Script* getScript(std::string scriptID);
+		Taskforce* getTaskforce(std::string taskforceID);
 
-		bool convertToBool(std::string str);
+		bool convertToBool(std::string str) const;
+		std::string intToStr(int64_t integer);
 };
 
 #endif // FILEHANDLER_H

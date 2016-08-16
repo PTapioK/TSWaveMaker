@@ -160,12 +160,6 @@ int32_t waypointIDToDec(QString wID)
 	return value-1;
 }
 
-std::string intToStr(int64_t integer) {
-	std::stringstream ss;
-	ss << integer;
-	return ss.str();
-}
-
 QString getTeamNameByID(QString ID)
 {
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
