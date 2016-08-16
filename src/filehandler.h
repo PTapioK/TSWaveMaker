@@ -38,6 +38,8 @@ class FileHandler {
 		Team* findNewTeamFromFile(std::string teamID);
 		Script* findNewScriptFromFile(std::string scriptID);
 		Taskforce* findNewTaskforceFromFile(std::string taskforceID);
+
+		bool convertToBool(std::string str);
 };
 
 #endif // FILEHANDLER_H

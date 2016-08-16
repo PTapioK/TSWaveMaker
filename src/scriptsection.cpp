@@ -455,7 +455,6 @@ void ScriptSection::on_newSA_Bef_clicked()
 void ScriptSection::mousePressEvent(QMouseEvent *event)
 {
 	event->accept();
-	ui->ScriptList->clearSelection();
 }
 
 // Delete script action

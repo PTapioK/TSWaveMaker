@@ -94,13 +94,15 @@ void TeamSection::on_Delete_clicked()
 // Edit team's name
 void TeamSection::on_EditName_clicked()
 {
-	if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
-		QString curName = ui->TeamList->selectedItems().last()->text();
-		QString curID = getTeamIDByName(curName);
+	if(ui->TeamList->selectedItems().size() != 0) {
+		if(ui->TeamList->findItems(ui->TNameEdit->text(), Qt::MatchExactly).count() == 0) {
+			QString curName = ui->TeamList->selectedItems().last()->text();
+			QString curID = getTeamIDByName(curName);
 
-		teams[curID]->setName(ui->TNameEdit->text());
+			teams[curID]->setName(ui->TNameEdit->text());
 
-		ui->TeamList->selectedItems().last()->setText(ui->TNameEdit->text());
+			ui->TeamList->selectedItems().last()->setText(ui->TNameEdit->text());
+		}
 	}
 }
 
@@ -257,7 +259,6 @@ void TeamSection::on_isWhiner_clicked()
 void TeamSection::mousePressEvent(QMouseEvent *event)
 {
 	event->accept();
-	ui->TeamList->clearSelection();
 }
 
 // Script for teams

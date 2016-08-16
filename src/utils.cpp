@@ -160,27 +160,6 @@ int32_t waypointIDToDec(QString wID)
 	return value-1;
 }
 
-bool convertToBool(std::string str)
-{
-	if(str == "yes" || str == "true") {
-		return true;
-	}
-	if(str == "no" || str == "false") {
-		return false;
-	}
-
-	return false;
-}
-
-QString convertBoolToYesNo(bool boolean)
-{
-	if(boolean == true) {
-		return "yes";
-	} else {
-		return "no";
-	}
-}
-
 std::string intToStr(int64_t integer) {
 	std::stringstream ss;
 	ss << integer;

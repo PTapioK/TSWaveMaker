@@ -111,3 +111,12 @@ QString Team::getID() const
 {
 	return ID;
 }
+
+QString Team::convertBoolToYesNo(bool boolean)
+{
+	if(boolean == true) {
+		return "yes";
+	} else {
+		return "no";
+	}
+}

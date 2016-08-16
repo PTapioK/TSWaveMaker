@@ -252,7 +252,7 @@
      </rect>
     </property>
     <property name="selectionMode">
-     <enum>QAbstractItemView::MultiSelection</enum>
+     <enum>QAbstractItemView::ExtendedSelection</enum>
     </property>
    </widget>
    <widget class="QLabel" name="ActionLabel">

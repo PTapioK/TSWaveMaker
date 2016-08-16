@@ -641,3 +641,15 @@ QString FileHandler::getFilePath() const
 {
 	return filePath;
 }
+
+bool FileHandler::convertToBool(std::string str)
+{
+	if(str == "yes" || str == "true") {
+		return true;
+	}
+	if(str == "no" || str == "false") {
+		return false;
+	}
+
+	return false;
+}

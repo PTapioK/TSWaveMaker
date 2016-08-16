@@ -56,6 +56,8 @@ class Team
 		bool onlytargethousenemy;
 		bool transportsreturnonunload;
 		bool areteammembersrecruitable;
+
+		QString convertBoolToYesNo(bool boolean);
 };
 
 #endif // TEAM_H
