@@ -35,8 +35,8 @@ class FileHandler {
 		void saveToBuffer();
 		void readToBuffer();
 
-		void parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);
-		void parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap);
+		void parseUnitTypes(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);
+		void parseVariables(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap);
 		void parseHouseTypes(QSettings &rules);
 
 		Team* getTeam(std::string teamID);

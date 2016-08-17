@@ -324,11 +324,11 @@ void FileHandler::parseSections()
 		}
 	}
 
-	parseUnitTypesToMap(currentMapSettings, vehicles, "VehicleTypes");
-	parseUnitTypesToMap(currentMapSettings, infantry, "InfantryTypes");
-	parseUnitTypesToMap(currentMapSettings, aircraft, "AircraftTypes");
+	parseUnitTypes(currentMapSettings, vehicles, "VehicleTypes");
+	parseUnitTypes(currentMapSettings, infantry, "InfantryTypes");
+	parseUnitTypes(currentMapSettings, aircraft, "AircraftTypes");
 
-	parseVariablesToMap(currentMapSettings, localvariables);
+	parseVariables(currentMapSettings, localvariables);
 
 	parseHouseTypes(currentMapSettings);
 }
@@ -368,11 +368,11 @@ void FileHandler::parseRules()
 	}
 
 	QSettings tsRulesData(Settings::tsRulesPath, QSettings::IniFormat);
-	parseUnitTypesToMap(tsRulesData, vehicles, "VehicleTypes");
-	parseUnitTypesToMap(tsRulesData, infantry, "InfantryTypes");
-	parseUnitTypesToMap(tsRulesData, aircraft, "AircraftTypes");
+	parseUnitTypes(tsRulesData, vehicles, "VehicleTypes");
+	parseUnitTypes(tsRulesData, infantry, "InfantryTypes");
+	parseUnitTypes(tsRulesData, aircraft, "AircraftTypes");
 
-	parseVariablesToMap(tsRulesData, globalvariables);
+	parseVariables(tsRulesData, globalvariables);
 
 	parseHouseTypes(tsRulesData);
 
@@ -405,9 +405,9 @@ void FileHandler::parseRules()
 	}
 
 	QSettings fsRulesData(Settings::fsRulesPath, QSettings::IniFormat);
-	parseUnitTypesToMap(fsRulesData, vehicles, "VehicleTypes");
-	parseUnitTypesToMap(fsRulesData, infantry, "InfantryTypes");
-	parseUnitTypesToMap(fsRulesData, aircraft, "AircraftTypes");
+	parseUnitTypes(fsRulesData, vehicles, "VehicleTypes");
+	parseUnitTypes(fsRulesData, infantry, "InfantryTypes");
+	parseUnitTypes(fsRulesData, aircraft, "AircraftTypes");
 }
 
 Taskforce* FileHandler::getTaskforce(std::string taskforceID)
@@ -569,7 +569,7 @@ Team* FileHandler::getTeam(std::string teamID)
 }
 
 // Finds and adds units to given container
-void FileHandler::parseUnitTypesToMap(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type) {
+void FileHandler::parseUnitTypes(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type) {
 	rules.beginGroup(type);
 	QStringList unitList = rules.childKeys();
 	rules.endGroup();
@@ -592,7 +592,7 @@ void FileHandler::parseUnitTypesToMap(QSettings &rules, std::map<QString, unitCo
 	}
 }
 
-void FileHandler::parseVariablesToMap(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap) {
+void FileHandler::parseVariables(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap) {
 	rules.beginGroup("VariableNames");
 	QStringList variableSec = rules.childKeys();
 	rules.endGroup();
