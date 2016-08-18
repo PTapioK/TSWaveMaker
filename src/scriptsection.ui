@@ -33,6 +33,9 @@
     <family>Arial</family>
    </font>
   </property>
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
+  </property>
   <property name="floating">
    <bool>false</bool>
   </property>

@@ -35,30 +35,6 @@ class TriggerSection : public QDockWidget
 
 		void on_CloneAction_clicked();
 
-		void on_WaypointBox_currentIndexChanged();
-
-		void on_SWaypointBox_currentIndexChanged();
-
-		void on_TeamtypeBox_activated();
-
-		void on_WPointAOButton_clicked();
-
-		void on_TeamAOButton_clicked();
-
-		void on_anyEventWave_clicked();
-
-		void on_isTimedWave_clicked();
-
-		void on_isCreateTeam_clicked();
-
-		void on_isReinforcement_clicked();
-
-		void on_isNukeStrike_clicked();
-
-		void on_isLose_clicked();
-
-		void on_isWin_clicked();
-
 		void on_ActionList_itemSelectionChanged();
 
 		void mousePressEvent(QMouseEvent *event);
@@ -67,8 +43,6 @@ class TriggerSection : public QDockWidget
 
 		void clearTriggerList();
 		void clearActionList();
-
-		uint32_t sWPoint;
 };
 
 #endif // TRIGGERSECTION_H

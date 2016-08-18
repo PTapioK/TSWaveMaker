@@ -7,8 +7,6 @@ TriggerSection::TriggerSection(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	sWPoint = 8; // Starting waypoint for "Make waypoints grow in ascending order in all actions"
-
 	ui->isOtherAction->setVisible(false);
 }
 
@@ -16,7 +14,6 @@ TriggerSection::~TriggerSection()
 {
 	delete ui;
 }
-
 
 void TriggerSection::on_TriggerList_itemSelectionChanged()
 {
@@ -53,23 +50,10 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 
 			ui->ActionList->addItem(text);
 		}
-		ui->isTimedWave->setChecked(curTrig->hasEventType(14));
-		ui->anyEventWave->setChecked(curTrig->hasEventType(8));
 
 	} else {
 		ui->NEdit->setText("");
 	}
-
-	ui->WaypointBox->clear();
-	ui->SWaypointBox->clear();
-	for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
-		QString str;
-		QTextStream wSS(&str);
-		wSS << (*IT);
-		ui->WaypointBox->addItem(wSS.readAll());
-		ui->SWaypointBox->addItem(wSS.readAll());
-	}
-
 }
 
 // New trigger
@@ -122,7 +106,6 @@ void TriggerSection::on_DeleteTrigger_clicked()
 
 		delete ui->TriggerList->item(ui->TriggerList->currentRow());
 	}
-
 }
 
 // Clone trigger
@@ -174,7 +157,6 @@ void TriggerSection::on_WaveTimer_editingFinished()
 		}
 
 	}
-
 }
 
 // New action
@@ -246,154 +228,16 @@ void TriggerSection::on_CloneAction_clicked()
 
 void TriggerSection::on_ActionList_itemSelectionChanged()
 {
-	ui->TeamtypeBox->clear();
-	ui->TeamAOBox->clear();
-	QStringList teamList;
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
-		ui->TeamtypeBox->addItem(IT->second->getName());
-		ui->TeamAOBox->addItem(IT->second->getName());
-		teamList << IT->second->getName();
-	}
-	if(!teamList.empty()) {
-		ui->TeamtypeBox->view()->setMinimumWidth(getStringListMaxWidth(teamList, ui->TeamtypeBox->font())+50);
-		ui->TeamAOBox->view()->setMinimumWidth(getStringListMaxWidth(teamList, ui->TeamAOBox->font())+50);
-	}
-	ui->TeamAOBox->setEnabled(false);
-	ui->TeamAOButton->setEnabled(false);
-	ui->TeamtypeBox->setEnabled(false);
 	ui->isOtherAction->setEnabled(true);
 	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		Action *cAct = cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
-		switch(cAct->getType()) {
-			case 1:
-				if(cAct->getParameter(2).toInt() == 2)
-					ui->isLose->toggle();
-				break;
-			case 2:
-				if(cAct->getParameter(2).toInt() == 2)
-					ui->isWin->toggle();
-				break;
-			case 4:
-				ui->isCreateTeam->toggle();
-				ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(getTeamNameByID(cAct->getParameter(2))));
-				ui->TeamAOBox->setEnabled(true);
-				ui->TeamAOButton->setEnabled(true);
-				ui->TeamtypeBox->setEnabled(true);
-				break;
-			case 80:
-				ui->isReinforcement->toggle();
-				ui->TeamtypeBox->setCurrentIndex(ui->TeamtypeBox->findText(getTeamNameByID(cAct->getParameter(2))));
-				ui->TeamAOBox->setEnabled(true);
-				ui->TeamAOButton->setEnabled(true);
-				ui->TeamtypeBox->setEnabled(true);
-				break;
-			case 95:
-				ui->isNukeStrike->toggle();
-				break;
-			default:
-				ui->isOtherAction->toggle();
-		}
-
-		ui->WaypointBox->setEditText(QString::number(cAct->getWaypoint()));
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
+		Action *curAct = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 	}
 }
 
 void TriggerSection::mousePressEvent(QMouseEvent *event)
 {
 	event->accept();
-}
-
-// Is "create team" - action
-void TriggerSection::on_isCreateTeam_clicked()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isCreateTeam->isChecked()) {
-			ui->TeamAOBox->setEnabled(true);
-			ui->TeamAOButton->setEnabled(true);
-			ui->TeamtypeBox->setEnabled(true);
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setType(4);
-			}
-		}
-	}
-}
-
-// Is "reinforcement at waypoint" - action
-void TriggerSection::on_isReinforcement_clicked()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isReinforcement->isChecked()) {
-			ui->TeamAOBox->setEnabled(true);
-			ui->TeamAOButton->setEnabled(true);
-			ui->TeamtypeBox->setEnabled(true);
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setType(80);
-			}
-		}
-	}
-}
-
-// Is "nuke strike at waypoint" - action
-void TriggerSection::on_isNukeStrike_clicked()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isNukeStrike->isChecked()) {
-			ui->TeamAOBox->setEnabled(false);
-			ui->TeamAOButton->setEnabled(false);
-			ui->TeamtypeBox->setEnabled(false);
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setType(95);
-			}
-		}
-	}
-}
-
-// Is "lose" - action
-void TriggerSection::on_isLose_clicked()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isLose->isChecked()) {
-			ui->TeamAOBox->setEnabled(false);
-			ui->TeamAOButton->setEnabled(false);
-			ui->TeamtypeBox->setEnabled(false);
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setType(1);
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(2,2);
-			}
-		}
-	}
-}
-
-// Is "win" - action
-void TriggerSection::on_isWin_clicked()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isWin->isChecked()) {
-			ui->TeamAOBox->setEnabled(false);
-			ui->TeamAOButton->setEnabled(false);
-			ui->TeamtypeBox->setEnabled(false);
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(2,2);
-			}
-		}
-	}
-}
-
-// Action's waypoint
-void TriggerSection::on_WaypointBox_currentIndexChanged()
-{
-	if(ui->ActionList->currentItem() != NULL) {
-		Trigger *cTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-			cTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setWayPoint(atoi(ui->WaypointBox->currentText().toStdString().c_str()));
-		}
-	}
 }
 
 void TriggerSection::clearTriggerList() {
@@ -406,114 +250,6 @@ void TriggerSection::clearActionList() {
 		delete ui->ActionList->selectedItems().at(i);
 	}
 	ui->ActionList->clear();
-}
-
-// Make waypoints grow in ascending order in selected actions
-void TriggerSection::on_WPointAOButton_clicked()
-{
-	if(ui->TriggerList->currentRow() != -1 && !waypoints.empty()) {
-
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-
-		unsigned int j = 0;
-		unsigned int i = 0;
-
-		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
-			if((*IT) == sWPoint) {
-				i = j;
-				break;
-			}
-			++j;
-			if(j == waypoints.size()) {
-				j = 0;
-				break;
-			}
-		}
-
-		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-			Action *cur_act = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)));
-			if(i == waypoints.size()) { i = j; }
-			cur_act->setWayPoint((*(waypoints.begin()+i)));
-			++i;
-		}
-
-	}
-}
-
-
-// Starting waypoint control for "Make waypoints grow in ascending order in all actions"
-void TriggerSection::on_SWaypointBox_currentIndexChanged()
-{
-	sWPoint = atoi(ui->SWaypointBox->currentText().toStdString().c_str());
-	on_WPointAOButton_clicked();
-}
-
-// TeamType for actions
-void TriggerSection::on_TeamtypeBox_activated()
-{
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-			curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(1, 1);
-			curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(2, getTeamByName(ui->TeamtypeBox->currentText())->getID());
-		}
-	}
-}
-
-// Make teams grow as actions in selected actions
-void TriggerSection::on_TeamAOButton_clicked()
-{
-	if(ui->ActionList->selectedItems().size() != 0) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		teamIT IT = teams.find(getTeamIDByName(ui->TeamAOBox->currentText()));
-		if(IT != teams.end()) {
-			for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-				curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setType(80);
-				curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(1, 1);
-				curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a)))->setParameter(2, IT->second->getID());
-				++IT;
-				if(IT == teams.end()) {
-					break;
-				}
-			}
-		}
-	}
-}
-
-// Trigger has "Mission timer expired" -event
-void TriggerSection::on_isTimedWave_clicked()
-{
-	if(ui->TriggerList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->isTimedWave->isChecked()) {
-			if(!curTrig->hasEventType(14)) {
-				Event *nEvent = new Event(14, 0, curTrig->getID());
-				curTrig->addEvent(nEvent);
-			}
-		} else {
-			if(curTrig->hasEventType(14)) {
-				curTrig->eraseEventByType(14);
-			}
-		}
-	}
-}
-
-// Trigger has "Any event" -event
-void TriggerSection::on_anyEventWave_clicked()
-{
-	if(ui->TriggerList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		if(ui->anyEventWave->isChecked()) {
-			if(!curTrig->hasEventType(8)) {
-				Event *nEvent = new Event(8, 0, curTrig->getID());
-				curTrig->addEvent(nEvent);
-			}
-		} else {
-			if(curTrig->hasEventType(8)) {
-				curTrig->eraseEventByType(8);
-			}
-		}
-	}
 }
 
 void TriggerSection::updateUi()

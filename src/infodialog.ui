@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>TSWaveMaker Info</string>
   </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
