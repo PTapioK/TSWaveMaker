@@ -208,6 +208,9 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="locale">
+     <locale language="English" country="UnitedStates"/>
+    </property>
     <property name="frame">
      <bool>true</bool>
     </property>

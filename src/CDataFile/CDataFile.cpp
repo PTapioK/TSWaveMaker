@@ -236,7 +236,7 @@ bool CDataFile::Save()
 			if ( Section->szComment.size() > 0 )
 			{
 				bWroteComment = true;
-				WriteLn(File, "\n%s", CommentStr(Section->szComment).c_str());
+				WriteLn(File, "%s\n", CommentStr(Section->szComment).c_str());
 			}
 
 			if ( Section->szName.size() > 0 )

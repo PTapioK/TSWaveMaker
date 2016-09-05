@@ -18,7 +18,7 @@ struct variableContainer {
 };
 
 // Script Action Target Type
-enum SATargetType {
+enum class SATargetType {
 	NONE = 1,
 	WAYPOINT,
 	TARGET,
@@ -35,6 +35,25 @@ enum SATargetType {
 	BALLOON
 };
 
+// Target types for trigger actions & events
+enum class TargetType {
+	NONE = 0,
+	WAYPOINT,
+	GLOBAL,
+	LOCAL,
+	HOUSE,
+	TEAM,
+	TRIGGER,
+	ONOFF,
+	EDITABLE,
+	TEXT,
+	TAG,
+	BUILDING,
+	INFANTRY,
+	VEHICLE,
+	AIRCRAFT
+};
+
 extern FileHandler file;
 
 extern std::map <QString, Trigger*> triggers;
@@ -49,10 +68,12 @@ extern std::map <QString, unitContainer> vehicles;
 extern std::map <QString, unitContainer> infantry;
 extern std::map <QString, unitContainer> aircraft;
 
-extern std::map <uint16_t, QString> houses;
+extern std::map <int16_t, QString> houses;
 
 extern std::map <uint16_t, variableContainer> localvariables;
 extern std::map <uint16_t, variableContainer> globalvariables;
+
+extern std::map <uint16_t, QString> tutorial;
 
 extern std::vector <int32_t> waypoints;
 

@@ -14,9 +14,11 @@ std::map <QString, unitContainer> vehicles;
 std::map <QString, unitContainer> infantry;
 std::map <QString, unitContainer> aircraft;
 
-std::map <uint16_t, QString> houses;
+std::map <int16_t, QString> houses;
 
 std::map <uint16_t, variableContainer> localvariables;
 std::map <uint16_t, variableContainer> globalvariables;
+
+std::map <uint16_t, QString> tutorial;
 
 std::vector <int32_t> waypoints;

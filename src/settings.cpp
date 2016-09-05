@@ -4,6 +4,7 @@ namespace Settings {
 
 const QString settingsFilePath = "settings.ini";
 const QString scriptStringsPath = "scriptstrings.ini";
+const QString triggerStringsPath = "triggerstrings.ini";
 
 QString tsRulesPath;
 QString fsRulesPath;
@@ -11,6 +12,7 @@ QString lastUsedPath;
 
 QSettings settings(settingsFilePath, QSettings::IniFormat);
 QSettings scriptStrings(scriptStringsPath, QSettings::IniFormat);
+QSettings triggerStrings(triggerStringsPath, QSettings::IniFormat);
 
 bool cloneOfNaming, ascNumNaming, alphabetNaming;
 

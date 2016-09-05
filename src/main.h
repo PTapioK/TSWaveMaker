@@ -19,13 +19,14 @@
 #include <sstream>
 #include <vector>
 #include <array>
+#include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 #include <cstdio>
 #include <cstdint>
 #include <cmath>
 
-enum SATargetType;
+enum class SATargetType;
 
 #include "settings.h"
 #include "trigger.h"

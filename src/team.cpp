@@ -14,12 +14,12 @@ Team::Team(QString nID, int nmax, QString ntagID, bool nfull, QString nname, int
 {
 }
 
-Team::Team(QString nID, QString nname)
+Team::Team(QString nID, QString nName)
 {
 	ID = nID;
 	max = 0;
 	full = false;
-	name = nname;
+	name = nName;
 	group = -1;
 	house = "Neutral";
 	scriptID = "";

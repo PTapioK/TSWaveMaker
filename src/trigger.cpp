@@ -145,10 +145,16 @@ void Trigger::addAction(Action *nAction)
 	actions.push_back((nAction));
 }
 
-void Trigger::eraseAction(int32_t count)
+void Trigger::eraseAction(int32_t actionID)
 {
-	delete (*(actions.begin() + count));
-	actions.erase(actions.begin() + count);
+	delete (*(actions.begin() + actionID));
+	actions.erase(actions.begin() + actionID);
+}
+
+void Trigger::eraseEvent(int32_t eventID)
+{
+	delete (*(events.begin() + eventID));
+	events.erase(events.begin() + eventID);
 }
 
 void Trigger::eraseEventByType(int32_t type)
@@ -165,6 +171,31 @@ void Trigger::eraseEventByType(int32_t type)
 Action* Trigger::getAction(int32_t count) const
 {
 	return *(actions.begin()+count);
+}
+
+Event *Trigger::getEvent(int32_t count) const
+{
+	return *(events.begin()+count);
+}
+
+Action* Trigger::getActionByType(int32_t type) const
+{
+	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+		if((*IT)->getType() == type) {
+			return *IT;
+		}
+	}
+	return NULL;
+}
+
+Event* Trigger::getEventByType(int32_t type) const
+{
+	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+		if((*IT)->getType() == type) {
+			return *IT;
+		}
+	}
+	return NULL;
 }
 
 void Trigger::eraseActionsFromBuffer()
@@ -195,24 +226,4 @@ bool Trigger::hasActionType(int32_t type)
 		}
 	}
 	return false;
-}
-
-Action* Trigger::getActionByType(int32_t type)
-{
-	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
-		if((*IT)->getType() == type) {
-			return *IT;
-		}
-	}
-	return NULL;
-}
-
-Event* Trigger::getEventByType(int32_t type)
-{
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
-		if((*IT)->getType() == type) {
-			return *IT;
-		}
-	}
-	return NULL;
 }

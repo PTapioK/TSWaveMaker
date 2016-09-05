@@ -102,7 +102,6 @@ void FileHandler::parseSections()
 {
 
 	t_Section * trSec = fileData.GetSection("Triggers");
-
 	if(trSec != NULL) {
 		triggers.clear();
 		KeyList * trigs = trSec->GetKeyList();
@@ -132,7 +131,6 @@ void FileHandler::parseSections()
 	}
 
 	t_Section * tagSec = fileData.GetSection("Tags");
-
 	if (tagSec != NULL) {
 		tags.clear();
 		KeyList * tagsl = tagSec->GetKeyList();
@@ -144,7 +142,7 @@ void FileHandler::parseSections()
 			if(curLine.size() == 3) {
 				QString ID = QString::fromStdString(Key);
 
-				int32_t mode = curLine[0].toInt();
+				int16_t mode = curLine[0].toShort();
 				QString name = curLine[1];
 				QString triggerID = curLine[2];
 
@@ -156,13 +154,11 @@ void FileHandler::parseSections()
 	}
 
 	t_Section * wpnSec = fileData.GetSection("Waypoints");
-
 	if (wpnSec != NULL) {
 		waypoints.clear();
 		KeyList * wpnl = wpnSec->GetKeyList();
 		for(KeyItor keyIT = wpnl->begin(); keyIT < wpnl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-
 			int32_t waypoint = atoi(Key.c_str());
 			waypoints.push_back(waypoint);
 		}
@@ -170,7 +166,6 @@ void FileHandler::parseSections()
 	}
 
 	t_Section * teamSec = fileData.GetSection("TeamTypes");
-
 	if (teamSec != NULL) {
 		teams.clear();
 		KeyList * teaml = teamSec->GetKeyList();
@@ -230,16 +225,12 @@ void FileHandler::parseSections()
 			std::string Key = keyIT->szKey;
 
 			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Events")).split(",");
-
 			QString ID = QString::fromStdString(Key);
-
 			int32_t count = curLine[0].toInt();
 
 			for(int i = 0; i != count; ++i) {
 				int32_t eType = curLine[1 + i*3].toInt();
-
-				int32_t unknown = curLine[2 + i*3].toShort();
-
+				int16_t unknown = curLine[2 + i*3].toShort();
 				int32_t param = curLine[3 + i*3].toInt();
 
 				triggers[ID]->addEvent(new Event(eType, param, ID, unknown));
@@ -256,9 +247,7 @@ void FileHandler::parseSections()
 			std::string Key = keyIT->szKey;
 
 			QStringList curLine = QString::fromStdString(fileData.GetString(Key, "Actions")).split(",");
-
 			QString ID = QString::fromStdString(Key);
-
 			int32_t count = curLine[0].toInt();
 
 			std::array<QString, 6> params;
@@ -267,15 +256,10 @@ void FileHandler::parseSections()
 				int32_t aType = curLine[1 + i*8].toInt();
 
 				params[0] = curLine[2 + i*8];
-
 				params[1] = curLine[3 + i*8];
-
 				params[2] = curLine[4 + i*8];
-
 				params[3] = curLine[5 + i*8];
-
 				params[4] = curLine[6 + i*8];
-
 				params[5] = curLine[7 + i*8];
 
 				int32_t wPoint = curLine[8 + i*8].toInt();
@@ -291,9 +275,7 @@ void FileHandler::parseSections()
 		KeyList * aiTrigl = aiTrigSec->GetKeyList();
 		for(KeyItor keyIT = aiTrigl->begin(); keyIT < aiTrigl->end(); ++keyIT) {
 			std::string Key = keyIT->szKey;
-
 			std::string curLine = fileData.GetString(Key, "AITriggerTypes");
-
 			std::string ID = Key;
 
 			aitriggers[QString::fromStdString(ID)] = QString::fromStdString(curLine);
@@ -331,6 +313,7 @@ void FileHandler::parseSections()
 	parseVariables(currentMapSettings, localvariables);
 
 	parseHouseTypes(currentMapSettings);
+	parseTutorial(currentMapSettings);
 }
 
 void FileHandler::parseRules()
@@ -374,6 +357,7 @@ void FileHandler::parseRules()
 
 	parseVariables(tsRulesData, globalvariables);
 
+	houses[-1] = "Any House";
 	parseHouseTypes(tsRulesData);
 
 	// Tiberian Sun Firestorm rules
@@ -601,19 +585,16 @@ void FileHandler::parseVariables(QSettings &rules, std::map<uint16_t, variableCo
 		for(QStringList::ConstIterator keyIT = variableSec.begin(); keyIT != variableSec.end(); ++keyIT) {
 			QString Key = *keyIT;
 
-			QStringList values = rules.value("VariableNames/" + Key).toString().split(",");
-
-			QString name = values.at(0);
+			QStringList values = rules.value("VariableNames/" + Key).toStringList();
 
 			bool set = false;
 			if(values.size() == 2)
-				set = values.at(1).toInt();
+				set = values[1].toInt();
 
 			variableContainer cont;
 			cont.set = set;
-			cont.name = name;
-
-			variableMap[Key.toShort()] = cont;
+			cont.name = values[0];
+			variableMap[Key.toInt()] = cont;
 		}
 	}
 }
@@ -632,6 +613,20 @@ void FileHandler::parseHouseTypes(QSettings &rules) {
 	}
 }
 
+void FileHandler::parseTutorial(QSettings &rules) {
+	rules.beginGroup("Tutorial");
+	QStringList tutorialSec = rules.childKeys();
+	rules.endGroup();
+
+	if (!tutorialSec.isEmpty()) {
+		for(QStringList::ConstIterator keyIT = tutorialSec.begin(); keyIT != tutorialSec.end(); ++keyIT) {
+			QString Key = *keyIT;
+			QString name = rules.value("Tutorial/" + Key).toString();
+			tutorial[Key.toShort()] = name;
+		}
+	}
+}
+
 void FileHandler::clear()
 {
 	fileData.Clear();
@@ -644,13 +639,8 @@ QString FileHandler::getFilePath() const
 
 bool FileHandler::convertToBool(std::string str) const
 {
-	if(str == "yes" || str == "true") {
-		return true;
-	}
-	if(str == "no" || str == "false") {
-		return false;
-	}
-
+	if(str == "yes" || str == "true") return true;
+	if(str == "no" || str == "false") return false;
 	return false;
 }
 

@@ -11,7 +11,7 @@ class Team
 			 bool nrecruiter, bool nreinforce, QString ntaskforceid, int ntechlevel, bool naggressive, bool nautocreate, bool nguardslower, bool nontransonly,
 			 bool navoidthreats, bool nlooserecruit, int nveteranlevel, bool nisbasedefense, bool nonlytargethouseenemy, bool ntransportsreturnonunload,
 			 bool nareteammemberrecruitable);
-		Team(QString nID, QString nname = "New Team");
+		Team(QString nID, QString nName = "New Team");
 		Team(QString nID, Team* nTeam);
 		~Team();
 

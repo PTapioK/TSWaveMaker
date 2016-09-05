@@ -38,6 +38,7 @@ class FileHandler {
 		void parseUnitTypes(QSettings &rules, std::map<QString, unitContainer> &unitMap, QString type);
 		void parseVariables(QSettings &rules, std::map<uint16_t, variableContainer> &variableMap);
 		void parseHouseTypes(QSettings &rules);
+		void parseTutorial(QSettings &rules);
 
 		Team* getTeam(std::string teamID);
 		Script* getScript(std::string scriptID);

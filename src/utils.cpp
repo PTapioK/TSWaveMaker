@@ -92,6 +92,8 @@ Tag* getTagByTriggerID(QString trigID)
 			return (*IT).second;
 		}
 	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find trigger with ID: " + trigID + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
 	return NULL;
 }
 
@@ -136,6 +138,8 @@ Trigger* getTriggerByName(QString name)
 			return IT->second;
 		}
 	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find trigger with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
 	return NULL;
 }
 
@@ -177,6 +181,8 @@ Team* getTeamByName(QString name)
 			return IT->second;
 		}
 	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find team with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
 	return NULL;
 }
 
@@ -238,6 +244,8 @@ Taskforce* getTaskforceByName(QString name)
 			return IT->second;
 		}
 	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find taskforce with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
 	return NULL;
 }
 
@@ -249,86 +257,19 @@ Script* getScriptByName(QString name)
 			return IT->second;
 		}
 	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find script with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
 	return NULL;
-}
-
-
-QString getScriptNameByPosition(uint16_t pos)
-{
-	int i = 0;
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		if(i == pos) {
-			return IT->second->getName();
-		}
-		++i;
-	}
-	return 0;
-}
-
-QString getTaskforceNameByPosition(uint16_t pos)
-{
-	int i = 0;
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
-		if(i == pos) {
-			return IT->second->getName();
-		}
-		++i;
-	}
-	return 0;
 }
 
 SATargetType getScriptActionTargetType(uint8_t ID)
 {
-	switch(ID) {
-	case 0:
-		return TARGET;
-	case 1:
-	case 3:
-		return WAYPOINT;
-	case 4:
-	case 5:
-	case 6:
-		return EDITABLE;
-	case 8:
-		return UNLOAD;
-	case 11:
-		return MISSION;
-	case 12:
-		return GLOBAL;
-	case 13:
-		return EDITABLE;
-	case 15:
-	case 16:
-		return WAYPOINT;
-	case 17:
-		return SCRIPT;
-	case 18:
-		return TASKFORCE;
-	case 20:
-		return HOUSE;
-	case 24:
-	case 25:
-	case 26:
-	case 27:
-	case 32:
-	case 34:
-		return EDITABLE;
-	case 38:
-		return GLOBAL;
-	case 39:
-	case 40:
-		return LOCAL;
-	case 42:
-		return FACING;
-	case 46:
-	case 47:
-		return BUILDING;
-	case 51:
-		return EDITABLE;
-	case 52:
-		return BALLOON;
-	default:
-		return NONE;
+	QVariant value;
+	value = scriptStrings.value("Actions/" + QString::number(ID));
+	if (!value.isNull()) {
+		return static_cast<SATargetType>(value.toStringList()[1].toInt());
+	} else {
+		return SATargetType::NONE;
 	}
 }
 
@@ -340,12 +281,10 @@ uint32_t getStringListMaxWidth(QStringList list, QFont font)
 		for(QStringList::Iterator listIT = list.begin(); listIT != list.end(); ++listIT) {
 			widths.push_back(metr.width(*listIT));
 		}
-		sort(widths.begin(), widths.end());
-		return *(widths.end()-1);
+		return *max_element(widths.begin(), widths.end());
 	}
 	return 0;
 }
-
 
 uint16_t getBuildingTypePosByKey(uint16_t key)
 {
@@ -390,6 +329,8 @@ void clearContainers()
 	localvariables.clear();
 
 	waypoints.clear();
+
+	tutorial.clear();
 }
 
 QString getNameWithNextMark(QString name, int iter, int numIter)
@@ -469,4 +410,16 @@ QString getUnitNameByUnitID(QString unitID)
 bool lessThanQString(const QString &str1, const QString &str2)
 {
 	return str1.toInt() < str2.toInt();
+}
+
+Tag *getTagByName(QString name)
+{
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		if((*IT).second->getName() == name) {
+			return IT->second;
+		}
+	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find tag with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
+	return NULL;
 }

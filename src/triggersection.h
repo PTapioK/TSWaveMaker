@@ -38,11 +38,48 @@ class TriggerSection : public QDockWidget
 		void on_ActionList_itemSelectionChanged();
 
 		void mousePressEvent(QMouseEvent *event);
+
+		void on_TagOr_clicked();
+
+		void on_TagAnd_clicked();
+
+		void on_TagRepeatingOr_clicked();
+
+		void on_EventList_itemSelectionChanged();
+
+		void on_NewEvent_clicked();
+
+		void on_DeleteEvent_clicked();
+
+		void on_CloneEvent_clicked();
+
+		void on_EventTypeBox_activated();
+
+		void on_EventParamBox_activated();
+
+		void on_TEParamAOButton_clicked();
+
+		void on_ActionTypeBox_activated();
+
 	private:
 		Ui::TriggerSection *ui;
 
-		void clearTriggerList();
-		void clearActionList();
+		void cleanActionList();
+		void cleanEventList();
+		void updateEventTypeBox();
+		void updateEventParamBox();
+		void updateActionTypeBox();
+
+		QStringList getTargetStrings(TargetType type);
+		TargetType getEventTargetType(uint8_t ID);
+		QString getTargetTypeString(uint8_t ID);
+		QString getTriggerNameByPosition(uint32_t pos);
+		QString getTeamNameByPosition(uint32_t pos);
+		QString getTagNameByPosition(uint32_t pos);
+		QString getBuildingNameByKey(uint16_t key);
+		QString getUnitNameByKey(uint16_t key, std::map<QString, unitContainer> &unitMap);
+		uint16_t getTutorialKeyByText(QString text);
+		uint16_t getUnitKeyByName(QString name, std::map<QString, unitContainer> &unitMap);
 };
 
 #endif // TRIGGERSECTION_H

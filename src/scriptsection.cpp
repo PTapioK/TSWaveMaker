@@ -15,23 +15,6 @@ ScriptSection::~ScriptSection()
 	delete ui;
 }
 
-void ScriptSection::updateUi()
-{
-	ui->ScriptList->clearSelection();
-	ui->ScriptActionList->setCurrentRow(-1);
-	ui->ScriptList->clear();
-	ui->SATypeBox->clear();
-	ui->SATargetBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
-		ui->ScriptList->addItem(IT->second->getName());
-	}
-	for(int i = 0; i != 54; ++i) {
-		ui->SATypeBox->addItem(getScriptActionMeaning(i));
-	}
-	ui->SATypeBox->view()->setMinimumWidth(180);
-}
-
-
 void ScriptSection::on_ScriptList_itemSelectionChanged()
 {
 	ui->ScriptActionList->setCurrentRow(-1);
@@ -39,14 +22,7 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 	ui->SATargetBox->setCurrentIndex(-1);
 
 	if(ui->ScriptList->selectedItems().size() != 0) {
-
 		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
-		if(curScript == NULL) {
-			if(QMessageBox::question(this, "Fatal Error!", "Fatal Error occured! Continue?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::No) {
-				exit(EXIT_FAILURE);
-			}
-			return;
-		}
 
 		ui->SNameEdit->setText(ui->ScriptList->selectedItems().last()->text());
 
@@ -59,15 +35,15 @@ void ScriptSection::on_ScriptList_itemSelectionChanged()
 void ScriptSection::on_ScriptActionList_itemSelectionChanged()
 {
 	if(ui->ScriptList->selectedItems().size() != 0 && ui->ScriptActionList->currentRow() != -1) {
-		int index = ui->SATypeBox->findText(getScriptActionMeaning(getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type));
-		if(index != -1) {
+		int16_t index = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
+		if(ui->SATypeBox->count() > index) {
 			ui->SATypeBox->setCurrentIndex(index);
-			update_SATargetBox();
+			updateSATargeBox();
 		}
 	}
 }
 
-// Script Action type - box activated
+// Script Action type box activated
 void ScriptSection::on_SATypeBox_activated()
 {
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
@@ -78,33 +54,33 @@ void ScriptSection::on_SATypeBox_activated()
 				curScript->scriptLines[ui->ScriptActionList->currentRow()]->type = ui->SATypeBox->currentIndex();
 			}
 		}
-		update_SATargetBox();
+		updateSATargeBox();
 	}
 }
 
-// Script Action target - box activated
+// Script Action target box activated
 void ScriptSection::on_SATargetBox_activated()
 {
 	if(ui->ScriptActionList->currentRow() != -1 && ui->SATargetBox->currentIndex() != -1 && ui->ScriptList->selectedItems().size() != 0) {
-		short type, curtype;
+		int16_t type, curtype;
+		uint32_t rowNum = ui->ScriptActionList->currentRow();
 		for (int a = 0; a != ui->ScriptList->selectedItems().size(); ++a) {
 			Script *curScript = getScriptByName(ui->ScriptList->selectedItems().at(a)->text());
-			uint32_t rowNum = ui->ScriptActionList->currentRow();
 			if(curScript->getLineAmount() >= rowNum+1) {
 				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[rowNum]->type;
 				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[rowNum]->type;
 				if(curtype == type) {
 					switch(getScriptActionTargetType(type)) {
-						case NONE:
+						case SATargetType::NONE:
 							curScript->scriptLines[rowNum]->param = 0;
 							break;
-						case WAYPOINT:
+						case SATargetType::WAYPOINT:
 							curScript->scriptLines[rowNum]->param = waypoints[ui->SATargetBox->currentIndex()];
 							break;
-						case EDITABLE:
-							curScript->scriptLines[rowNum]->param = atoi(ui->SATargetBox->currentText().toStdString().c_str());
+						case SATargetType::EDITABLE:
+							curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentText().toInt();
 							break;
-						case BUILDING:
+						case SATargetType::BUILDING:
 							if(ui->defaultTarget->isChecked()) {
 								curScript->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
 							} else if(ui->lowThreat->isChecked()) {
@@ -117,11 +93,11 @@ void ScriptSection::on_SATargetBox_activated()
 								curScript->scriptLines[rowNum]->param = 262144 + ui->SATargetBox->currentIndex();
 							}
 							break;
-						case BALLOON:
+						case SATargetType::BALLOON:
 							curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex()+1;
 							break;
-						case HOUSE:
-							for(std::map<uint16_t, QString>::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+						case SATargetType::HOUSE:
+							for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
 								if((*IT).second == ui->SATargetBox->currentText()) {
 									curScript->scriptLines[rowNum]->param = (*IT).first;
 									break;
@@ -137,8 +113,8 @@ void ScriptSection::on_SATargetBox_activated()
 	}
 }
 
-// Update Script Action target - box
-void ScriptSection::update_SATargetBox()
+// Update Script Action target box
+void ScriptSection::updateSATargeBox()
 {
 	ui->SATargetBox->setEditable(false);
 	ui->SATargetBox->clear();
@@ -152,30 +128,30 @@ void ScriptSection::update_SATargetBox()
 
 	if(ui->ScriptActionList->currentRow() != -1 && ui->ScriptList->selectedItems().size() != 0) {
 		Script *curScript = getScriptByName(ui->ScriptList->selectedItems().last()->text());
-		short type = curScript->scriptLines[ui->ScriptActionList->currentRow()]->type;
-		int param = curScript->scriptLines[ui->ScriptActionList->currentRow()]->param;
+		int16_t type = curScript->scriptLines[ui->ScriptActionList->currentRow()]->type;
+		int32_t param = curScript->scriptLines[ui->ScriptActionList->currentRow()]->param;
 
 		QStringList targetList = getScriptActionTargetStrings(getScriptActionTargetType(type));
 		ui->SATargetBox->addItems(targetList);
-		ui->SATargetBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->SATargetBox->font())+50);
+		ui->SATargetBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->SATargetBox->font()) + 50);
 
 		switch(getScriptActionTargetType(type)) {
-			case NONE:
+			case SATargetType::NONE:
 				break;
-			case WAYPOINT:
+			case SATargetType::WAYPOINT:
 				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(QString::number(param)));
 				break;
-			case EDITABLE:
+			case SATargetType::EDITABLE:
 				ui->SATargetBox->setEditable(true);
 				ui->SATargetBox->setCurrentText(QString::number(param));
 				break;
-			case SCRIPT:
+			case SATargetType::SCRIPT:
 				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getScriptNameByPosition(param)));
 				break;
-			case TASKFORCE:
+			case SATargetType::TASKFORCE:
 				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(getTaskforceNameByPosition(param)));
 				break;
-			case BUILDING:
+			case SATargetType::BUILDING:
 				ui->lowThreat->setDisabled(false);
 				ui->bigThreat->setDisabled(false);
 				ui->nearTarget->setDisabled(false);
@@ -199,10 +175,10 @@ void ScriptSection::update_SATargetBox()
 					ui->farTarget->toggle();
 				}
 				break;
-			case BALLOON:
+			case SATargetType::BALLOON:
 				ui->SATargetBox->setCurrentIndex(param-1);
 				break;
-			case HOUSE:
+			case SATargetType::HOUSE:
 				ui->SATargetBox->setCurrentIndex(ui->SATargetBox->findText(houses[param]));
 				break;
 			default:
@@ -318,7 +294,7 @@ void ScriptSection::on_SATargetBox_editTextChanged(const QString &arg1)
 				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					if(getScriptActionTargetType(type) == EDITABLE) {
+					if(getScriptActionTargetType(type) == SATargetType::EDITABLE) {
 						curScript->scriptLines[rowNum]->param = arg1.toInt();
 					}
 				}
@@ -349,7 +325,7 @@ void ScriptSection::on_CLastButton_clicked()
 
 			std::vector<Script::ScriptLine*> slines;
 
-			slines = scripts[newID]->getLinesByType(WAYPOINT);
+			slines = scripts[newID]->getLinesByType(SATargetType::WAYPOINT);
 
 			for(std::vector<Script::ScriptLine*>::iterator IT = slines.begin(); IT != slines.end(); ++IT) {
 				(*IT)->param = (*IT)->param + short(ui->ScriptList->selectedItems().size());
@@ -478,11 +454,16 @@ void ScriptSection::on_delSA_clicked()
 	}
 }
 
-QString ScriptSection::getScriptActionMeaning(uint8_t ID)
+void ScriptSection::updateSATypeBox()
 {
-	QString retVal;
-	retVal = scriptStrings.value("Actions/" + QString::number(ID), QString("Not Implemented!")).toString();
-	return retVal;
+	QStringList values;
+	uint32_t i = 0;
+	values = scriptStrings.value("Actions/" + QString::number(i)).toStringList();
+	while (!values.isEmpty()) {
+		ui->SATypeBox->addItem(values[0]);
+		++i;
+		values = scriptStrings.value("Actions/" + QString::number(i)).toStringList();
+	}
 }
 
 QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
@@ -491,7 +472,7 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 	QStringList strList;
 
 	switch(type) {
-	case TARGET:
+	case SATargetType::TARGET:
 		scriptStrings.beginGroup("Target");
 		strList = scriptStrings.childKeys();
 		qSort(strList.begin(), strList.end(), lessThanQString);
@@ -500,12 +481,12 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		scriptStrings.endGroup();
 		break;
-	case WAYPOINT:
+	case SATargetType::WAYPOINT:
 		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
 			list << QString::number((*IT));
 		}
 		break;
-	case UNLOAD:
+	case SATargetType::UNLOAD:
 		scriptStrings.beginGroup("Unload");
 		strList = scriptStrings.childKeys();
 		qSort(strList.begin(), strList.end(), lessThanQString);
@@ -514,7 +495,7 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		scriptStrings.endGroup();
 		break;
-	case MISSION:
+	case SATargetType::MISSION:
 		scriptStrings.beginGroup("Mission");
 		strList = scriptStrings.childKeys();
 		qSort(strList.begin(), strList.end(), lessThanQString);
@@ -523,12 +504,12 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		scriptStrings.endGroup();
 		break;
-	case BUILDING:
+	case SATargetType::BUILDING:
 		for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
 			list << (*IT).second.name;
 		}
 		break;
-	case BALLOON:
+	case SATargetType::BALLOON:
 		scriptStrings.beginGroup("Balloon");
 		strList = scriptStrings.childKeys();
 		qSort(strList.begin(), strList.end(), lessThanQString);
@@ -537,7 +518,7 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		scriptStrings.endGroup();
 		break;
-	case FACING:
+	case SATargetType::FACING:
 		scriptStrings.beginGroup("Facing");
 		strList = scriptStrings.childKeys();
 		qSort(strList.begin(), strList.end(), lessThanQString);
@@ -546,34 +527,72 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		scriptStrings.endGroup();
 		break;
-	case LOCAL:
+	case SATargetType::LOCAL:
 		for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
 			list << (*IT).second.name;
 		}
 		break;
-	case GLOBAL:
+	case SATargetType::GLOBAL:
 		for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
 			list << (*IT).second.name;
 		}
 		break;
-	case SCRIPT:
+	case SATargetType::SCRIPT:
 		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			list << (*IT).second->getName();
 		}
 		break;
-	case TASKFORCE:
+	case SATargetType::TASKFORCE:
 		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 			list << (*IT).second->getName();
 		}
 		break;
-	case HOUSE:
-		for(std::map<uint16_t, QString >::iterator IT = houses.begin(); IT != houses.end(); ++IT) {
+	case SATargetType::HOUSE:
+		for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
 			list << (*IT).second;
 		}
 		break;
-	case EDITABLE:
+	case SATargetType::EDITABLE:
 	default:
 		list << "";
 	}
 	return list;
+}
+
+QString ScriptSection::getScriptNameByPosition(uint16_t pos)
+{
+	int i = 0;
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return QString("");
+}
+
+QString ScriptSection::getTaskforceNameByPosition(uint16_t pos)
+{
+	int i = 0;
+	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return QString("");
+}
+
+void ScriptSection::updateUi()
+{
+	ui->ScriptList->clearSelection();
+	ui->ScriptActionList->setCurrentRow(-1);
+	ui->ScriptList->clear();
+	ui->SATypeBox->clear();
+	ui->SATargetBox->clear();
+	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		ui->ScriptList->addItem(IT->second->getName());
+	}
+	updateSATypeBox();
+	ui->SATypeBox->view()->setMinimumWidth(180);
 }

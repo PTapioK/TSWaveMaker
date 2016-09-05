@@ -19,31 +19,30 @@ class Trigger
 		Trigger(QString newID, QString newName);
 		~Trigger();
 
-		void setID(QString newID);
-
 		void save();
 
+		void setID(QString newID);
 		void setDis(bool dis);
-
 		void setName(QString nName);
 
 		void addEvent(Event *nEvent);
 		void addAction(Action *nAction);
 
-		void eraseAction(int32_t count);
-
+		void eraseAction(int32_t actionID);
+		void eraseEvent(int32_t eventID);
 		void eraseEventByType(int32_t type);
 
 		void eraseActionsFromBuffer();
 		void eraseEventsFromBuffer();
 
 		Action* getAction(int32_t count) const;
-		Action* getActionByType(int32_t type);
+		Action* getActionByType(int32_t type) const;
+
+		Event* getEvent(int32_t count) const;
+		Event* getEventByType(int32_t type) const;
 
 		bool hasEventType(int32_t type);
 		bool hasActionType(int32_t type);
-
-		Event* getEventByType(int32_t type);
 
 		QString getID() const;
 

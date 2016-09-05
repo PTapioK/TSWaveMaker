@@ -34,7 +34,7 @@
    </font>
   </property>
   <property name="locale">
-   <locale language="English" country="UnitedKingdom"/>
+   <locale language="English" country="UnitedStates"/>
   </property>
   <property name="floating">
    <bool>false</bool>

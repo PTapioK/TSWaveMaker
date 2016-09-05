@@ -28,6 +28,11 @@ void Event::setParameter(QString parameter)
 	param = parameter;
 }
 
+void Event::setUnknown(int16_t parameter)
+{
+	unknown = parameter;
+}
+
 void Event::setType(int32_t newType)
 {
 	type = newType;

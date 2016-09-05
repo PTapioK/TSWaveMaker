@@ -91,16 +91,16 @@ void MainWindow::saveFile()
 void MainWindow::saveFileAs()
 {
 	QFileDialog fDG(this);
-	QString newFilePath;
+	QString filePath;
 
-	newFilePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), Settings::lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
-	if(newFilePath.isEmpty()) {
+	filePath = fDG.getSaveFileName(this, tr("Save Tiberian Sun map or text file"), Settings::lastUsedPath, tr("Compatible Files (*.map *.mpr *.txt)"));
+	if(filePath.isEmpty()) {
 		return;
 	}
 
-	file.save(newFilePath);
-	this->setWindowTitle(CAPTIONBASE + tr(" | ") + newFilePath);
-	Settings::lastUsedPath = QFileInfo(newFilePath).path();
+	file.save(filePath);
+	this->setWindowTitle(CAPTIONBASE + tr(" | ") + filePath);
+	Settings::lastUsedPath = QFileInfo(filePath).path();
 }
 
 void MainWindow::infoDialog()

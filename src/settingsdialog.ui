@@ -18,6 +18,9 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
   <widget class="QLineEdit" name="rulesFileEdit">
    <property name="enabled">
     <bool>false</bool>

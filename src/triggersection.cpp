@@ -1,13 +1,14 @@
 #include "triggersection.h"
 #include "ui_triggersection.h"
+#include "main.h"
+
+using namespace Settings;
 
 TriggerSection::TriggerSection(QWidget *parent) :
 	QDockWidget(parent),
 	ui(new Ui::TriggerSection)
 {
 	ui->setupUi(this);
-
-	ui->isOtherAction->setVisible(false);
 }
 
 TriggerSection::~TriggerSection()
@@ -18,19 +19,37 @@ TriggerSection::~TriggerSection()
 void TriggerSection::on_TriggerList_itemSelectionChanged()
 {
 	ui->WaveTimer->setTime(QTime(0, 0, 0));
+	ui->EventList->clear();
 	ui->ActionList->clear();
+	ui->TagOr->toggle();
 
-	if(ui->TriggerList->currentRow() != -1) {
-		QString trig_name = ui->TriggerList->currentItem()->text();
-		Trigger *curTrig = getTriggerByName(trig_name);
-		if(curTrig == NULL) {
-			if(QMessageBox::question(this, "Fatal Error!", "Fatal Error occured! Continue?", QMessageBox::Yes|QMessageBox::No) == QMessageBox::No) {
-				exit(EXIT_FAILURE);
-			}
-		}
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		QString trigName = ui->TriggerList->selectedItems().last()->text();
+		Trigger *curTrig = getTriggerByName(trigName);
+		Tag *curTrigTag = getTagByTriggerID(curTrig->getID());
 
-		ui->NEdit->setText(ui->TriggerList->currentItem()->text());
+		ui->NameEdit->setText(trigName);
 		ui->isDisabledCheck->setChecked(curTrig->isDisabled());
+
+		switch (curTrigTag->getMode()) {
+			case 0:
+			{
+				ui->TagOr->toggle();
+				break;
+			}
+			case 1:
+			{
+				ui->TagAnd->toggle();
+				break;
+			}
+			case 2:
+			{
+				ui->TagRepeatingOr->toggle();
+				break;
+			}
+			default:
+				ui->TagOr->toggle();
+		}
 
 		if(curTrig->hasActionType(27)) {
 			int32_t secs = curTrig->getActionByType(27)->getParameter(2).toInt();
@@ -40,198 +59,361 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		}
 
 		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+		for(eventIT IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
 			++i;
-			QString str;
-			QTextStream iSS(&str);
-			iSS << i;
-			QString text = "Action ";
-			text += iSS.readAll();
-
-			ui->ActionList->addItem(text);
+			ui->EventList->addItem(QString::number(i));
 		}
 
+		i = 0;
+		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+			++i;
+			ui->ActionList->addItem(QString::number(i));
+		}
 	} else {
-		ui->NEdit->setText("");
+		ui->NameEdit->setText("");
 	}
 }
 
 // New trigger
 void TriggerSection::on_NewTrigger_clicked()
 {
-	if(ui->TriggerList->findItems(ui->NEdit->text(), Qt::MatchExactly).count() == 0) {
-		QString name = ui->NEdit->text();
-		ui->TriggerList->addItem(ui->NEdit->text());
-		QString nID = findFirstFreeID();
-		triggers[nID] = new Trigger(nID, name);
-		tags[name + " 1"] = new Tag(name + " 1", triggers[nID]->getID());
+	if(ui->TriggerList->findItems(ui->NameEdit->text(), Qt::MatchExactly).count() == 0) {
+		QString name = ui->NameEdit->text();
+		QString newID = findFirstFreeID();
+		triggers[newID] = new Trigger(newID, name);
+		QString newTagID = findFirstFreeID();
+		tags[newTagID] = new Tag(name + " 1", newID, newTagID);
+		updateUi();
+		ui->TriggerList->setCurrentItem(ui->TriggerList->findItems(name, Qt::MatchExactly).last());
 	}
 }
 
 // Edit trigger's name
 void TriggerSection::on_EditTriggerName_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		if(ui->TriggerList->findItems(ui->NEdit->text(), Qt::MatchExactly).count() == 0) {
-			QString curName = ui->TriggerList->currentItem()->text();
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		QString curName = ui->TriggerList->selectedItems().last()->text();
+		QString newName = ui->NameEdit->text();
+		if(ui->TriggerList->findItems(newName, Qt::MatchExactly).count() == 0) {
 			QString curID = getTriggerIDByName(curName);
 
-			triggers[curID]->setName(ui->NEdit->text());
-			getTagByTriggerID(curID)->setName(ui->NEdit->text() + " 1");
+			triggers[curID]->setName(newName);
+			getTagByTriggerID(curID)->setName(newName + " 1");
 
-			ui->TriggerList->currentItem()->setText(ui->NEdit->text());
+			ui->TriggerList->selectedItems().last()->setText(newName);
 		}
 	}
 }
 
-// Disable trigger checkbox
+// Disable trigger(s)
 void TriggerSection::on_isDisabledCheck_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		getTriggerByName(ui->TriggerList->currentItem()->text())->setDis(ui->isDisabledCheck->isChecked());
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString name = ui->TriggerList->selectedItems().at(a)->text();
+			getTriggerByName(name)->setDis(ui->isDisabledCheck->isChecked());
+		}
 	}
 }
 
-// Delete trigger
+// Delete trigger(s)
 void TriggerSection::on_DeleteTrigger_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		QString name = ui->TriggerList->currentItem()->text();
-		QString ID = getTriggerIDByName(name);
-		delete getTriggerByName(name);
-		triggers.erase(ID);
-		QString tagName = getTagByTriggerID(ID)->getName();
-		delete getTagByTriggerID(ID);
-		tags.erase(tagName);
-
-		delete ui->TriggerList->item(ui->TriggerList->currentRow());
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString name = ui->TriggerList->selectedItems().at(a)->text();
+			QString ID = getTriggerIDByName(name);
+			delete getTriggerByName(name);
+			triggers.erase(ID);
+			QString tagName = getTagByTriggerID(ID)->getName();
+			delete getTagByTriggerID(ID);
+			tags.erase(tagName);
+		}
+		updateUi();
 	}
 }
 
-// Clone trigger
+// Clone trigger(s)
 void TriggerSection::on_CloneTrigger_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		QString newName = getNameWithNextMark(ui->TriggerList->currentItem()->text());
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString curName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(curName);
 
-		int i = 0;
-		while(ui->TriggerList->findItems(newName, Qt::MatchExactly).count() != 0) {
-			++i;
-			newName = getNameWithNextMark(ui->TriggerList->currentItem()->text(), i);
+			QString newName = getNameWithNextMark(ui->TriggerList->selectedItems().at(a)->text(), a, 0);
+			int i = 0;
+			while(ui->TriggerList->findItems(newName, Qt::MatchExactly).count() != 0) {
+				++i;
+				newName = getNameWithNextMark(curName, i);
+			}
+
+			QString newID = findFirstFreeID();
+			triggers[newID] = new Trigger(newID, curTrig);
+			triggers[newID]->setName(newName);
+			ui->TriggerList->addItem(newName);
+
+			Tag *cTag = getTagByTriggerID(curTrig->getID());
+			QString tagNewName = newName + " 1";
+			i = 0;
+			while(tags.find(tagNewName) != tags.end()) {
+				++i;
+				tagNewName = getNameWithNextMark(newName + " 1", i);
+			}
+
+			QString newTagID = findFirstFreeID();
+			tags[newTagID] = new Tag(cTag, newID, newTagID, tagNewName);
 		}
-
-		QString newID = findFirstFreeID();
-		triggers[newID] = new Trigger(newID, getTriggerByName(ui->TriggerList->currentItem()->text()));
-		triggers[newID]->setName(newName);
-		ui->TriggerList->addItem(newName);
-		Tag *cTag = getTagByTriggerID(getTriggerByName(ui->TriggerList->currentItem()->text())->getID());
-		tags[newName + " 1"] = new Tag(cTag, triggers[newID]->getID());
-		tags[newName + " 1"]->setName(newName + " 1");
 	}
 }
 
 void TriggerSection::on_WaveTimer_editingFinished()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		QString trig_name = ui->TriggerList->currentItem()->text();
-		int32_t secs = 0;
-		secs = abs(ui->WaveTimer->time().secsTo(QTime(0, 0, 0)));
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString curName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(curName);
 
-		Trigger *curTrig = getTriggerByName(trig_name);
+			int32_t secs = 0;
+			secs = abs(ui->WaveTimer->time().secsTo(QTime(0, 0, 0)));
 
-		if(!curTrig->hasActionType(27)) {
-			Action *nAction = new Action(curTrig->getID(), 27, 0, "0", QString::number(secs), "0", "0", "0", "0");
-			curTrig->addAction(nAction);
-		} else {
-			curTrig->getActionByType(27)->setParameter(2, secs);
+			if(!curTrig->hasActionType(27)) {
+				Action *nAction = new Action(curTrig->getID(), 27, 0, "0", QString::number(secs), "0", "0", "0", "0");
+				curTrig->addAction(nAction);
+				ui->ActionList->addItem(QString::number(curTrig->actions.size()));
+			} else {
+				curTrig->getActionByType(27)->setParameter(2, secs);
+			}
 		}
+	}
+}
 
-		ui->ActionList->clear();
-		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
-			++i;
-			QString text = "Action ";
-			text += QString::number(i);
+// New event
+void TriggerSection::on_NewEvent_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-			ui->ActionList->addItem(text);
+			Event *nEvent = new Event(curTrig->getID());
+			curTrig->addEvent(nEvent);
 		}
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		ui->EventList->addItem(QString::number(curTrig->events.size()));
+	}
+}
 
+// Delete event
+void TriggerSection::on_DeleteEvent_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+
+			for(uint32_t i = ui->EventList->selectedItems().size()-1; i != -1; --i) {
+				if(curTrig->events.size() > i) {
+					curTrig->eraseEvent(ui->EventList->row(ui->EventList->selectedItems().at(i)));
+				}
+			}
+		}
+		cleanEventList();
+	}
+}
+
+// Clone event
+void TriggerSection::on_CloneEvent_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+
+			int eventsCount = curTrig->events.size();
+			int i = eventsCount;
+			for(int b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				int eventID = ui->EventList->row(ui->EventList->selectedItems().at(b));
+				if (eventID < eventsCount) {
+					Event *nEve = new Event(curTrig->getEvent(eventID), curTrig->getID());
+					curTrig->addEvent(nEve);
+
+					if (ui->TriggerList->selectedItems().at(a)->text() == ui->TriggerList->selectedItems().last()->text()) {
+						++i;
+						ui->EventList->addItem(QString::number(i));
+					}
+				}
+			}
+		}
+	}
+}
+
+void TriggerSection::on_EventList_itemSelectionChanged()
+{
+	ui->EventTypeBox->setCurrentIndex(0);
+	ui->EventParamBox->clear();
+	if (ui->EventList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int16_t index = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()))->getType();
+		if (index < ui->EventTypeBox->count()) {
+			ui->EventTypeBox->setCurrentIndex(index);
+			updateEventParamBox();
+		}
+	}
+}
+
+void TriggerSection::on_EventTypeBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0 && ui->EventList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				size_t index = ui->EventList->row(ui->EventList->selectedItems().at(b));
+				if(index < curTrig->events.size()) {
+					curTrig->getEvent(index)->setType(ui->EventTypeBox->currentIndex());
+				}
+			}
+		}
+		updateEventParamBox();
+	}
+}
+
+void TriggerSection::on_EventParamBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0 && ui->EventList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
+		int32_t curEventType = curEvent->getType();
+		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				if (b < trig->events.size()) {
+					Event *event = trig->getEvent(ui->EventList->row(ui->EventList->selectedItems().at(b)));
+					int32_t eventType = event->getType();
+					if (curEventType == eventType) {
+						switch(getEventTargetType(eventType)) {
+							case TargetType::NONE:
+								event->setParameter("0");
+								break;
+							case TargetType::WAYPOINT:
+								event->setParameter(QString::number(waypoints[ui->EventParamBox->currentIndex()]));
+								break;
+							case TargetType::HOUSE:
+								for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
+									if((*IT).second == ui->EventParamBox->currentText()) {
+										event->setParameter(QString::number((*IT).first));
+										break;
+									}
+								}
+								break;
+							case TargetType::TEAM:
+								event->setUnknown(1);
+								event->setParameter(getTeamByName(ui->EventParamBox->currentText())->getID());
+								break;
+							case TargetType::TRIGGER:
+								event->setParameter(getTriggerByName(ui->EventParamBox->currentText())->getID());
+								break;
+							case TargetType::EDITABLE:
+								event->setParameter(ui->EventParamBox->currentText());
+								break;
+							case TargetType::TEXT:
+								event->setParameter(QString::number(getTutorialKeyByText(ui->EventParamBox->currentText())));
+								break;
+							case TargetType::TAG:
+								event->setParameter(getTagByName(ui->EventParamBox->currentText())->getID());
+								break;
+							case TargetType::BUILDING:
+								for(auto IT = buildings.begin(); IT != buildings.end(); ++IT) {
+									if((*IT).second.name == ui->EventParamBox->currentText()) {
+										event->setParameter(QString::number((*IT).first));
+										break;
+									}
+								}
+								break;
+							case TargetType::INFANTRY:
+								event->setParameter(QString::number(getUnitKeyByName(ui->EventParamBox->currentText(), infantry)));
+								break;
+							case TargetType::VEHICLE:
+								event->setParameter(QString::number(getUnitKeyByName(ui->EventParamBox->currentText(), vehicles)));
+								break;
+							case TargetType::AIRCRAFT:
+								event->setParameter(QString::number(getUnitKeyByName(ui->EventParamBox->currentText(), aircraft)));
+								break;
+							default:
+								event->setParameter(QString::number(ui->EventParamBox->currentIndex()));
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
 // New action
 void TriggerSection::on_NewAction_clicked()
 {
-	if(ui->TriggerList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-		Action *nAction = new Action(curTrig->getID());
-		curTrig->addAction(nAction);
-
-		ui->ActionList->clear();
-		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
-			++i;
-			QString text = "Action ";
-			text += QString::number(i);
-
-			ui->ActionList->addItem(text);
+			Action *nAction = new Action(curTrig->getID());
+			curTrig->addAction(nAction);
 		}
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		ui->ActionList->addItem(QString::number(curTrig->actions.size()));
 	}
 }
 
 // Delete action
 void TriggerSection::on_DeleteAction_clicked()
 {
-	if(ui->ActionList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-		for(int i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
-			curTrig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
+			for(uint32_t i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
+				if(curTrig->actions.size() > i) {
+					curTrig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
+				}
+			}
 		}
-
-		clearActionList();
-		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
-			++i;
-			QString text = "Action ";
-			text += QString::number(i);
-
-			ui->ActionList->addItem(text);
-		}
+		cleanActionList();
 	}
 }
 
 // Clone action
 void TriggerSection::on_CloneAction_clicked()
 {
-	if(ui->ActionList->currentRow() != -1) {
-		int i = 1;
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
-			++i;
-		}
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-		for(int a = 0; a != ui->ActionList->selectedItems().size(); ++a) {
-			Action *nAct = new Action(curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(a))), curTrig->getID());
-			curTrig->addAction(nAct);
+			int actionsCount = curTrig->actions.size();
+			int i = actionsCount;
+			for(int b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				int actionID = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
+				if (actionID < actionsCount) {
+					Action *nAct = new Action(curTrig->getAction(actionID), curTrig->getID());
+					curTrig->addAction(nAct);
 
-			QString text = "Action ";
-			text += QString::number(i);
-
-			ui->ActionList->addItem(text);
-
-			++i;
+					if (ui->TriggerList->selectedItems().at(a)->text() == ui->TriggerList->selectedItems().last()->text()) {
+						++i;
+						ui->ActionList->addItem(QString::number(i));
+					}
+				}
+			}
 		}
 	}
 }
 
 void TriggerSection::on_ActionList_itemSelectionChanged()
 {
-	ui->isOtherAction->setEnabled(true);
-	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->currentRow() != -1) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->currentItem()->text());
-		Action *curAct = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+	ui->ActionTypeBox->setCurrentIndex(0);
+	ui->ActionParamNameBox->clear();
+	ui->ActionParamValueBox->clear();
+	if (ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int16_t index = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()))->getType();
+		if (index < ui->ActionTypeBox->count()) {
+			ui->ActionTypeBox->setCurrentIndex(index);
+		}
 	}
 }
 
@@ -240,16 +422,399 @@ void TriggerSection::mousePressEvent(QMouseEvent *event)
 	event->accept();
 }
 
-void TriggerSection::clearTriggerList() {
-	delete ui->TriggerList->item(ui->TriggerList->currentRow());
-	ui->TriggerList->clear();
-}
-
-void TriggerSection::clearActionList() {
+void TriggerSection::cleanActionList() {
 	for(int i = 0; i < ui->ActionList->selectedItems().size(); ++i) {
 		delete ui->ActionList->selectedItems().at(i);
 	}
 	ui->ActionList->clear();
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int i = 0;
+		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+			++i;
+			ui->ActionList->addItem(QString::number(i));
+		}
+	}
+}
+
+void TriggerSection::cleanEventList() {
+	for(int i = 0; i < ui->EventList->selectedItems().size(); ++i) {
+		delete ui->EventList->selectedItems().at(i);
+	}
+	ui->EventList->clear();
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int i = 0;
+		for(eventIT IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
+			++i;
+			ui->EventList->addItem(QString::number(i));
+		}
+	}
+}
+
+void TriggerSection::updateEventTypeBox()
+{
+	QStringList values;
+	uint32_t i = 0;
+	values = triggerStrings.value("Events/" + QString::number(i)).toStringList();
+	while (!values.isEmpty()) {
+		ui->EventTypeBox->addItem(values[0]);
+		++i;
+		values = triggerStrings.value("Events/" + QString::number(i)).toStringList();
+	}
+}
+
+void TriggerSection::updateEventParamBox()
+{
+	ui->EventParamBox->setEditable(false);
+	ui->EventParamBox->clear();
+	ui->EEParameterBox->clear();
+	ui->SEParameterBox->clear();
+
+	if(ui->EventList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
+		int32_t type = curEvent->getType();
+		QString param = curEvent->getParameter();
+
+		TargetType tType = getEventTargetType(type);
+		QStringList targetList = getTargetStrings(tType);
+		ui->EventParamBox->addItems(targetList);
+		ui->EventParamBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->EventParamBox->font()) + 50);
+		ui->SEParameterBox->addItems(targetList);
+		ui->SEParameterBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->SEParameterBox->font()) + 50);
+		ui->EEParameterBox->addItems(targetList);
+		ui->EEParameterBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->EEParameterBox->font()) + 50);
+
+		switch(getEventTargetType(type)) {
+			case TargetType::NONE:
+				break;
+			case TargetType::WAYPOINT:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(param));
+				break;
+			case TargetType::HOUSE:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(houses[param.toShort()]));
+				break;
+			case TargetType::TEAM:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTeamNameByPosition(param.toInt())));
+				break;
+			case TargetType::TRIGGER:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTriggerNameByPosition(param.toInt())));
+				break;
+			case TargetType::EDITABLE:
+				ui->EventParamBox->setEditable(true);
+				ui->EventParamBox->setCurrentText(QString::number(param.toInt()));
+				break;
+			case TargetType::TEXT:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(tutorial[param.toInt()]));
+				break;
+			case TargetType::TAG:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTagNameByPosition(param.toInt())));
+				break;
+			case TargetType::BUILDING:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getBuildingNameByKey(param.toShort())));
+				break;
+			case TargetType::INFANTRY:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getUnitNameByKey(param.toShort(), infantry)));
+				break;
+			case TargetType::VEHICLE:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getUnitNameByKey(param.toShort(), vehicles)));
+				break;
+			case TargetType::AIRCRAFT:
+				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getUnitNameByKey(param.toShort(), aircraft)));
+				break;
+			default:
+				ui->EventParamBox->setCurrentIndex(param.toInt());
+		}
+	}
+}
+
+// Make selected triggers selected events grow in ascending order
+void TriggerSection::on_TEParamAOButton_clicked()
+{
+	if(ui->EventList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
+		int32_t curEventType = curEvent->getType();
+		size_t ITPlus = 0;
+		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				if (b < trig->events.size()) {
+					Event *event = trig->getEvent(ui->EventList->row(ui->EventList->selectedItems().at(b)));
+					int32_t eventType = event->getType();
+					if (curEventType == eventType) {
+						switch(getEventTargetType(eventType)) {
+							case TargetType::NONE:
+								break;
+							case TargetType::WAYPOINT:
+							{
+								auto IT = std::find(waypoints.begin(), waypoints.end(), ui->SEParameterBox->currentIndex());
+								auto endIT = std::find(waypoints.begin(), waypoints.end(), ui->EEParameterBox->currentIndex());
+								++endIT;
+								IT += ITPlus;
+								if (IT != waypoints.end() && IT != endIT) {
+									event->setParameter(QString::number(*IT));
+								}
+								break;
+							}
+							case TargetType::HOUSE:
+							{
+								auto IT = houses.begin();
+								auto endIT = houses.end();
+								for(auto iterIT = houses.begin(); iterIT != houses.end(); ++iterIT) {
+									if((*iterIT).second == ui->SEParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second == ui->EEParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != houses.end() && IT != endIT) {
+									event->setParameter(QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::TEAM:
+							{
+								event->setUnknown(1);
+								teamIT IT = teams.begin();
+								teamIT endIT = teams.begin();
+								IT = teams.find(getTeamByName(ui->SEParameterBox->currentText())->getID());
+								endIT = teams.find(getTeamByName(ui->EEParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != teams.end() && IT != endIT) {
+									event->setParameter(IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::BUILDING:
+							{
+								auto IT = buildings.begin();
+								auto endIT = buildings.end();
+								for(auto iterIT = buildings.begin(); iterIT != buildings.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SEParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EEParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != buildings.end() && IT != endIT) {
+									event->setParameter(QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::INFANTRY:
+							{
+								auto IT = infantry.begin();
+								auto endIT = infantry.begin();
+								for(auto iterIT = infantry.begin(); iterIT != infantry.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SEParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EEParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != infantry.end() && IT != endIT) {
+									event->setParameter(QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::VEHICLE:
+							{
+								auto IT = vehicles.begin();
+								auto endIT = vehicles.begin();
+								for(auto iterIT = vehicles.begin(); iterIT != vehicles.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SEParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EEParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != vehicles.end() && IT != endIT) {
+									event->setParameter(QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::AIRCRAFT:
+							{
+								auto IT = aircraft.begin();
+								auto endIT = aircraft.begin();
+								for(auto iterIT = aircraft.begin(); iterIT != aircraft.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SEParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EEParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != aircraft.end() && IT != endIT) {
+									event->setParameter(QString::number((*IT).second.key));
+								}
+								break;
+							}
+							default:
+								event->setParameter(QString::number(std::min(ui->SEParameterBox->currentIndex() + ITPlus, size_t(ui->EEParameterBox->currentIndex()))));
+								break;
+						}
+					}
+				}
+			}
+			++ITPlus;
+		}
+	}
+}
+
+void TriggerSection::updateActionTypeBox()
+{
+	QStringList values;
+	uint32_t i = 0;
+	values = triggerStrings.value("Actions/" + QString::number(i)).toStringList();
+	while (!values.isEmpty()) {
+		ui->ActionTypeBox->addItem(values[0]);
+		++i;
+		values = triggerStrings.value("Actions/" + QString::number(i)).toStringList();
+	}
+}
+
+void TriggerSection::on_ActionTypeBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->ActionList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				size_t index = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
+				if(index < curTrig->actions.size()) {
+					curTrig->getAction(index)->setType(ui->ActionTypeBox->currentIndex());
+				}
+			}
+		}
+	}
+}
+
+QString TriggerSection::getTargetTypeString(uint8_t ID)
+{
+	QVariant value;
+	value = triggerStrings.value("ParamTypes/" + QString::number(ID));
+	if (!value.isNull()) {
+		return value.toStringList()[0];
+	} else {
+		return QString("");
+	}
+}
+
+TargetType TriggerSection::getEventTargetType(uint8_t ID)
+{
+	QVariant value;
+	value = triggerStrings.value("Events/" + QString::number(ID));
+	if (!value.isNull()) {
+		value = triggerStrings.value("ParamTypes/" + QString::number(value.toStringList()[2].toInt()));
+		if (!value.isNull()) {
+			return static_cast<TargetType>(value.toStringList()[1].toInt());
+		}
+	}
+	return TargetType::NONE;
+}
+
+QStringList TriggerSection::getTargetStrings(TargetType type)
+{
+	QStringList list;
+	switch(type) {
+		case TargetType::WAYPOINT:
+			for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
+				list << QString::number((*IT));
+			}
+			break;
+		case TargetType::LOCAL:
+			for(std::map <uint16_t, variableContainer>::iterator IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::GLOBAL:
+			for(std::map <uint16_t, variableContainer>::iterator IT = globalvariables.begin(); IT != globalvariables.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::HOUSE:
+			for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
+				list << (*IT).second;
+			}
+			break;
+		case TargetType::TEAM:
+			for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+				list << (*IT).second->getName();
+			}
+			break;
+		case TargetType::TRIGGER:
+			for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+				list << (*IT).second->getName();
+			}
+			break;
+		case TargetType::ONOFF:
+			list << "Off";
+			list << "On";
+			break;
+		case TargetType::TEXT:
+			for(std::map <uint16_t, QString>::iterator IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
+				list << (*IT).second;
+			}
+			break;
+		case TargetType::TAG:
+			for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+				list << (*IT).second->getName();
+			}
+			break;
+		case TargetType::BUILDING:
+			for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::INFANTRY:
+			for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::VEHICLE:
+			for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::AIRCRAFT:
+			for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+				list << (*IT).second.name;
+			}
+			break;
+		case TargetType::EDITABLE:
+		default:
+			list << "";
+	}
+	return list;
 }
 
 void TriggerSection::updateUi()
@@ -257,7 +822,123 @@ void TriggerSection::updateUi()
 	ui->TriggerList->setCurrentRow(-1);
 	ui->ActionList->setCurrentRow(-1);
 	ui->TriggerList->clear();
+	ui->EventTypeBox->clear();
+	ui->ActionTypeBox->clear();
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		ui->TriggerList->addItem(IT->second->getName());
+	}
+	updateEventTypeBox();
+	updateActionTypeBox();
+}
+
+QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
+{
+	int i = 0;
+	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return QString("");
+}
+
+QString TriggerSection::getTeamNameByPosition(uint32_t pos)
+{
+	int i = 0;
+	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return QString("");
+}
+
+QString TriggerSection::getTagNameByPosition(uint32_t pos)
+{
+	int i = 0;
+	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+		if(i == pos) {
+			return IT->second->getName();
+		}
+		++i;
+	}
+	return QString("");
+}
+
+QString TriggerSection::getBuildingNameByKey(uint16_t key)
+{
+	for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
+		if((*IT).second.key == key) {
+			return (*IT).second.name;
+		}
+	}
+	return QString("");
+}
+
+QString TriggerSection::getUnitNameByKey(uint16_t key, std::map<QString, unitContainer> &unitMap)
+{
+	for(unitIT IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
+		if((*IT).second.key == key) {
+			return (*IT).second.name;
+		}
+	}
+	return QString("");
+}
+
+uint16_t TriggerSection::getTutorialKeyByText(QString text)
+{
+	for(auto IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
+		if ((*IT).second == text) {
+			return (*IT).first;
+		}
+	}
+	return 0;
+}
+
+uint16_t TriggerSection::getUnitKeyByName(QString name, std::map<QString, unitContainer> &unitMap)
+{
+	for(unitIT IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
+		if((*IT).second.name == name) {
+			return (*IT).second.key;
+		}
+	}
+	return 0;
+}
+
+void TriggerSection::on_TagOr_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString trigName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(trigName);
+			Tag *curTrigTag = getTagByTriggerID(curTrig->getID());
+			curTrigTag->setMode(0);
+		}
+	}
+}
+
+void TriggerSection::on_TagAnd_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString trigName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(trigName);
+			Tag *curTrigTag = getTagByTriggerID(curTrig->getID());
+			curTrigTag->setMode(1);
+		}
+	}
+}
+
+void TriggerSection::on_TagRepeatingOr_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString trigName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(trigName);
+			Tag *curTrigTag = getTagByTriggerID(curTrig->getID());
+			curTrigTag->setMode(2);
+		}
 	}
 }

@@ -1,28 +1,42 @@
 #include "tag.h"
 
-Tag::Tag(QString tname, QString trigID)
+Tag::Tag(QString newName, QString trigID)
 {
-	name = tname;
+	name = newName;
 	ID = findFirstFreeID();
 	triggerID = trigID;
 	mode = 0;
-
 }
 
-Tag::Tag(Tag *oTag, QString trigID)
+Tag::Tag(QString newName, QString trigID, QString newID)
 {
-	*this = *oTag;
+	name = newName;
+	ID = newID;
+	triggerID = trigID;
+	mode = 0;
+}
+
+Tag::Tag(Tag *otherTag, QString trigID)
+{
+	*this = *otherTag;
 	setID(findFirstFreeID());
 	triggerID = trigID;
-
 }
 
-Tag::Tag(QString nID, QString nName, QString nTrigID, int32_t nmode)
+Tag::Tag(Tag *otherTag, QString trigID, QString newID, QString newName)
 {
-	ID = nID;
-	name = nName;
-	triggerID = nTrigID;
-	mode = nmode;
+	*this = *otherTag;
+	setID(newID);
+	triggerID = trigID;
+	name = newName;
+}
+
+Tag::Tag(QString newID, QString newName, QString trigID, int32_t newMode)
+{
+	ID = newID;
+	name = newName;
+	triggerID = trigID;
+	mode = newMode;
 }
 
 Tag::~Tag()
@@ -30,30 +44,40 @@ Tag::~Tag()
 	file.deleteLineFromBuffer("Tags", ID);
 }
 
-QString Tag::getID() const {
-	return ID;
+void Tag::setID(QString newID) {
+	ID = newID;
 }
 
-void Tag::setID(QString nID) {
-	ID = nID;
+void Tag::setName(QString newName) {
+	name = newName;
 }
 
-QString Tag::getTriggerID() const {
-	return triggerID;
+void Tag::setMode(int16_t newMode)
+{
+	mode = newMode;
 }
 
-void Tag::save() {
+void Tag::save() const {
 	QString str;
 	QTextStream valueSS(&str);
 	valueSS << mode << "," << name << "," << triggerID;
 	file.saveLineToBuffer("Tags", ID, valueSS.readAll());
 }
 
+QString Tag::getID() const {
+	return ID;
+}
+
+int16_t Tag::getMode() const
+{
+	return mode;
+}
+
+QString Tag::getTriggerID() const {
+	return triggerID;
+}
+
 QString Tag::getName() const
 {
 	return name;
-}
-
-void Tag::setName(QString nName) {
-	name = nName;
 }

@@ -27,7 +27,7 @@ class ScriptSection : public QDockWidget
 
 		void on_SATargetBox_activated();
 
-		void update_SATargetBox();
+		void updateSATargeBox();
 
 		void on_CLastButton_clicked();
 
@@ -59,8 +59,10 @@ class ScriptSection : public QDockWidget
 
 		void mousePressEvent(QMouseEvent *event);
 	private:
-		QString getScriptActionMeaning(uint8_t ID);
+		void updateSATypeBox();
 		QStringList getScriptActionTargetStrings(SATargetType type);
+		QString getScriptNameByPosition(uint16_t pos);
+		QString getTaskforceNameByPosition(uint16_t pos);
 
 		Ui::ScriptSection *ui;
 };

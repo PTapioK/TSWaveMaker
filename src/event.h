@@ -11,6 +11,7 @@ class Event
 		Event(int32_t newType, int32_t newParameter, QString newID, int16_t newUnknown = 0);
 
 		void setParameter(QString parameter);
+		void setUnknown(int16_t parameter);
 		void setType(int32_t newType);
 		void save(int32_t count);
 
