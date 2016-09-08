@@ -19,27 +19,27 @@ QString findFirstFreeID()
 		return ssID.readAll();
 	}
 
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		IDTemp.push_back((*IT).first);
 	}
 
-	for (scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for (auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for (taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for (auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		IDTemp.push_back((*IT).second->getID());
 	}
 
-	for (aitriggerIT IT = aitriggers.begin(); IT != aitriggers.end(); ++IT) {
+	for (auto IT = aitriggers.begin(); IT != aitriggers.end(); ++IT) {
 		IDTemp.push_back((*IT).first);
 	}
 
@@ -87,7 +87,7 @@ QString findFirstFreeID()
 
 Tag* getTagByTriggerID(QString trigID)
 {
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		if((*IT).second->getTriggerID() == trigID) {
 			return (*IT).second;
 		}
@@ -123,7 +123,7 @@ QString decToSmallAlphas(int32_t dec)
 
 QString getTriggerIDByName(QString name)
 {
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName() == name) {
 			return IT->second->getID();
 		}
@@ -133,7 +133,7 @@ QString getTriggerIDByName(QString name)
 
 Trigger* getTriggerByName(QString name)
 {
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if((*IT).second->getName() == name) {
 			return IT->second;
 		}
@@ -166,7 +166,7 @@ int32_t waypointIDToDec(QString wID)
 
 QString getTeamNameByID(QString ID)
 {
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
 		}
@@ -176,7 +176,7 @@ QString getTeamNameByID(QString ID)
 
 Team* getTeamByName(QString name)
 {
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
 		}
@@ -188,7 +188,7 @@ Team* getTeamByName(QString name)
 
 QString getTeamIDByName(QString name)
 {
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
 		}
@@ -198,7 +198,7 @@ QString getTeamIDByName(QString name)
 
 QString getScriptNameByID(QString ID)
 {
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
 		}
@@ -208,7 +208,7 @@ QString getScriptNameByID(QString ID)
 
 QString getScriptIDByName(QString name)
 {
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
 		}
@@ -218,7 +218,7 @@ QString getScriptIDByName(QString name)
 
 QString getTaskforceNameByID(QString ID)
 {
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getID() == ID) {
 			return IT->second->getName();
 		}
@@ -228,7 +228,7 @@ QString getTaskforceNameByID(QString ID)
 
 QString getTaskforceIDByName(QString name)
 {
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second->getID();
 		}
@@ -239,7 +239,7 @@ QString getTaskforceIDByName(QString name)
 
 Taskforce* getTaskforceByName(QString name)
 {
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
 		}
@@ -252,7 +252,7 @@ Taskforce* getTaskforceByName(QString name)
 
 Script* getScriptByName(QString name)
 {
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(IT->second->getName() == name) {
 			return IT->second;
 		}
@@ -312,23 +312,23 @@ uint16_t getBuildingTypePosByKey(uint16_t key)
 
 void clearContainers()
 {
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		delete (*IT).second;
 	}
 	triggers.clear();
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		delete (*IT).second;
 	}
 	teams.clear();
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		delete (*IT).second;
 	}
 	tags.clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		delete (*IT).second;
 	}
 	scripts.clear();
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		delete (*IT).second;
 	}
 	taskforces.clear();
@@ -403,17 +403,17 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 
 QString getUnitNameByUnitID(QString unitID)
 {
-	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+	for(auto IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
 	}
-	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+	for(auto IT = infantry.begin(); IT != infantry.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
 	}
-	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+	for(auto IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
 		if(IT->second.unitID == unitID) {
 			return IT->second.name;
 		}
@@ -428,7 +428,7 @@ bool lessThanQString(const QString &str1, const QString &str2)
 
 Tag *getTagByName(QString name)
 {
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		if((*IT).second->getName() == name) {
 			return IT->second;
 		}

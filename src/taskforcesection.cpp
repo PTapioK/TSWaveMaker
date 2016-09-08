@@ -177,16 +177,16 @@ void TaskforceSection::updateUi()
 	ui->TaskforceList->clearSelection();
 	ui->TaskforceList->clear();
 	ui->UnitBox->clear();
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		ui->TaskforceList->addItem(IT->second->getName());
 	}
-	for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+	for(auto IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
 		ui->UnitBox->addItem("[" + IT->first + "] " + IT->second.name);
 	}
-	for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+	for(auto IT = infantry.begin(); IT != infantry.end(); ++IT) {
 		ui->UnitBox->addItem("[" + IT->first + "] " + IT->second.name);
 	}
-	for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+	for(auto IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
 		ui->UnitBox->addItem("[" + IT->first + "] " + IT->second.name);
 	}
 	ui->UnitBox->view()->setMinimumWidth(220);

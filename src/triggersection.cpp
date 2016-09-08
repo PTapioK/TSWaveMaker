@@ -59,13 +59,13 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		}
 
 		int i = 0;
-		for(eventIT IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
+		for(auto IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
 			++i;
 			ui->EventList->addItem(QString::number(i));
 		}
 
 		i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+		for(auto IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
 			++i;
 			ui->ActionList->addItem(QString::number(i));
 		}
@@ -355,7 +355,7 @@ void TriggerSection::cleanEventList() {
 	if(ui->TriggerList->selectedItems().size() != 0) {
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		int i = 0;
-		for(eventIT IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
+		for(auto IT = curTrig->events.begin(); IT != curTrig->events.end(); ++IT) {
 			++i;
 			ui->EventList->addItem(QString::number(i));
 		}
@@ -488,8 +488,8 @@ void TriggerSection::on_TEParamAOButton_clicked()
 							case TargetType::TEAM:
 							{
 								event->setUnknown(1);
-								teamIT IT = teams.begin();
-								teamIT endIT = teams.begin();
+								auto IT = teams.begin();
+								auto endIT = teams.begin();
 								IT = teams.find(getTeamByName(ui->SEParameterBox->currentText())->getID());
 								endIT = teams.find(getTeamByName(ui->EEParameterBox->currentText())->getID());
 								++endIT;
@@ -683,7 +683,7 @@ void TriggerSection::cleanActionList() {
 	if(ui->TriggerList->selectedItems().size() != 0) {
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+		for(auto IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
 			++i;
 			ui->ActionList->addItem(QString::number(i));
 		}
@@ -1036,8 +1036,8 @@ void TriggerSection::on_AParamAOButton_clicked()
 							}
 							case TargetType::TEAM:
 							{
-								teamIT IT = teams.begin();
-								teamIT endIT = teams.begin();
+								auto IT = teams.begin();
+								auto endIT = teams.begin();
 								IT = teams.find(getTeamByName(ui->SAParameterBox->currentText())->getID());
 								endIT = teams.find(getTeamByName(ui->EAParameterBox->currentText())->getID());
 								++endIT;
@@ -1051,8 +1051,8 @@ void TriggerSection::on_AParamAOButton_clicked()
 							}
 							case TargetType::TRIGGER:
 							{
-								triggerIT IT = triggers.begin();
-								triggerIT endIT = triggers.begin();
+								auto IT = triggers.begin();
+								auto endIT = triggers.begin();
 								IT = triggers.find(getTriggerByName(ui->SAParameterBox->currentText())->getID());
 								endIT = triggers.find(getTriggerByName(ui->EAParameterBox->currentText())->getID());
 								++endIT;
@@ -1066,8 +1066,8 @@ void TriggerSection::on_AParamAOButton_clicked()
 							}
 							case TargetType::TAG:
 							{
-								tagIT IT = tags.begin();
-								tagIT endIT = tags.begin();
+								auto IT = tags.begin();
+								auto endIT = tags.begin();
 								IT = tags.find(getTagByName(ui->SAParameterBox->currentText())->getID());
 								endIT = tags.find(getTagByName(ui->EAParameterBox->currentText())->getID());
 								++endIT;
@@ -1195,7 +1195,7 @@ QStringList TriggerSection::getTargetStrings(TargetType type)
 	QStringList list;
 	switch(type) {
 		case TargetType::WAYPOINT:
-			for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
+			for(auto IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
 				list << QString::number((*IT));
 			}
 			break;
@@ -1215,12 +1215,12 @@ QStringList TriggerSection::getTargetStrings(TargetType type)
 			}
 			break;
 		case TargetType::TEAM:
-			for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+			for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 				list << (*IT).second->getName();
 			}
 			break;
 		case TargetType::TRIGGER:
-			for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+			for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 				list << (*IT).second->getName();
 			}
 			break;
@@ -1234,7 +1234,7 @@ QStringList TriggerSection::getTargetStrings(TargetType type)
 			}
 			break;
 		case TargetType::TAG:
-			for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+			for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 				list << (*IT).second->getName();
 			}
 			break;
@@ -1244,17 +1244,17 @@ QStringList TriggerSection::getTargetStrings(TargetType type)
 			}
 			break;
 		case TargetType::INFANTRY:
-			for(unitIT IT = infantry.begin(); IT != infantry.end(); ++IT) {
+			for(auto IT = infantry.begin(); IT != infantry.end(); ++IT) {
 				list << (*IT).second.name;
 			}
 			break;
 		case TargetType::VEHICLE:
-			for(unitIT IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
+			for(auto IT = vehicles.begin(); IT != vehicles.end(); ++IT) {
 				list << (*IT).second.name;
 			}
 			break;
 		case TargetType::AIRCRAFT:
-			for(unitIT IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
+			for(auto IT = aircraft.begin(); IT != aircraft.end(); ++IT) {
 				list << (*IT).second.name;
 			}
 			break;
@@ -1272,7 +1272,7 @@ void TriggerSection::updateUi()
 	ui->TriggerList->clear();
 	ui->EventTypeBox->clear();
 	ui->ActionTypeBox->clear();
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		ui->TriggerList->addItem(IT->second->getName());
 	}
 	updateEventTypeBox();
@@ -1282,7 +1282,7 @@ void TriggerSection::updateUi()
 QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
 {
 	uint32_t i = 0;
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
 		}
@@ -1294,7 +1294,7 @@ QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
 QString TriggerSection::getTeamNameByPosition(uint32_t pos)
 {
 	uint32_t i = 0;
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
 		}
@@ -1306,7 +1306,7 @@ QString TriggerSection::getTeamNameByPosition(uint32_t pos)
 QString TriggerSection::getTagNameByPosition(uint32_t pos)
 {
 	uint32_t i = 0;
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
 		}
@@ -1327,7 +1327,7 @@ QString TriggerSection::getBuildingNameByKey(uint16_t key)
 
 QString TriggerSection::getUnitNameByKey(uint16_t key, std::map<QString, unitContainer> &unitMap)
 {
-	for(unitIT IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
+	for(auto IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
 		if((*IT).second.key == key) {
 			return (*IT).second.name;
 		}
@@ -1347,7 +1347,7 @@ uint16_t TriggerSection::getTutorialKeyByText(QString text)
 
 uint16_t TriggerSection::getUnitKeyByName(QString name, std::map<QString, unitContainer> &unitMap)
 {
-	for(unitIT IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
+	for(auto IT = unitMap.begin(); IT != unitMap.end(); ++IT) {
 		if((*IT).second.name == name) {
 			return (*IT).second.key;
 		}

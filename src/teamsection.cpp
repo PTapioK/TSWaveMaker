@@ -17,21 +17,21 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		ui->scriptBox->clear();
-		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->scriptBox->addItem(IT->second->getName());
 		}
 
 		ui->AOSBox->clear();
-		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->AOSBox->addItem(IT->second->getName());
 		}
 		ui->AOEBox->clear();
-		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->AOEBox->addItem(IT->second->getName());
 		}
 
 		ui->taskforceBox->clear();
-		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 			ui->taskforceBox->addItem(IT->second->getName());
 		}
 
@@ -289,7 +289,7 @@ void TeamSection::on_SAOButton_clicked()
 		std::vector<Script*> temp;
 		std::vector<Script*>::iterator tempIT;
 
-		scriptIT IT = scripts.find(getScriptIDByName(ui->AOSBox->currentText()));
+		auto IT = scripts.find(getScriptIDByName(ui->AOSBox->currentText()));
 		do {
 			temp.push_back(IT->second);
 			if(IT == scripts.find(getScriptIDByName(ui->AOEBox->currentText()))) { break; }
@@ -318,7 +318,7 @@ void TeamSection::updateUi()
 {
 	ui->TeamList->clearSelection();
 	ui->TeamList->clear();
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		ui->TeamList->addItem(IT->second->getName());
 	}
 }

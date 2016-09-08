@@ -34,38 +34,38 @@ void FileHandler::save(QString as)
 
 void FileHandler::saveToBuffer()
 {
-	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
+	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		(*IT).second->save();
 	}
-	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
 		(*IT).second->save();
 	}
 
 	int i = 0;
 	deleteSectionFromBuffer("TeamTypes");
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		saveLineToBuffer("TeamTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
-	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
+	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		(*IT).second->save();
 	}
 	i = 0;
 	deleteSectionFromBuffer("ScriptTypes");
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		saveLineToBuffer("ScriptTypes", QString::number(i), IT->second->getID());
 		++i;
 	}
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		(*IT).second->save();
 	}
 	i = 0;
 	deleteSectionFromBuffer("TaskForces");
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		saveLineToBuffer("TaskForces", QString::number(i), IT->second->getID());
 		++i;
 	}
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		(*IT).second->save();
 	}
 

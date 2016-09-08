@@ -482,7 +482,7 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		scriptStrings.endGroup();
 		break;
 	case SATargetType::WAYPOINT:
-		for(waypointIT IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
+		for(auto IT = waypoints.begin(); IT != waypoints.end(); ++IT) {
 			list << QString::number((*IT));
 		}
 		break;
@@ -538,12 +538,12 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 		}
 		break;
 	case SATargetType::SCRIPT:
-		for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			list << (*IT).second->getName();
 		}
 		break;
 	case SATargetType::TASKFORCE:
-		for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 			list << (*IT).second->getName();
 		}
 		break;
@@ -562,7 +562,7 @@ QStringList ScriptSection::getScriptActionTargetStrings(SATargetType type)
 QString ScriptSection::getScriptNameByPosition(uint16_t pos)
 {
 	int i = 0;
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
 		}
@@ -574,7 +574,7 @@ QString ScriptSection::getScriptNameByPosition(uint16_t pos)
 QString ScriptSection::getTaskforceNameByPosition(uint16_t pos)
 {
 	int i = 0;
-	for(taskforceIT IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+	for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
 		}
@@ -590,7 +590,7 @@ void ScriptSection::updateUi()
 	ui->ScriptList->clear();
 	ui->SATypeBox->clear();
 	ui->SATargetBox->clear();
-	for(scriptIT IT = scripts.begin(); IT != scripts.end(); ++IT) {
+	for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 		ui->ScriptList->addItem(IT->second->getName());
 	}
 	updateSATypeBox();

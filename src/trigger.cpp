@@ -32,11 +32,11 @@ Trigger::Trigger(Trigger *otherTrigger)
 	*this = *otherTrigger;
 	setID(findFirstFreeID());
 	events.clear();
-	for(eventIT IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
+	for(auto IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
 		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
+	for(auto IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
 		actions.push_back(new Action(*IT, ID));
 	}
 
@@ -47,11 +47,11 @@ Trigger::Trigger(QString newID, Trigger *otherTrigger)
 	*this = *otherTrigger;
 	setID(newID);
 	events.clear();
-	for(eventIT IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
+	for(auto IT = otherTrigger->events.begin(); IT != otherTrigger->events.end(); ++IT) {
 		events.push_back(new Event(*IT, ID));
 	}
 	actions.clear();
-	for(actionIT IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
+	for(auto IT = otherTrigger->actions.begin(); IT != otherTrigger->actions.end(); ++IT) {
 		actions.push_back(new Action(*IT, ID));
 	}
 
@@ -74,11 +74,11 @@ Trigger::~Trigger()
 {
 	eraseEventsFromBuffer();
 	eraseActionsFromBuffer();
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+	for(auto IT = events.begin(); IT != events.end(); ++IT) {
 		delete (*IT);
 	}
 	events.clear();
-	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+	for(auto IT = actions.begin(); IT != actions.end(); ++IT) {
 		delete (*IT);
 	}
 	actions.clear();
@@ -104,12 +104,12 @@ void Trigger::save()
 	file.saveLineToBuffer("Triggers", ID, valueSS.readAll());
 
 	int i = 0;
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+	for(auto IT = events.begin(); IT != events.end(); ++IT) {
 		i = i + 1;
 		(*IT)->save(i);
 	}
 	i = 0;
-	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+	for(auto IT = actions.begin(); IT != actions.end(); ++IT) {
 		i = i + 1;
 		(*IT)->save(i);
 	}
@@ -159,7 +159,7 @@ void Trigger::eraseEvent(int32_t eventID)
 
 void Trigger::eraseEventByType(int32_t type)
 {
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+	for(auto IT = events.begin(); IT != events.end(); ++IT) {
 		if((*IT)->getType() == type) {
 			delete *IT;
 			events.erase(IT);
@@ -180,7 +180,7 @@ Event *Trigger::getEvent(int32_t count) const
 
 Action* Trigger::getActionByType(int32_t type) const
 {
-	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+	for(auto IT = actions.begin(); IT != actions.end(); ++IT) {
 		if((*IT)->getType() == type) {
 			return *IT;
 		}
@@ -190,7 +190,7 @@ Action* Trigger::getActionByType(int32_t type) const
 
 Event* Trigger::getEventByType(int32_t type) const
 {
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+	for(auto IT = events.begin(); IT != events.end(); ++IT) {
 		if((*IT)->getType() == type) {
 			return *IT;
 		}
@@ -210,7 +210,7 @@ void Trigger::eraseEventsFromBuffer()
 
 bool Trigger::hasEventType(int32_t type)
 {
-	for(eventIT IT = events.begin(); IT != events.end(); ++IT) {
+	for(auto IT = events.begin(); IT != events.end(); ++IT) {
 		if((*IT)->getType() == type) {
 			return true;
 		}
@@ -220,7 +220,7 @@ bool Trigger::hasEventType(int32_t type)
 
 bool Trigger::hasActionType(int32_t type)
 {
-	for(actionIT IT = actions.begin(); IT != actions.end(); ++IT) {
+	for(auto IT = actions.begin(); IT != actions.end(); ++IT) {
 		if((*IT)->getType() == type) {
 			return true;
 		}
