@@ -61,6 +61,12 @@ class TriggerSection : public QDockWidget
 
 		void on_ActionTypeBox_activated();
 
+		void on_ActionParamNameBox_activated();
+
+		void on_ActionParamValueBox_activated();
+
+		void on_AParamAOButton_clicked();
+
 	private:
 		Ui::TriggerSection *ui;
 
@@ -69,10 +75,13 @@ class TriggerSection : public QDockWidget
 		void updateEventTypeBox();
 		void updateEventParamBox();
 		void updateActionTypeBox();
+		void updateActionParamNameBox();
+		void updateActionParamValueBox();
+		void resetActionLine(Action *action);
 
 		QStringList getTargetStrings(TargetType type);
-		TargetType getEventTargetType(uint8_t ID);
-		QString getTargetTypeString(uint8_t ID);
+		TargetType getEventTargetType(int32_t ID);
+		QString getTargetTypeString(int32_t ID);
 		QString getTriggerNameByPosition(uint32_t pos);
 		QString getTeamNameByPosition(uint32_t pos);
 		QString getTagNameByPosition(uint32_t pos);
@@ -80,6 +89,7 @@ class TriggerSection : public QDockWidget
 		QString getUnitNameByKey(uint16_t key, std::map<QString, unitContainer> &unitMap);
 		uint16_t getTutorialKeyByText(QString text);
 		uint16_t getUnitKeyByName(QString name, std::map<QString, unitContainer> &unitMap);
+		TargetType getActionTargetType(int32_t ID, uint8_t paramID);
 };
 
 #endif // TRIGGERSECTION_H

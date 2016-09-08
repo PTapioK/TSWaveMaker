@@ -52,7 +52,7 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 		}
 
 		if(curTrig->hasActionType(27)) {
-			int32_t secs = curTrig->getActionByType(27)->getParameter(2).toInt();
+			int32_t secs = curTrig->getActionByType(27)->getParameter(1).toInt();
 			QTime time(0, 0, 0);
 			time = time.addSecs(secs);
 			ui->WaveTimer->setTime(time);
@@ -125,9 +125,9 @@ void TriggerSection::on_DeleteTrigger_clicked()
 			QString ID = getTriggerIDByName(name);
 			delete getTriggerByName(name);
 			triggers.erase(ID);
-			QString tagName = getTagByTriggerID(ID)->getName();
+			QString tagID = getTagByTriggerID(ID)->getID();
 			delete getTagByTriggerID(ID);
-			tags.erase(tagName);
+			tags.erase(tagID);
 		}
 		updateUi();
 	}
@@ -182,7 +182,7 @@ void TriggerSection::on_WaveTimer_editingFinished()
 				curTrig->addAction(nAction);
 				ui->ActionList->addItem(QString::number(curTrig->actions.size()));
 			} else {
-				curTrig->getActionByType(27)->setParameter(2, secs);
+				curTrig->getActionByType(27)->setParameter(1, secs);
 			}
 		}
 	}
@@ -256,6 +256,7 @@ void TriggerSection::on_EventList_itemSelectionChanged()
 			ui->EventTypeBox->setCurrentIndex(index);
 			updateEventParamBox();
 		}
+		ui->EventTypeBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->EventTypeBox) + 50);
 	}
 }
 
@@ -346,97 +347,6 @@ void TriggerSection::on_EventParamBox_activated()
 	}
 }
 
-// New action
-void TriggerSection::on_NewAction_clicked()
-{
-	if(ui->TriggerList->selectedItems().size() != 0) {
-		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
-			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-
-			Action *nAction = new Action(curTrig->getID());
-			curTrig->addAction(nAction);
-		}
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
-		ui->ActionList->addItem(QString::number(curTrig->actions.size()));
-	}
-}
-
-// Delete action
-void TriggerSection::on_DeleteAction_clicked()
-{
-	if(ui->TriggerList->selectedItems().size() != 0) {
-		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
-			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-
-			for(uint32_t i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
-				if(curTrig->actions.size() > i) {
-					curTrig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
-				}
-			}
-		}
-		cleanActionList();
-	}
-}
-
-// Clone action
-void TriggerSection::on_CloneAction_clicked()
-{
-	if(ui->TriggerList->selectedItems().size() != 0) {
-		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
-			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-
-			int actionsCount = curTrig->actions.size();
-			int i = actionsCount;
-			for(int b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
-				int actionID = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
-				if (actionID < actionsCount) {
-					Action *nAct = new Action(curTrig->getAction(actionID), curTrig->getID());
-					curTrig->addAction(nAct);
-
-					if (ui->TriggerList->selectedItems().at(a)->text() == ui->TriggerList->selectedItems().last()->text()) {
-						++i;
-						ui->ActionList->addItem(QString::number(i));
-					}
-				}
-			}
-		}
-	}
-}
-
-void TriggerSection::on_ActionList_itemSelectionChanged()
-{
-	ui->ActionTypeBox->setCurrentIndex(0);
-	ui->ActionParamNameBox->clear();
-	ui->ActionParamValueBox->clear();
-	if (ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
-		int16_t index = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()))->getType();
-		if (index < ui->ActionTypeBox->count()) {
-			ui->ActionTypeBox->setCurrentIndex(index);
-		}
-	}
-}
-
-void TriggerSection::mousePressEvent(QMouseEvent *event)
-{
-	event->accept();
-}
-
-void TriggerSection::cleanActionList() {
-	for(int i = 0; i < ui->ActionList->selectedItems().size(); ++i) {
-		delete ui->ActionList->selectedItems().at(i);
-	}
-	ui->ActionList->clear();
-	if(ui->TriggerList->selectedItems().size() != 0) {
-		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
-		int i = 0;
-		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
-			++i;
-			ui->ActionList->addItem(QString::number(i));
-		}
-	}
-}
-
 void TriggerSection::cleanEventList() {
 	for(int i = 0; i < ui->EventList->selectedItems().size(); ++i) {
 		delete ui->EventList->selectedItems().at(i);
@@ -480,11 +390,11 @@ void TriggerSection::updateEventParamBox()
 		TargetType tType = getEventTargetType(type);
 		QStringList targetList = getTargetStrings(tType);
 		ui->EventParamBox->addItems(targetList);
-		ui->EventParamBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->EventParamBox->font()) + 50);
 		ui->SEParameterBox->addItems(targetList);
-		ui->SEParameterBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->SEParameterBox->font()) + 50);
 		ui->EEParameterBox->addItems(targetList);
-		ui->EEParameterBox->view()->setMinimumWidth(getStringListMaxWidth(targetList, ui->EEParameterBox->font()) + 50);
+		ui->EventParamBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->EventParamBox) + 50);
+		ui->SEParameterBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->SEParameterBox) + 50);
+		ui->EEParameterBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->EEParameterBox) + 50);
 
 		switch(getEventTargetType(type)) {
 			case TargetType::NONE:
@@ -496,20 +406,16 @@ void TriggerSection::updateEventParamBox()
 				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(houses[param.toShort()]));
 				break;
 			case TargetType::TEAM:
-				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTeamNameByPosition(param.toInt())));
+			{
+				auto IT = teams.find(param);
+				if (IT != teams.end()) {
+					ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(IT->second->getName()));
+				}
 				break;
-			case TargetType::TRIGGER:
-				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTriggerNameByPosition(param.toInt())));
-				break;
+			}
 			case TargetType::EDITABLE:
 				ui->EventParamBox->setEditable(true);
-				ui->EventParamBox->setCurrentText(QString::number(param.toInt()));
-				break;
-			case TargetType::TEXT:
-				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(tutorial[param.toInt()]));
-				break;
-			case TargetType::TAG:
-				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getTagNameByPosition(param.toInt())));
+				ui->EventParamBox->setCurrentText(param);
 				break;
 			case TargetType::BUILDING:
 				ui->EventParamBox->setCurrentIndex(ui->EventParamBox->findText(getBuildingNameByKey(param.toShort())));
@@ -691,6 +597,99 @@ void TriggerSection::on_TEParamAOButton_clicked()
 	}
 }
 
+// New action
+void TriggerSection::on_NewAction_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+
+			Action *nAction = new Action(curTrig->getID());
+			curTrig->addAction(nAction);
+		}
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		ui->ActionList->addItem(QString::number(curTrig->actions.size()));
+	}
+}
+
+// Delete action
+void TriggerSection::on_DeleteAction_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+
+			for(uint32_t i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
+				if(curTrig->actions.size() > i) {
+					curTrig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
+				}
+			}
+		}
+		cleanActionList();
+	}
+}
+
+// Clone action
+void TriggerSection::on_CloneAction_clicked()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+
+			int actionsCount = curTrig->actions.size();
+			int i = actionsCount;
+			for(int b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				int actionID = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
+				if (actionID < actionsCount) {
+					Action *nAct = new Action(curTrig->getAction(actionID), curTrig->getID());
+					curTrig->addAction(nAct);
+
+					if (ui->TriggerList->selectedItems().at(a)->text() == ui->TriggerList->selectedItems().last()->text()) {
+						++i;
+						ui->ActionList->addItem(QString::number(i));
+					}
+				}
+			}
+		}
+	}
+}
+
+void TriggerSection::on_ActionList_itemSelectionChanged()
+{
+	ui->ActionTypeBox->setCurrentIndex(0);
+	ui->ActionParamNameBox->clear();
+	ui->ActionParamValueBox->clear();
+	if (ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int16_t index = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()))->getType();
+		if (index < ui->ActionTypeBox->count()) {
+			ui->ActionTypeBox->setCurrentIndex(index);
+		}
+		updateActionParamNameBox();
+	}
+	ui->ActionTypeBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->ActionTypeBox) + 50);
+}
+
+void TriggerSection::mousePressEvent(QMouseEvent *event)
+{
+	event->accept();
+}
+
+void TriggerSection::cleanActionList() {
+	for(int i = 0; i < ui->ActionList->selectedItems().size(); ++i) {
+		delete ui->ActionList->selectedItems().at(i);
+	}
+	ui->ActionList->clear();
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int i = 0;
+		for(actionIT IT = curTrig->actions.begin(); IT != curTrig->actions.end(); ++IT) {
+			++i;
+			ui->ActionList->addItem(QString::number(i));
+		}
+	}
+}
+
 void TriggerSection::updateActionTypeBox()
 {
 	QStringList values;
@@ -707,29 +706,70 @@ void TriggerSection::on_ActionTypeBox_activated()
 {
 	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
-			Trigger *curTrig = getTriggerByName(ui->ActionList->selectedItems().at(a)->text());
+			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
 				size_t index = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
 				if(index < curTrig->actions.size()) {
 					curTrig->getAction(index)->setType(ui->ActionTypeBox->currentIndex());
+					resetActionLine(curTrig->getAction(index));
 				}
 			}
+		}
+		updateActionParamNameBox();
+	}
+}
+
+void TriggerSection::updateActionParamNameBox()
+{
+	ui->ActionParamNameBox->clear();
+	ui->EAParameterBox->clear();
+	ui->SAParameterBox->clear();
+	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Action *curAct = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+		int32_t curType = curAct->getType();
+		QVariant value = triggerStrings.value("Actions/" + QString::number(curType));
+		if (!value.isNull()) {
+			QStringList values = value.toStringList();
+			bool rowSet = false;
+			for (int i = 1; i < 7; ++i) {
+				ui->ActionParamNameBox->addItem(getTargetTypeString(values[i].toInt()));
+				if (values[i].toInt() == 0 || values[i].toInt() < 0) {
+					ui->ActionParamNameBox->setItemData(i - 1, QSize(0,0), Qt::SizeHintRole);
+				} else if(!rowSet) {
+					ui->ActionParamNameBox->setCurrentIndex(i - 1);
+					rowSet = true;
+				}
+			}
+			if (values[7].toInt()) {
+				ui->ActionParamNameBox->addItem(getTargetTypeString(30));
+			}
+			if (rowSet) {
+				updateActionParamValueBox();
+			} else {
+				ui->ActionParamNameBox->clear();
+			}
+			ui->ActionParamNameBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->ActionParamNameBox) + 50);
 		}
 	}
 }
 
-QString TriggerSection::getTargetTypeString(uint8_t ID)
+QString TriggerSection::getTargetTypeString(int32_t ID)
 {
 	QVariant value;
 	value = triggerStrings.value("ParamTypes/" + QString::number(ID));
 	if (!value.isNull()) {
 		return value.toStringList()[0];
 	} else {
-		return QString("");
+		if (ID < 0) {
+			return QString("Unknown");
+		} else {
+			return QString("Invalid");
+		}
 	}
 }
 
-TargetType TriggerSection::getEventTargetType(uint8_t ID)
+TargetType TriggerSection::getEventTargetType(int32_t ID)
 {
 	QVariant value;
 	value = triggerStrings.value("Events/" + QString::number(ID));
@@ -740,6 +780,414 @@ TargetType TriggerSection::getEventTargetType(uint8_t ID)
 		}
 	}
 	return TargetType::NONE;
+}
+
+TargetType TriggerSection::getActionTargetType(int32_t ID, uint8_t paramID)
+{
+	QVariant value;
+	value = triggerStrings.value("Actions/" + QString::number(ID));
+	if (!value.isNull()) {
+		if (paramID > 5 && value.toStringList()[paramID + 1].toInt()) {
+			return TargetType::WAYPOINT;
+		} else if (value.toStringList()[paramID + 1].toInt() < 0) {
+			return TargetType::CONSTANT;
+		}
+		value = triggerStrings.value("ParamTypes/" + QString::number(value.toStringList()[paramID + 1].toInt()));
+		if (!value.isNull()) {
+			return static_cast<TargetType>(value.toStringList()[1].toInt());
+		}
+	}
+	return TargetType::NONE;
+}
+
+void TriggerSection::on_ActionParamNameBox_activated()
+{
+	updateActionParamValueBox();
+}
+
+void TriggerSection::updateActionParamValueBox()
+{
+	ui->ActionParamValueBox->setEditable(false);
+	ui->ActionParamValueBox->clear();
+	ui->EAParameterBox->clear();
+	ui->SAParameterBox->clear();
+
+	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+		int32_t type = curAction->getType();
+		QString param;
+		if (ui->ActionParamNameBox->currentIndex() < 6) {
+			param = curAction->getParameter(ui->ActionParamNameBox->currentIndex());
+		} else {
+			param = curAction->getWaypoint();
+		}
+
+		TargetType tType = getActionTargetType(type, ui->ActionParamNameBox->currentIndex());
+		QStringList targetList = getTargetStrings(tType);
+		ui->ActionParamValueBox->addItems(targetList);
+		ui->SAParameterBox->addItems(targetList);
+		ui->EAParameterBox->addItems(targetList);
+		ui->ActionParamValueBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->ActionParamValueBox) + 50);
+		ui->SAParameterBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->SAParameterBox) + 50);
+		ui->EAParameterBox->view()->setMinimumWidth(getComboBoxMaxWidth(ui->EAParameterBox) + 50);
+
+		switch(getActionTargetType(type, ui->ActionParamNameBox->currentIndex())) {
+			case TargetType::NONE:
+				break;
+			case TargetType::WAYPOINT:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(param));
+				break;
+			case TargetType::HOUSE:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(houses[param.toShort()]));
+				break;
+			case TargetType::TEAM:
+			{
+				auto IT = teams.find(param);
+				if (IT != teams.end()) {
+					ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(IT->second->getName()));
+				}
+				break;
+			}
+			case TargetType::TRIGGER:
+			{
+				auto IT = triggers.find(param);
+				if (IT != triggers.end())
+					ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(IT->second->getName()));
+				break;
+			}
+			case TargetType::EDITABLE:
+				ui->ActionParamValueBox->setEditable(true);
+				ui->ActionParamValueBox->setCurrentText(param);
+				break;
+			case TargetType::TEXT:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(tutorial[param.toInt()]));
+				break;
+			case TargetType::TAG:
+			{
+				auto IT = tags.find(param);
+				if (IT != tags.end()) {
+					ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(IT->second->getName()));
+				}
+				break;
+			}
+			case TargetType::BUILDING:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(getBuildingNameByKey(param.toShort())));
+				break;
+			case TargetType::INFANTRY:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(getUnitNameByKey(param.toShort(), infantry)));
+				break;
+			case TargetType::VEHICLE:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(getUnitNameByKey(param.toShort(), vehicles)));
+				break;
+			case TargetType::AIRCRAFT:
+				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(getUnitNameByKey(param.toShort(), aircraft)));
+				break;
+			default:
+				ui->ActionParamValueBox->setCurrentIndex(param.toInt());
+		}
+	}
+}
+
+void TriggerSection::resetActionLine(Action *action)
+{
+	std::array<QString, 6> params = action->getParameters();
+	for (size_t i = 0; i < 6; ++i) {
+		QVariant value = triggerStrings.value("Actions/" + QString::number(action->getType()));
+		if (!value.isNull()) {
+			int32_t val = value.toStringList()[i + 1].toInt();
+			if (val < 0) {
+				params[i] = QString::number(abs(val));
+			}
+		}
+	}
+	action->setParameters(params);
+}
+
+void TriggerSection::on_ActionParamValueBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+		int32_t curActionType = curAction->getType();
+		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				if (b < trig->actions.size()) {
+					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
+					int32_t actionType = action->getType();
+					int32_t paramID = ui->ActionParamNameBox->currentIndex();
+					if (curActionType == actionType) {
+						if (paramID < 6) {
+							switch(getActionTargetType(actionType, paramID)) {
+								case TargetType::NONE:
+									action->setWaypoint(0);
+									break;
+								case TargetType::WAYPOINT:
+									action->setParameter(paramID, QString::number(waypoints[ui->ActionParamValueBox->currentIndex()]));
+									break;
+								case TargetType::HOUSE:
+									for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
+										if((*IT).second == ui->ActionParamValueBox->currentText()) {
+											action->setParameter(paramID, QString::number((*IT).first));
+											break;
+										}
+									}
+									break;
+								case TargetType::TEAM:
+									action->setParameter(paramID, getTeamByName(ui->ActionParamValueBox->currentText())->getID());
+									break;
+								case TargetType::TRIGGER:
+									action->setParameter(paramID, getTriggerByName(ui->ActionParamValueBox->currentText())->getID());
+									break;
+								case TargetType::EDITABLE:
+									action->setParameter(paramID, ui->ActionParamValueBox->currentText());
+									break;
+								case TargetType::TEXT:
+									action->setParameter(paramID, QString::number(getTutorialKeyByText(ui->ActionParamValueBox->currentText())));
+									break;
+								case TargetType::TAG:
+									action->setParameter(paramID, getTagByName(ui->ActionParamValueBox->currentText())->getID());
+									break;
+								case TargetType::BUILDING:
+									for(auto IT = buildings.begin(); IT != buildings.end(); ++IT) {
+										if((*IT).second.name == ui->ActionParamValueBox->currentText()) {
+											action->setParameter(paramID, QString::number((*IT).first));
+											break;
+										}
+									}
+									break;
+								case TargetType::INFANTRY:
+									action->setParameter(paramID, QString::number(getUnitKeyByName(ui->ActionParamValueBox->currentText(), infantry)));
+									break;
+								case TargetType::VEHICLE:
+									action->setParameter(paramID, QString::number(getUnitKeyByName(ui->ActionParamValueBox->currentText(), vehicles)));
+									break;
+								case TargetType::AIRCRAFT:
+									action->setParameter(paramID, QString::number(getUnitKeyByName(ui->ActionParamValueBox->currentText(), aircraft)));
+									break;
+								default:
+									action->setParameter(paramID, QString::number(ui->ActionParamValueBox->currentIndex()));
+							}
+						} else {
+							action->setWaypoint(waypoints[ui->ActionParamValueBox->currentIndex()]);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void TriggerSection::on_AParamAOButton_clicked()
+{
+	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+		int32_t curActionType = curAction->getType();
+
+		size_t ITPlus = 0;
+		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				if (b < trig->actions.size()) {
+					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
+					int32_t actionType = action->getType();
+					int32_t paramID = ui->ActionParamNameBox->currentIndex();
+					if (curActionType == actionType) {
+						switch(getActionTargetType(actionType, paramID)) {
+							case TargetType::NONE:
+								break;
+							case TargetType::WAYPOINT:
+							{
+								auto IT = std::find(waypoints.begin(), waypoints.end(), ui->SAParameterBox->currentIndex());
+								auto endIT = std::find(waypoints.begin(), waypoints.end(), ui->EAParameterBox->currentIndex());
+								++endIT;
+								IT += ITPlus;
+								if (IT != waypoints.end() && IT != endIT) {
+									if (paramID < 6) {
+										action->setParameter(paramID, QString::number(*IT));
+									} else {
+										action->setWaypoint(*IT);
+									}
+								}
+								break;
+							}
+							case TargetType::HOUSE:
+							{
+								auto IT = houses.begin();
+								auto endIT = houses.end();
+								for(auto iterIT = houses.begin(); iterIT != houses.end(); ++iterIT) {
+									if((*iterIT).second == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != houses.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::TEAM:
+							{
+								teamIT IT = teams.begin();
+								teamIT endIT = teams.begin();
+								IT = teams.find(getTeamByName(ui->SAParameterBox->currentText())->getID());
+								endIT = teams.find(getTeamByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != teams.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TRIGGER:
+							{
+								triggerIT IT = triggers.begin();
+								triggerIT endIT = triggers.begin();
+								IT = triggers.find(getTriggerByName(ui->SAParameterBox->currentText())->getID());
+								endIT = triggers.find(getTriggerByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != triggers.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TAG:
+							{
+								tagIT IT = tags.begin();
+								tagIT endIT = tags.begin();
+								IT = tags.find(getTagByName(ui->SAParameterBox->currentText())->getID());
+								endIT = tags.find(getTagByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != tags.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TEXT:
+							{
+								auto IT = tutorial.begin();
+								auto endIT = tutorial.begin();
+								IT = tutorial.find(getTutorialKeyByText(ui->SAParameterBox->currentText()));
+								endIT = tutorial.find(getTutorialKeyByText(ui->SEParameterBox->currentText()));
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != tutorial.end() && IT != endIT) {
+									action->setParameter(paramID, IT->first);
+								}
+								break;
+							}
+							case TargetType::BUILDING:
+							{
+								auto IT = buildings.begin();
+								auto endIT = buildings.end();
+								for(auto iterIT = buildings.begin(); iterIT != buildings.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != buildings.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::INFANTRY:
+							{
+								auto IT = infantry.begin();
+								auto endIT = infantry.begin();
+								for(auto iterIT = infantry.begin(); iterIT != infantry.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != infantry.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::VEHICLE:
+							{
+								auto IT = vehicles.begin();
+								auto endIT = vehicles.begin();
+								for(auto iterIT = vehicles.begin(); iterIT != vehicles.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != vehicles.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::AIRCRAFT:
+							{
+								auto IT = aircraft.begin();
+								auto endIT = aircraft.begin();
+								for(auto iterIT = aircraft.begin(); iterIT != aircraft.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != aircraft.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							default:
+								action->setParameter(paramID, QString::number(std::min(ui->SAParameterBox->currentIndex() + ITPlus, size_t(ui->EAParameterBox->currentIndex()))));
+								break;
+						}
+					}
+				}
+			}
+			++ITPlus;
+		}
+	}
 }
 
 QStringList TriggerSection::getTargetStrings(TargetType type)
@@ -833,7 +1281,7 @@ void TriggerSection::updateUi()
 
 QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
 {
-	int i = 0;
+	uint32_t i = 0;
 	for(triggerIT IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
@@ -845,7 +1293,7 @@ QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
 
 QString TriggerSection::getTeamNameByPosition(uint32_t pos)
 {
-	int i = 0;
+	uint32_t i = 0;
 	for(teamIT IT = teams.begin(); IT != teams.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();
@@ -857,7 +1305,7 @@ QString TriggerSection::getTeamNameByPosition(uint32_t pos)
 
 QString TriggerSection::getTagNameByPosition(uint32_t pos)
 {
-	int i = 0;
+	uint32_t i = 0;
 	for(tagIT IT = tags.begin(); IT != tags.end(); ++IT) {
 		if(i == pos) {
 			return IT->second->getName();

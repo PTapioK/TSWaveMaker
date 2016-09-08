@@ -51,7 +51,8 @@ enum class TargetType {
 	BUILDING,
 	INFANTRY,
 	VEHICLE,
-	AIRCRAFT
+	AIRCRAFT,
+	CONSTANT
 };
 
 extern FileHandler file;

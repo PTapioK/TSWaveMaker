@@ -95,21 +95,26 @@ void Action::setType(int32_t newType)
 	type = newType;
 }
 
-void Action::setWayPoint(int32_t newWaypoint)
+void Action::setWaypoint(int32_t newWaypoint)
 {
 	waypoint = decToWaypointID(newWaypoint);
 }
 
-void Action::setParameter(int32_t i, QString data)
+void Action::setParameter(uint8_t i, QString data)
 {
-	assert(i > 0 && i < 6);
-	params[i-1] = data;
+	assert(i >= 0 && i < 6);
+	params[i] = data;
 }
 
-void Action::setParameter(int32_t i, int32_t data)
+void Action::setParameter(uint8_t i, int32_t data)
 {
-	assert(i > 0 && i < 6);
-	params[i-1] = QString::number(data);
+	assert(i >= 0 && i < 6);
+	params[i] = QString::number(data);
+}
+
+void Action::setParameters(std::array<QString, 6> newParameters)
+{
+	params = newParameters;
 }
 
 int32_t Action::getType() const
@@ -122,8 +127,13 @@ int32_t Action::getWaypoint() const
 	return waypointIDToDec(waypoint);
 }
 
-QString Action::getParameter(int i) const
+QString Action::getParameter(uint8_t i) const
 {
-	assert(i > 0 && i < 6);
-	return params[i-1];
+	assert(i >= 0 && i < 6);
+	return params[i];
+}
+
+std::array<QString, 6> Action::getParameters() const
+{
+	return params;
 }

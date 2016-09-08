@@ -283,6 +283,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+     </property>
     </widget>
     <widget class="QLabel" name="AParameterLabel">
      <property name="geometry">
@@ -552,6 +555,9 @@
        <width>191</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToMinimumContentsLength</enum>
      </property>
     </widget>
     <widget class="QComboBox" name="EventParamBox">

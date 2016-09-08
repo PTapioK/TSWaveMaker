@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include "main.h"
+#include <QComboBox>
 
 extern QString findFirstFreeID();
 
@@ -34,7 +35,8 @@ extern int32_t waypointIDToDec(QString wID);
 
 extern QString getNameWithNextMark(QString name, int iter = 0, int numIter = -1000000);
 
-extern uint32_t getStringListMaxWidth(QStringList list, QFont font);
+extern size_t getStringListMaxWidth(QStringList list, QFont font);
+extern size_t getComboBoxMaxWidth(QComboBox *box);
 extern bool lessThanQString(const QString &str1, const QString &str2);
 extern void clearContainers();
 

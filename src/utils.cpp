@@ -273,13 +273,27 @@ SATargetType getScriptActionTargetType(uint8_t ID)
 	}
 }
 
-uint32_t getStringListMaxWidth(QStringList list, QFont font)
+size_t getStringListMaxWidth(QStringList list, QFont font)
 {
-	if(!list.empty()) {
-		std::vector <uint32_t> widths;
+	if (!list.empty()) {
+		std::vector <size_t> widths;
 		QFontMetrics metr(font);
 		for(QStringList::Iterator listIT = list.begin(); listIT != list.end(); ++listIT) {
 			widths.push_back(metr.width(*listIT));
+		}
+		return *max_element(widths.begin(), widths.end());
+	}
+	return 0;
+}
+
+size_t getComboBoxMaxWidth(QComboBox *box)
+{
+	box->update();
+	if (box != NULL && box->count() > 0) {
+		std::vector <size_t> widths;
+		QFontMetrics metr(box->font());
+		for(int i = 0; i < box->count(); ++i) {
+			widths.push_back(metr.width(box->itemText(i)));
 		}
 		return *max_element(widths.begin(), widths.end());
 	}

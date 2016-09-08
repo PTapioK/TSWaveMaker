@@ -17,14 +17,16 @@ class Action
 		void save(int32_t count);
 
 		void setType(int32_t newType);
-		void setWayPoint(int32_t newWaypoint);
+		void setWaypoint(int32_t newWaypoint);
 
-		void setParameter(int32_t i, QString data);
-		void setParameter(int32_t i, int32_t data);
+		void setParameter(uint8_t i, QString data);
+		void setParameter(uint8_t i, int32_t data);
+		void setParameters(std::array<QString, 6> newParameters);
 
 		int32_t getType() const;
 		int32_t getWaypoint() const;
-		QString getParameter(int i) const;
+		QString getParameter(uint8_t i) const;
+		std::array<QString, 6> getParameters() const;
 
 	private:
 		QString ID;
