@@ -51,14 +51,17 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="gitBuild">
    <property name="geometry">
     <rect>
-     <x>116</x>
+     <x>36</x>
      <y>220</y>
-     <width>101</width>
+     <width>241</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label">
