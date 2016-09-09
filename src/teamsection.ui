@@ -206,9 +206,9 @@
    <widget class="QPushButton" name="SAOButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>510</x>
       <y>30</y>
-      <width>201</width>
+      <width>231</width>
       <height>23</height>
      </rect>
     </property>
@@ -249,27 +249,33 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>540</x>
       <y>60</y>
-      <width>91</width>
+      <width>181</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Starting from script</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>540</x>
       <y>110</y>
-      <width>81</width>
+      <width>181</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Ending to script</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -293,6 +299,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Aggressive</string>
      </property>
@@ -305,6 +316,11 @@
        <width>70</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Recruiter</string>
@@ -319,6 +335,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Full</string>
      </property>
@@ -331,6 +352,11 @@
        <width>81</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Autocreate</string>
@@ -345,6 +371,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>IsBaseDefense</string>
      </property>
@@ -357,6 +388,11 @@
        <width>70</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Suicide</string>
@@ -371,6 +407,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>AreTeamMembersRecruitable</string>
      </property>
@@ -383,6 +424,11 @@
        <width>121</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Annoyance</string>
@@ -397,6 +443,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>AvoidThreats</string>
      </property>
@@ -409,6 +460,11 @@
        <width>141</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>OnlyTargetHouseEnemy</string>
@@ -423,6 +479,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Reinforce</string>
      </property>
@@ -435,6 +496,11 @@
        <width>151</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>TransportsReturnOnUnload</string>
@@ -449,6 +515,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Ion immune</string>
      </property>
@@ -461,6 +532,11 @@
        <width>70</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Droppod</string>
@@ -475,6 +551,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Prebuild</string>
      </property>
@@ -487,6 +568,11 @@
        <width>91</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Loose recruit</string>
@@ -501,6 +587,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Guard slower</string>
      </property>
@@ -513,6 +604,11 @@
        <width>70</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Loadable</string>
@@ -527,6 +623,11 @@
        <height>17</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>OnTransOnly</string>
      </property>
@@ -539,6 +640,11 @@
        <width>70</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>Whiner</string>

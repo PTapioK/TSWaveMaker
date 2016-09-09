@@ -40,14 +40,17 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>10</x>
      <y>10</y>
-     <width>81</width>
-     <height>16</height>
+     <width>621</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>Rules.ini location</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="rulesFind">
@@ -95,14 +98,17 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>346</x>
+     <x>6</x>
      <y>60</y>
-     <width>101</width>
+     <width>631</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>Firestrm.ini location</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="saveButton">

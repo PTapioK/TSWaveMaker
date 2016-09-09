@@ -19,7 +19,7 @@ void TaskforceSection::on_TaskforceList_itemSelectionChanged()
 	ui->UnitList->clear();
 	ui->UnitBox->setCurrentIndex(-1);
 	ui->UnitNumberBox->setValue(0);
-	if(ui->TaskforceList->selectedItems().size() != NULL) {
+	if(ui->TaskforceList->selectedItems().size() != 0) {
 		Taskforce *curTaskforce = getTaskforceByName(ui->TaskforceList->selectedItems().last()->text());
 		ui->taskforceNameEdit->setText(ui->TaskforceList->selectedItems().last()->text());
 

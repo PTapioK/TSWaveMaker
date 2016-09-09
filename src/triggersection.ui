@@ -142,7 +142,7 @@
      <rect>
       <x>180</x>
       <y>180</y>
-      <width>61</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -370,9 +370,9 @@
    <widget class="QLabel" name="TALALabel">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>720</x>
       <y>140</y>
-      <width>91</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -623,7 +623,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>82</width>
+       <width>91</width>
        <height>17</height>
       </rect>
      </property>
@@ -639,7 +639,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>82</width>
+       <width>91</width>
        <height>17</height>
       </rect>
      </property>

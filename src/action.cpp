@@ -102,13 +102,13 @@ void Action::setWaypoint(int32_t newWaypoint)
 
 void Action::setParameter(uint8_t i, QString data)
 {
-	assert(i >= 0 && i < 6);
+	assert(i < 6);
 	params[i] = data;
 }
 
 void Action::setParameter(uint8_t i, int32_t data)
 {
-	assert(i >= 0 && i < 6);
+	assert(i < 6);
 	params[i] = QString::number(data);
 }
 
@@ -129,7 +129,7 @@ int32_t Action::getWaypoint() const
 
 QString Action::getParameter(uint8_t i) const
 {
-	assert(i >= 0 && i < 6);
+	assert(i < 6);
 	return params[i];
 }
 

@@ -210,8 +210,8 @@ void TriggerSection::on_DeleteEvent_clicked()
 		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-			for(uint32_t i = ui->EventList->selectedItems().size()-1; i != -1; --i) {
-				if(curTrig->events.size() > i) {
+			for(int32_t i = ui->EventList->selectedItems().size()-1; i != -1; --i) {
+				if(int32_t(curTrig->events.size()) > i) {
 					curTrig->eraseEvent(ui->EventList->row(ui->EventList->selectedItems().at(i)));
 				}
 			}
@@ -265,7 +265,7 @@ void TriggerSection::on_EventTypeBox_activated()
 	if(ui->TriggerList->selectedItems().size() != 0 && ui->EventList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+			for(int32_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
 				size_t index = ui->EventList->row(ui->EventList->selectedItems().at(b));
 				if(index < curTrig->events.size()) {
 					curTrig->getEvent(index)->setType(ui->EventTypeBox->currentIndex());
@@ -282,10 +282,10 @@ void TriggerSection::on_EventParamBox_activated()
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
 		int32_t curEventType = curEvent->getType();
-		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
-				if (b < trig->events.size()) {
+			for(int32_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				if (b < int32_t(trig->events.size())) {
 					Event *event = trig->getEvent(ui->EventList->row(ui->EventList->selectedItems().at(b)));
 					int32_t eventType = event->getType();
 					if (curEventType == eventType) {
@@ -443,10 +443,10 @@ void TriggerSection::on_TEParamAOButton_clicked()
 		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
 		int32_t curEventType = curEvent->getType();
 		size_t ITPlus = 0;
-		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
-				if (b < trig->events.size()) {
+			for(int32_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				if (b < int32_t(trig->events.size())) {
 					Event *event = trig->getEvent(ui->EventList->row(ui->EventList->selectedItems().at(b)));
 					int32_t eventType = event->getType();
 					if (curEventType == eventType) {
@@ -619,8 +619,8 @@ void TriggerSection::on_DeleteAction_clicked()
 		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-			for(uint32_t i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
-				if(curTrig->actions.size() > i) {
+			for(int32_t i = ui->ActionList->selectedItems().size()-1; i != -1; --i) {
+				if(int32_t(curTrig->actions.size()) > i) {
 					curTrig->eraseAction(ui->ActionList->row(ui->ActionList->selectedItems().at(i)));
 				}
 			}
@@ -707,7 +707,7 @@ void TriggerSection::on_ActionTypeBox_activated()
 	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
 		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
 				size_t index = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
 				if(index < curTrig->actions.size()) {
 					curTrig->getAction(index)->setType(ui->ActionTypeBox->currentIndex());
@@ -910,10 +910,10 @@ void TriggerSection::on_ActionParamValueBox_activated()
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 		int32_t curActionType = curAction->getType();
-		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
-				if (b < trig->actions.size()) {
+			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				if (b < int32_t(trig->actions.size())) {
 					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
 					int32_t actionType = action->getType();
 					int32_t paramID = ui->ActionParamNameBox->currentIndex();
@@ -987,10 +987,10 @@ void TriggerSection::on_AParamAOButton_clicked()
 		int32_t curActionType = curAction->getType();
 
 		size_t ITPlus = 0;
-		for (size_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
-			for(size_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
-				if (b < trig->actions.size()) {
+			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				if (b < int32_t(trig->actions.size())) {
 					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
 					int32_t actionType = action->getType();
 					int32_t paramID = ui->ActionParamNameBox->currentIndex();
