@@ -562,7 +562,7 @@ void FileHandler::parseUnitTypes(QSettings &rules, std::map<QString, unitContain
 		for(QStringList::ConstIterator keyIT = unitList.begin(); keyIT != unitList.end(); ++keyIT) {
 
 			QString unitID = rules.value(type + "/" + *keyIT).toString();
-			QString unitName = rules.value(unitID + "/name").toString();
+			QString unitName = rules.value(unitID + "/Name").toString();
 
 			if(unitName != "") {
 				unitContainer cont;
