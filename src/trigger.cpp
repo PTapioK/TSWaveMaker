@@ -168,12 +168,12 @@ void Trigger::eraseEventByType(int32_t type)
 	}
 }
 
-Action* Trigger::getAction(int32_t count) const
+Action* Trigger::getAction(size_t count) const
 {
 	return *(actions.begin()+count);
 }
 
-Event *Trigger::getEvent(int32_t count) const
+Event *Trigger::getEvent(size_t count) const
 {
 	return *(events.begin()+count);
 }

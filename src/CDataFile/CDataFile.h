@@ -144,11 +144,11 @@ typedef SectionList::iterator SectionItor;
 
 /// General Purpose Utility Functions ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-void	Report(e_DebugLevel DebugLevel, char *fmt, ...);
+void	Report(e_DebugLevel DebugLevel, const char *fmt, ...);
 t_Str	GetNextWord(t_Str& CommandLine);
 bool CompareCase(t_Str str1, t_Str str2);
 void	Trim(t_Str& szStr);
-int		WriteLn(std::fstream& stream, char* fmt, ...);
+int		WriteLn(std::fstream& stream, const char *fmt, ...);
 
 
 /// Class Definitions ///////////////////////////////////////////////////////////
@@ -236,9 +236,9 @@ public:
 				// Utility Methods
 				/////////////////////////////////////////////////////////////////
 				// SectionCount: Returns the number of valid sections in the database.
-	int			SectionCount();
+	size_t SectionCount();
 				// KeyCount: Returns the total number of keys, across all sections.
-	int			KeyCount();
+	size_t KeyCount();
 				// Clear: Initializes the member variables to their default states
 	void		Clear();
 				// SetFileName: For use when creating the object by hand

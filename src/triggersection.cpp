@@ -224,14 +224,14 @@ void TriggerSection::on_DeleteEvent_clicked()
 void TriggerSection::on_CloneEvent_clicked()
 {
 	if(ui->TriggerList->selectedItems().size() != 0) {
-		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-			int eventsCount = curTrig->events.size();
-			int i = eventsCount;
-			for(int b = 0; b != ui->EventList->selectedItems().size(); ++b) {
-				int eventID = ui->EventList->row(ui->EventList->selectedItems().at(b));
-				if (eventID < eventsCount) {
+			size_t eventsCount = curTrig->events.size();
+			size_t i = eventsCount;
+			for(int32_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
+				int32_t eventID = ui->EventList->row(ui->EventList->selectedItems().at(b));
+				if (eventID < int32_t(eventsCount)) {
 					Event *nEve = new Event(curTrig->getEvent(eventID), curTrig->getID());
 					curTrig->addEvent(nEve);
 
@@ -633,14 +633,14 @@ void TriggerSection::on_DeleteAction_clicked()
 void TriggerSection::on_CloneAction_clicked()
 {
 	if(ui->TriggerList->selectedItems().size() != 0) {
-		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 
-			int actionsCount = curTrig->actions.size();
-			int i = actionsCount;
-			for(int b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
-				int actionID = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
-				if (actionID < actionsCount) {
+			size_t actionsCount = curTrig->actions.size();
+			size_t i = actionsCount;
+			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				int32_t actionID = ui->ActionList->row(ui->ActionList->selectedItems().at(b));
+				if (actionID < int32_t(actionsCount)) {
 					Action *nAct = new Action(curTrig->getAction(actionID), curTrig->getID());
 					curTrig->addAction(nAct);
 
@@ -892,7 +892,7 @@ void TriggerSection::updateActionParamValueBox()
 void TriggerSection::resetActionLine(Action *action)
 {
 	std::array<QString, 6> params = action->getParameters();
-	for (size_t i = 0; i < 6; ++i) {
+	for (int8_t i = 0; i < 6; ++i) {
 		QVariant value = triggerStrings.value("Actions/" + QString::number(action->getType()));
 		if (!value.isNull()) {
 			int32_t val = value.toStringList()[i + 1].toInt();

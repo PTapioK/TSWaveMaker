@@ -43,7 +43,7 @@
    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
   </property>
   <property name="windowTitle">
-   <string>Tea&amp;m Section</string>
+   <string notr="true">Team Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QLabel" name="TeamLabel">

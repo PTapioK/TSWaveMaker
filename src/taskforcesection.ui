@@ -46,7 +46,7 @@
    <set>Qt::AllDockWidgetAreas</set>
   </property>
   <property name="windowTitle">
-   <string>Tas&amp;kforce Section</string>
+   <string notr="true">Taskforce Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QListWidget" name="TaskforceList">

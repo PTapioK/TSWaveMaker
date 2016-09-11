@@ -591,16 +591,16 @@ bool CDataFile::CreateSection(t_Str szSection, t_Str szComment, KeyList Keys)
 
 // SectionCount
 // Simply returns the number of sections in the list.
-int CDataFile::SectionCount() 
+size_t CDataFile::SectionCount()
 { 
 	return m_Sections.size(); 
 }
 
 // KeyCount
 // Returns the total number of keys contained within all the sections.
-int CDataFile::KeyCount()
+size_t CDataFile::KeyCount()
 {
-	int nCounter = 0;
+	size_t nCounter = 0;
 	SectionItor s_pos;
 
 	for (s_pos = m_Sections.begin(); s_pos != m_Sections.end(); s_pos++)
@@ -684,10 +684,10 @@ t_Str CDataFile::CommentStr(t_Str szComment)
 // remainder.  Returns the key
 t_Str GetNextWord(t_Str& CommandLine)
 {
-	int nPos = CommandLine.find_first_of(EqualIndicators);
+	size_t nPos = CommandLine.find_first_of(EqualIndicators);
 	t_Str sWord = t_Str("");
 
-	if ( nPos > -1 )
+	if ( nPos != string::npos )
 	{
 		sWord = CommandLine.substr(0, nPos);
 		CommandLine.erase(0, nPos+1);
@@ -723,7 +723,7 @@ void Trim(t_Str& szStr)
 	t_Str szTrimChars = WhiteSpace;
 	
 	//szTrimChars += EqualIndicators;
-	int nPos, rPos;
+	size_t nPos, rPos;
 
 	// trim left
 	nPos = szStr.find_first_not_of(szTrimChars);
@@ -735,14 +735,14 @@ void Trim(t_Str& szStr)
 	nPos = szStr.find_last_not_of(szTrimChars);
 	rPos = szStr.find_last_of(szTrimChars);
 
-	if ( rPos > nPos && rPos > -1)
+	if ( rPos > nPos && rPos != string::npos)
 		szStr.erase(rPos, szStr.size()-rPos);
 }
 
 // WriteLn
 // Writes the formatted output to the file stream, returning the number of
 // bytes written.
-int WriteLn(fstream& stream, char* fmt, ...)
+int WriteLn(fstream& stream, const char* fmt, ...)
 {
 	char buf[MAX_BUFFER_LEN];
 	int nLength;
@@ -769,7 +769,7 @@ int WriteLn(fstream& stream, char* fmt, ...)
 // A simple reporting function. Outputs the report messages to stdout
 // This is a dumb'd down version of a simmilar function of mine, so if 
 // it looks like it should do more than it does, that's why...
-void Report(e_DebugLevel DebugLevel, char *fmt, ...)
+void Report(e_DebugLevel DebugLevel, const char *fmt, ...)
 {
 	char buf[MAX_BUFFER_LEN];
 	int nLength;

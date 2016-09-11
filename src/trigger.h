@@ -35,10 +35,10 @@ class Trigger
 		void eraseActionsFromBuffer();
 		void eraseEventsFromBuffer();
 
-		Action* getAction(int32_t count) const;
+		Action* getAction(size_t count) const;
 		Action* getActionByType(int32_t type) const;
 
-		Event* getEvent(int32_t count) const;
+		Event* getEvent(size_t count) const;
 		Event* getEventByType(int32_t type) const;
 
 		bool hasEventType(int32_t type);

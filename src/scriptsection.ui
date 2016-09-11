@@ -46,7 +46,7 @@
    <set>Qt::AllDockWidgetAreas</set>
   </property>
   <property name="windowTitle">
-   <string>Script Sectio&amp;n</string>
+   <string notr="true">Script Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QListWidget" name="ScriptList">
