@@ -43,20 +43,23 @@
    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
   </property>
   <property name="windowTitle">
-   <string>Team Section</string>
+   <string>Tea&amp;m Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QLabel" name="TeamLabel">
     <property name="geometry">
      <rect>
-      <x>45</x>
+      <x>15</x>
       <y>10</y>
-      <width>41</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Teams</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QListWidget" name="TeamList">
@@ -85,14 +88,17 @@
    <widget class="QLabel" name="NameLabel">
     <property name="geometry">
      <rect>
-      <x>175</x>
+      <x>135</x>
       <y>10</y>
-      <width>31</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Name</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="New">
@@ -165,14 +171,17 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>280</x>
       <y>30</y>
-      <width>41</width>
+      <width>201</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Script</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QComboBox" name="taskforceBox">
@@ -193,14 +202,17 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>280</x>
       <y>90</y>
-      <width>61</width>
+      <width>201</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Taskforce</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="SAOButton">
@@ -281,10 +293,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>125</x>
       <y>180</y>
-      <width>611</width>
-      <height>131</height>
+      <width>620</width>
+      <height>125</height>
      </rect>
     </property>
     <property name="title">
@@ -295,7 +307,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>81</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -313,7 +325,7 @@
       <rect>
        <x>450</x>
        <y>20</y>
-       <width>70</width>
+       <width>111</width>
        <height>17</height>
       </rect>
      </property>
@@ -349,7 +361,7 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>81</width>
+       <width>91</width>
        <height>17</height>
       </rect>
      </property>
@@ -367,7 +379,7 @@
       <rect>
        <x>180</x>
        <y>100</y>
-       <width>101</width>
+       <width>111</width>
        <height>17</height>
       </rect>
      </property>
@@ -403,7 +415,7 @@
       <rect>
        <x>10</x>
        <y>60</y>
-       <width>161</width>
+       <width>171</width>
        <height>17</height>
       </rect>
      </property>
@@ -457,7 +469,7 @@
       <rect>
        <x>300</x>
        <y>60</y>
-       <width>141</width>
+       <width>151</width>
        <height>17</height>
       </rect>
      </property>
@@ -475,7 +487,7 @@
       <rect>
        <x>450</x>
        <y>40</y>
-       <width>70</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -493,7 +505,7 @@
       <rect>
        <x>450</x>
        <y>80</y>
-       <width>151</width>
+       <width>171</width>
        <height>17</height>
       </rect>
      </property>
@@ -511,7 +523,7 @@
       <rect>
        <x>180</x>
        <y>80</y>
-       <width>81</width>
+       <width>91</width>
        <height>17</height>
       </rect>
      </property>
@@ -565,7 +577,7 @@
       <rect>
        <x>300</x>
        <y>40</y>
-       <width>91</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -583,7 +595,7 @@
       <rect>
        <x>180</x>
        <y>60</y>
-       <width>91</width>
+       <width>101</width>
        <height>17</height>
       </rect>
      </property>
@@ -601,7 +613,7 @@
       <rect>
        <x>300</x>
        <y>20</y>
-       <width>70</width>
+       <width>81</width>
        <height>17</height>
       </rect>
      </property>

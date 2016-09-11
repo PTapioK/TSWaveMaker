@@ -46,7 +46,7 @@
    <set>Qt::AllDockWidgetAreas</set>
   </property>
   <property name="windowTitle">
-   <string>Taskforce Section</string>
+   <string>Tas&amp;kforce Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QListWidget" name="TaskforceList">
@@ -169,20 +169,23 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>590</x>
       <y>10</y>
-      <width>51</width>
-      <height>16</height>
+      <width>131</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Unit type</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QSpinBox" name="UnitNumberBox">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>680</x>
       <y>60</y>
       <width>42</width>
       <height>22</height>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1050</width>
-    <height>330</height>
+    <height>340</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>1050</width>
-    <height>330</height>
+    <height>340</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1050</width>
-    <height>330</height>
+    <height>340</height>
    </size>
   </property>
   <property name="font">
@@ -43,7 +43,7 @@
    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
   </property>
   <property name="windowTitle">
-   <string>Trigger Section</string>
+   <string>Tri&amp;gger Section</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QLineEdit" name="NameEdit">
@@ -609,10 +609,10 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>140</x>
       <y>210</y>
-      <width>121</width>
-      <height>91</height>
+      <width>141</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -623,9 +623,14 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>91</width>
+       <width>101</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>SINGLE OR</string>
@@ -639,9 +644,14 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>91</width>
+       <width>111</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>SINGLE AND</string>
@@ -652,9 +662,14 @@
       <rect>
        <x>10</x>
        <y>60</y>
-       <width>111</width>
+       <width>121</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>REPEATING OR</string>
