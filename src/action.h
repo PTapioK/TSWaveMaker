@@ -9,7 +9,7 @@ class Action
 		Action(QString newID);
 		Action(Action *otherAction, QString newID);
 		Action(QString newID, int32_t newType, int32_t newWaypoint);
-		Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, int32_t newWaypoint);
+		Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, QString newWaypoint);
 		Action(QString newID, int32_t newType, int32_t newWaypoint,
 			   QString parameter1, QString parameter2, QString parameter3,
 			   QString parameter4, QString parameter5, QString parameter6);

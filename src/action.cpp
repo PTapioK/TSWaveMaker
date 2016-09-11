@@ -31,11 +31,11 @@ Action::Action(QString newID, int32_t newType, int32_t newWaypoint,
 	params[5] = parameter6;
 }
 
-Action::Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, int32_t newWaypoint = 0)
+Action::Action(QString newID, int32_t newType, std::array<QString, 6> newParameters, QString newWaypoint = 0)
 {
 	ID = newID;
 	type = newType;
-	waypoint = decToWaypointID(newWaypoint);
+	waypoint = newWaypoint;
 	params = newParameters;
 }
 

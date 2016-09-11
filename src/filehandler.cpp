@@ -262,7 +262,7 @@ void FileHandler::parseSections()
 				params[4] = curLine[6 + i*8];
 				params[5] = curLine[7 + i*8];
 
-				int32_t wPoint = curLine[8 + i*8].toInt();
+				QString wPoint = curLine[8 + i*8];
 
 				triggers[ID]->addAction(new Action(ID, aType, params, wPoint));
 			}

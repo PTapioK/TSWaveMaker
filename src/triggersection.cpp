@@ -820,7 +820,7 @@ void TriggerSection::updateActionParamValueBox()
 		if (ui->ActionParamNameBox->currentIndex() < 6) {
 			param = curAction->getParameter(ui->ActionParamNameBox->currentIndex());
 		} else {
-			param = curAction->getWaypoint();
+			param = QString::number(curAction->getWaypoint());
 		}
 
 		TargetType tType = getActionTargetType(type, ui->ActionParamNameBox->currentIndex());
@@ -986,9 +986,9 @@ void TriggerSection::on_AParamAOButton_clicked()
 		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 		int32_t curActionType = curAction->getType();
 
-		size_t ITPlus = 0;
 		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			size_t ITPlus = 0;
 			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
 				if (b < int32_t(trig->actions.size())) {
 					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
@@ -1182,10 +1182,10 @@ void TriggerSection::on_AParamAOButton_clicked()
 								action->setParameter(paramID, QString::number(std::min(ui->SAParameterBox->currentIndex() + ITPlus, size_t(ui->EAParameterBox->currentIndex()))));
 								break;
 						}
+						++ITPlus;
 					}
 				}
 			}
-			++ITPlus;
 		}
 	}
 }

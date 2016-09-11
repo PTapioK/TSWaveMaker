@@ -704,16 +704,9 @@ t_Str GetNextWord(t_Str& CommandLine)
 
 
 // !CompareNoCase
-// !it's amazing what features std::string lacks.  This function simply
-// !does a lowercase compare against the two strings, returning 0 if they
-// !match.
 bool CompareCase(t_Str str1, t_Str str2) // Just compare
 {
-#ifdef WIN32
-	return (strcmp(str1.c_str(), str2.c_str()) != 0);
-#else
-	return (strcmp(str1.c_str(), str2.c_str()) != 0);
-#endif
+	return str1.compare(str2) != 0;
 }
 
 // Trim
