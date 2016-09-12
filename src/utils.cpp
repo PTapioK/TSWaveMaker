@@ -354,26 +354,23 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 
 	if(alphabetNaming) {
 		for(int i = 0; i != 26; ++i) {
-			QString str;
-			QTextStream ss(&str);
-			ss << " " << alphas[i];
-			if(name.contains(ss.readAll())) {
-				name.replace(name.indexOf(ss.readAll()), ss.readAll().length(), QString (" ") + decToWaypointID(i + iter + 1));
+			QString str = " " + alphas[i];
+			if(name.contains(str)) {
+				QString c = QString (" ") + decToWaypointID(i + iter + 1);
+				name.replace(name.indexOf(str), str.length(), QString (" ") + decToWaypointID(i + iter + 1));
 				break;
 			} else if(*(name.end()-1) == alphas[i]) {
-				name.replace(name.length()-1, sizeof(char), decToWaypointID(i + iter + 1));
+				name.replace(name.length()-1, 1, decToWaypointID(i + iter + 1));
 				break;
 			}
 		}
 		for(int i = 0; i != 26; ++i) {
-			QString str;
-			QTextStream ss(&str);
-			ss << " " << small_alphas[i];
-			if(name.contains(ss.readAll())) {
-				name.replace(name.indexOf(ss.readAll()), ss.readAll().length(), QString (" ") + decToSmallAlphas(i + iter + 1));
+			QString str = " " + small_alphas[i];
+			if(name.contains(str)) {
+				name.replace(name.indexOf(str), str.length(), QString (" ") + decToSmallAlphas(i + iter + 1));
 				break;
 			} else if(*(name.end()-1) == small_alphas[i]) {
-				name.replace(name.length()-1, sizeof(char), decToSmallAlphas(i + iter + 1));
+				name.replace(name.length()-1, 1, decToSmallAlphas(i + iter + 1));
 				break;
 			}
 		}
@@ -384,7 +381,7 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 			intLoc = name.indexOf(QString::number(i));
 			if(intLoc != -1) {
 				QString numStr("");
-				int num = name.right(intLoc).toInt();
+				int num = name.mid(intLoc).toInt();
 				numStr = QString::number(num);
 				name.replace(intLoc, numStr.length(), QString::number(num + numIter + 1));
 				break;
