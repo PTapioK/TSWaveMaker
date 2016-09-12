@@ -16,11 +16,13 @@ class Team
 		~Team();
 
 		void setName(QString newName);
+		void setHouse(QString newHouse);
 
 		void save();
 
 		QString getName() const;
 		QString getID() const;
+		QString getHouse() const;
 	private:
 		friend class TeamSection;
 

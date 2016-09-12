@@ -381,7 +381,7 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 			intLoc = name.indexOf(QString::number(i));
 			if(intLoc != -1) {
 				QString numStr("");
-				int num = name.mid(intLoc).toInt();
+				int num = name.mid(intLoc, QString::number(i).length()).toInt();
 				numStr = QString::number(num);
 				name.replace(intLoc, numStr.length(), QString::number(num + numIter + 1));
 				break;

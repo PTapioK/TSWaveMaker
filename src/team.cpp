@@ -65,6 +65,11 @@ void Team::setName(QString newName)
 	name = newName;
 }
 
+void Team::setHouse(QString newHouse)
+{
+	house = newHouse;
+}
+
 void Team::save()
 {
 	file.saveLineToBuffer(ID, "Max", QString::number(max));
@@ -110,6 +115,11 @@ QString Team::getName() const
 QString Team::getID() const
 {
 	return ID;
+}
+
+QString Team::getHouse() const
+{
+	return house;
 }
 
 QString Team::convertBoolToYesNo(bool boolean)

@@ -73,6 +73,9 @@ class TeamSection : public QDockWidget
 		void on_isWhiner_clicked();
 
 		void mousePressEvent(QMouseEvent *event);
+
+		void on_HouseBox_activated();
+
 	private:
 		Ui::TeamSection *ui;
 };

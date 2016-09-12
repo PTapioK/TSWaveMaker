@@ -62,6 +62,8 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 
 		ui->scriptBox->setCurrentIndex(ui->scriptBox->findText(getScriptNameByID(curTeam->scriptID)));
 		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(getTaskforceNameByID(curTeam->taskForceID)));
+
+		ui->HouseBox->setCurrentIndex(ui->HouseBox->findText(curTeam->getHouse()));
 	}
 }
 
@@ -314,11 +316,27 @@ void TeamSection::on_SAOButton_clicked()
 	}
 }
 
+void TeamSection::on_HouseBox_activated()
+{
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			getTeamByName(ui->TeamList->selectedItems().at(a)->text())->setHouse(ui->HouseBox->currentText());
+		}
+	}
+}
+
 void TeamSection::updateUi()
 {
 	ui->TeamList->clearSelection();
 	ui->TeamList->clear();
 	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {
 		ui->TeamList->addItem(IT->second->getName());
+	}
+
+	ui->HouseBox->clear();
+	for (auto IT = houses.begin(); IT != houses.end(); ++IT) {
+		if (IT->first >= 0) {
+			ui->HouseBox->addItem(IT->second);
+		}
 	}
 }
