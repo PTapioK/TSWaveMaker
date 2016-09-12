@@ -354,7 +354,7 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 
 	if(alphabetNaming) {
 		for(int i = 0; i != 26; ++i) {
-			QString str = " " + alphas[i];
+			QString str = " " + QString(alphas[i]);
 			if(name.contains(str)) {
 				QString c = QString (" ") + decToWaypointID(i + iter + 1);
 				name.replace(name.indexOf(str), str.length(), QString (" ") + decToWaypointID(i + iter + 1));
@@ -365,7 +365,7 @@ QString getNameWithNextMark(QString name, int iter, int numIter)
 			}
 		}
 		for(int i = 0; i != 26; ++i) {
-			QString str = " " + small_alphas[i];
+			QString str = " " + QString(small_alphas[i]);
 			if(name.contains(str)) {
 				name.replace(name.indexOf(str), str.length(), QString (" ") + decToSmallAlphas(i + iter + 1));
 				break;
