@@ -743,6 +743,7 @@ void TriggerSection::updateActionParamNameBox()
 			}
 			if (values[7].toInt()) {
 				ui->ActionParamNameBox->addItem(getTargetTypeString(30));
+				rowSet = true;
 			}
 			if (rowSet) {
 				updateActionParamValueBox();
