@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "main.h"
+#include "../main.h"
 
 namespace Settings
 {

@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QDockWidget>
 
-#include "main.h"
+#include "../main.h"
 
 namespace Ui {
 class ScriptSection;

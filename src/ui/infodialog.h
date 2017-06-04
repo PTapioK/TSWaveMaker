@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QDialog>
 
-#include "main.h"
+#include "../main.h"
 
 namespace Ui {
 class InfoDialog;

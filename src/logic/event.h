@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "main.h"
+#include "../main.h"
 
 class Event
 {

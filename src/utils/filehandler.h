@@ -1,7 +1,7 @@
 #ifndef FILEHANDLER_H
 #define FILEHANDLER_H
 
-#include "main.h"
+#include "../main.h"
 #include "CDataFile/CDataFile.h"
 
 struct unitContainer;

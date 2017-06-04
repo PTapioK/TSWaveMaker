@@ -1,6 +1,6 @@
 #include "triggersection.h"
 #include "ui_triggersection.h"
-#include "main.h"
+#include "../main.h"
 
 using namespace Settings;
 

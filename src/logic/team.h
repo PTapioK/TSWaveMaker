@@ -1,7 +1,7 @@
 #ifndef TEAM_H
 #define TEAM_H
 
-#include "main.h"
+#include "../main.h"
 
 class Team
 {

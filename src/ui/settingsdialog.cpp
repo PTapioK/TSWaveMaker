@@ -1,7 +1,7 @@
-#include "utils.h"
+#include "../utils/utils.h"
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
-#include "settings.h"
+#include "../utils/settings.h"
 
 using namespace Settings;
 

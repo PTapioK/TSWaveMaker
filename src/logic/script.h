@@ -1,7 +1,7 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
-#include "main.h"
+#include "../main.h"
 
 class Script
 {

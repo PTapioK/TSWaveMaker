@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "main.h"
+#include "../main.h"
 #include "triggersection.h"
 #include "teamsection.h"
 #include "scriptsection.h"

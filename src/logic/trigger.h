@@ -1,7 +1,7 @@
 #ifndef TRIGGER_H
 #define TRIGGER_H
 
-#include "main.h"
+#include "../main.h"
 
 class Action;
 class Event;

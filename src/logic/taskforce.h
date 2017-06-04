@@ -1,7 +1,7 @@
 #ifndef TASKFORCE_H
 #define TASKFORCE_H
 
-#include "main.h"
+#include "../main.h"
 
 class Taskforce
 {

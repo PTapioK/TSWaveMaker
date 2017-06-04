@@ -1,7 +1,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include "main.h"
+#include "../main.h"
 
 class Action
 {

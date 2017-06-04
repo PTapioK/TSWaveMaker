@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "main.h"
+#include "../main.h"
 #include <QComboBox>
 
 extern QString findFirstFreeID();

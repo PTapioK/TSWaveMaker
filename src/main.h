@@ -28,17 +28,17 @@
 
 enum class SATargetType;
 
-#include "settings.h"
-#include "trigger.h"
-#include "tag.h"
-#include "event.h"
-#include "action.h"
-#include "team.h"
-#include "taskforce.h"
-#include "script.h"
-#include "infodialog.h"
-#include "settingsdialog.h"
-#include "filehandler.h"
+#include "utils/settings.h"
+#include "logic/trigger.h"
+#include "logic/tag.h"
+#include "logic/event.h"
+#include "logic/action.h"
+#include "logic/team.h"
+#include "logic/taskforce.h"
+#include "logic/script.h"
+#include "ui/infodialog.h"
+#include "ui/settingsdialog.h"
+#include "utils/filehandler.h"
 
 namespace Ui {
 class MainWindow;
@@ -57,8 +57,8 @@ class Team;
 class Taskforce;
 class Script;
 
-#include "containers.h"
-#include "utils.h"
+#include "utils/containers.h"
+#include "utils/utils.h"
 
 #define CAPTIONBASE (tr("TSWaveMaker ") + tr(VERSION) + tr(" version"))
 
