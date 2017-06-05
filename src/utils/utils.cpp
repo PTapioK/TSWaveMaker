@@ -304,7 +304,7 @@ uint16_t getBuildingTypePosByKey(uint16_t key)
 {
 	for(std::map<uint16_t, unitContainer>::iterator IT = buildings.begin(); IT != buildings.end(); ++IT) {
 		if((*IT).second.key == key) {
-			return (*IT).first;
+			return key;
 		}
 	}
 	return 0;

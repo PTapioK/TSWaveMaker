@@ -82,7 +82,7 @@ void ScriptSection::on_SATargetBox_activated()
 							break;
 						case SATargetType::BUILDING:
 							if(ui->defaultTarget->isChecked()) {
-								curScript->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
+								curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex();
 							} else if(ui->lowThreat->isChecked()) {
 								curScript->scriptLines[rowNum]->param = 65536 + ui->SATargetBox->currentIndex();
 							} else if (ui->bigThreat->isChecked()) {
@@ -275,7 +275,7 @@ void ScriptSection::on_defaultTarget_clicked()
 				type = getScriptByName(ui->ScriptList->selectedItems().last()->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				curtype = getScriptByName(ui->ScriptList->selectedItems().at(a)->text())->scriptLines[ui->ScriptActionList->currentRow()]->type;
 				if(curtype == type) {
-					curScript->scriptLines[rowNum]->param = buildings[uint16_t(ui->SATargetBox->currentIndex())].key;
+					curScript->scriptLines[rowNum]->param = ui->SATargetBox->currentIndex();
 				}
 			}
 		}
