@@ -13,12 +13,14 @@
 #include <QSettings>
 #include <QDebug>
 #include <QTextStream>
+#include <QShortcut>
 
 #include <string>
 #include <map>
 #include <sstream>
 #include <vector>
 #include <array>
+#include <set>
 #include <algorithm>
 
 #include <cassert>
@@ -36,8 +38,10 @@ enum class SATargetType;
 #include "logic/team.h"
 #include "logic/taskforce.h"
 #include "logic/script.h"
+#include "logic/allies.h"
 #include "ui/infodialog.h"
 #include "ui/settingsdialog.h"
+#include "ui/alliesdialog.h"
 #include "utils/filehandler.h"
 
 namespace Ui {
@@ -48,6 +52,7 @@ class ScriptSection;
 class TaskforceSection;
 class InfoDialog;
 class SettingsDialog;
+class AlliesDialog;
 }
 
 class FileHandler;
@@ -56,6 +61,7 @@ class Trigger;
 class Team;
 class Taskforce;
 class Script;
+class Allies;
 
 #include "utils/containers.h"
 #include "utils/utils.h"

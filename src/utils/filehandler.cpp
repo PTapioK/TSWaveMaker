@@ -69,6 +69,9 @@ void FileHandler::saveToBuffer()
 		(*IT).second->save();
 	}
 
+	deleteLineFromBuffer("Basic", "AllyBySpawnDefault");
+	deleteSectionFromBuffer(QString("AllyBySpawnLocation") + QString::number(alliesID));
+	allies.save();
 }
 
 void FileHandler::saveLineToBuffer(QString section, QString ID, QString value)
@@ -303,6 +306,33 @@ void FileHandler::parseSections()
 
 				buildings[atoi(Key.c_str())] = cont;
 			}
+		}
+	}
+
+	alliesID = fileData.GetInt("AllyBySpawnDefault", "Basic");
+	if (alliesID != NULL) {
+		std::stringstream ss;
+		ss << "AllyBySpawnLocation" << alliesID;
+		std::string secStr = ss.str();
+
+		t_Section * allySec = fileData.GetSection(secStr);
+		if (allySec != NULL) {
+			KeyList * allyl = allySec->GetKeyList();
+			for(KeyItor keyIT = allyl->begin(); keyIT < allyl->end(); ++keyIT) {
+				std::string Key = keyIT->szKey;
+
+				if (Key != "Description") {
+					QStringList spawnsInTeam = QString::fromStdString(fileData.GetString(Key, secStr)).split(",");
+
+					for (auto IT = spawnsInTeam.begin(); IT != spawnsInTeam.end(); ++IT) {
+						allies.addPlayerToTeam((*IT).toInt(), QString::fromStdString(Key));
+					}
+				} else {
+					std::string description = fileData.GetString("Description", secStr);
+					allies.setDescription(QString::fromStdString(description));
+				}
+			}
+
 		}
 	}
 

@@ -2,6 +2,9 @@
 
 FileHandler file;
 
+Allies allies;
+int32_t alliesID = 1;
+
 std::map <QString, Trigger*> triggers;
 std::map <QString, Tag*> tags;
 std::map <QString, Team*> teams;

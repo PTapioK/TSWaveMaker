@@ -36,7 +36,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1850</width>
+     <width>1800</width>
      <height>21</height>
     </rect>
    </property>
@@ -68,6 +68,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionSettings"/>
+    <addaction name="actionAllies"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -106,6 +107,11 @@
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionAllies">
+   <property name="text">
+    <string>Allies</string>
    </property>
   </action>
  </widget>

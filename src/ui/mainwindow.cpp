@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(settingsDialog()));
 	// Connect info menu
 	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(infoDialog()));
+    // Connect allies menu
+    connect(ui->actionAllies, SIGNAL(triggered()), this, SLOT(alliesDialog()));
 
 	triggerSct		= new TriggerSection(this);
 	teamSct			= new TeamSection(this);
@@ -115,3 +117,8 @@ void MainWindow::settingsDialog()
 	dialog->show();
 }
 
+void MainWindow::alliesDialog()
+{
+    AlliesDialog * dialog = new AlliesDialog;
+    dialog->show();
+}
