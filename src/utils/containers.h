@@ -79,7 +79,7 @@ extern std::map <int16_t, QString> houses;
 extern std::map <uint16_t, variableContainer> localvariables;
 extern std::map <uint16_t, variableContainer> globalvariables;
 
-extern std::map <uint16_t, QString> tutorial;
+extern QMap <uint16_t, QString> tutorial;
 
 extern std::vector <int32_t> waypoints;
 #endif // CONTAINERS_H

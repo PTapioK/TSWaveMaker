@@ -66,7 +66,6 @@ class TriggerSection : public QDockWidget
 		void on_ActionParamValueBox_activated();
 
 		void on_AParamAOButton_clicked();
-
 	private:
 		Ui::TriggerSection *ui;
 
@@ -78,6 +77,7 @@ class TriggerSection : public QDockWidget
 		void updateActionParamNameBox();
 		void updateActionParamValueBox();
 		void resetActionLine(Action *action);
+		uint16_t addTutorialText(QString text);
 
 		QStringList getTargetStrings(TargetType type);
 		TargetType getEventTargetType(int32_t ID);

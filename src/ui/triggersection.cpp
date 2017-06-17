@@ -859,9 +859,12 @@ void TriggerSection::updateActionParamValueBox()
 			}
 			case TargetType::EDITABLE:
 				ui->ActionParamValueBox->setEditable(true);
+				connect(ui->ActionParamValueBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_ActionParamValueBox_activated()));
 				ui->ActionParamValueBox->setCurrentText(param);
 				break;
 			case TargetType::TEXT:
+				ui->ActionParamValueBox->setEditable(true);
+				connect(ui->ActionParamValueBox->lineEdit(), SIGNAL(editingFinished()), this, SLOT(on_ActionParamValueBox_activated()));
 				ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(tutorial[param.toInt()]));
 				break;
 			case TargetType::TAG:
@@ -905,6 +908,13 @@ void TriggerSection::resetActionLine(Action *action)
 	action->setParameters(params);
 }
 
+uint16_t TriggerSection::addTutorialText(QString text)
+{
+	uint16_t newKey = tutorial.lastKey() + 1;
+	tutorial[newKey] = text;
+	return newKey;
+}
+
 void TriggerSection::on_ActionParamValueBox_activated()
 {
 	if(ui->TriggerList->selectedItems().size() != 0 && ui->ActionList->selectedItems().size() != 0) {
@@ -945,8 +955,21 @@ void TriggerSection::on_ActionParamValueBox_activated()
 									action->setParameter(paramID, ui->ActionParamValueBox->currentText());
 									break;
 								case TargetType::TEXT:
-									action->setParameter(paramID, QString::number(getTutorialKeyByText(ui->ActionParamValueBox->currentText())));
+								{
+									QString text = ui->ActionParamValueBox->currentText();
+									uint16_t textNum = getTutorialKeyByText(text);
+
+									if (textNum != 0) {
+										action->setParameter(paramID, QString::number(textNum));
+									} else if(!text.isEmpty()) {
+										textNum = addTutorialText(text);
+										action->setParameter(paramID, QString::number(textNum));
+										ui->ActionParamValueBox->addItem(text);
+										ui->ActionParamValueBox->setCurrentIndex(ui->ActionParamValueBox->findText(text));
+										ui->ActionParamValueBox->view()->setMinimumHeight(30);
+									}
 									break;
+								}
 								case TargetType::TAG:
 									action->setParameter(paramID, getTagByName(ui->ActionParamValueBox->currentText())->getID());
 									break;
@@ -1091,7 +1114,7 @@ void TriggerSection::on_AParamAOButton_clicked()
 									++IT;
 								}
 								if (IT != tutorial.end() && IT != endIT) {
-									action->setParameter(paramID, IT->first);
+									action->setParameter(paramID, IT.key());
 								}
 								break;
 							}
@@ -1230,8 +1253,8 @@ QStringList TriggerSection::getTargetStrings(TargetType type)
 			list << "On";
 			break;
 		case TargetType::TEXT:
-			for(std::map <uint16_t, QString>::iterator IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
-				list << (*IT).second;
+			for(auto IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
+				list << IT.value();
 			}
 			break;
 		case TargetType::TAG:
@@ -1339,8 +1362,8 @@ QString TriggerSection::getUnitNameByKey(uint16_t key, std::map<QString, unitCon
 uint16_t TriggerSection::getTutorialKeyByText(QString text)
 {
 	for(auto IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
-		if ((*IT).second == text) {
-			return (*IT).first;
+		if (IT.value() == text) {
+			return IT.key();
 		}
 	}
 	return 0;

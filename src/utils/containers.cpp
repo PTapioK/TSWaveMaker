@@ -22,6 +22,6 @@ std::map <int16_t, QString> houses;
 std::map <uint16_t, variableContainer> localvariables;
 std::map <uint16_t, variableContainer> globalvariables;
 
-std::map <uint16_t, QString> tutorial;
+QMap <uint16_t, QString> tutorial;
 
 std::vector <int32_t> waypoints;
