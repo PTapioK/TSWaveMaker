@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QTextStream>
 #include <QShortcut>
+#include <QMenu>
 
 #include <string>
 #include <map>

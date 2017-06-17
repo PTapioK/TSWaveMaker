@@ -75,28 +75,37 @@ AlliesDialog::AlliesDialog(QWidget *parent) :
 	}
 
 	QShortcut* teamADelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamAList);
-	connect(teamADelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromA()));
+	connect(teamADelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamAList);});
 
 	QShortcut* teamBDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamBList);
-	connect(teamBDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromB()));
+	connect(teamBDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamBList);});
 
 	QShortcut* teamCDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamCList);
-	connect(teamCDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromC()));
+	connect(teamCDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamCList);});
 
 	QShortcut* teamDDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamDList);
-	connect(teamDDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromD()));
+	connect(teamDDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamDList);});
 
 	QShortcut* teamEDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamEList);
-	connect(teamEDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromE()));
+	connect(teamEDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamEList);});
 
 	QShortcut* teamFDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamFList);
-	connect(teamFDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromF()));
+	connect(teamFDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamFList);});
 
 	QShortcut* teamGDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamGList);
-	connect(teamGDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromG()));
+	connect(teamGDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamGList);});
 
 	QShortcut* teamHDelete = new QShortcut(QKeySequence(Qt::Key_Delete), ui->teamHList);
-	connect(teamHDelete, SIGNAL(activatedAmbiguously()), this, SLOT(deleteFromH()));
+	connect(teamHDelete, &QShortcut::activatedAmbiguously, this, [&](){deleteFrom(ui->teamHList);});
+
+	connect(ui->teamAList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamAList);});
+	connect(ui->teamBList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamBList);});
+	connect(ui->teamCList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamCList);});
+	connect(ui->teamDList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamDList);});
+	connect(ui->teamEList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamEList);});
+	connect(ui->teamFList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamFList);});
+	connect(ui->teamGList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamGList);});
+	connect(ui->teamHList, &QListWidget::customContextMenuRequested, this, [&](const QPoint &pos){showContextMenu(pos, ui->teamHList);});
 }
 
 AlliesDialog::~AlliesDialog()
@@ -150,44 +159,9 @@ void AlliesDialog::on_HButton_clicked()
 	ui->stackedWidget_4->setCurrentIndex(0);
 }
 
-void AlliesDialog::deleteFromA()
+void AlliesDialog::deleteFrom(QListWidget *listWidget)
 {
-	delete ui->teamAList->currentItem();
-}
-
-void AlliesDialog::deleteFromB()
-{
-	delete ui->teamBList->currentItem();
-}
-
-void AlliesDialog::deleteFromC()
-{
-	delete ui->teamCList->currentItem();
-}
-
-void AlliesDialog::deleteFromD()
-{
-	delete ui->teamDList->currentItem();
-}
-
-void AlliesDialog::deleteFromE()
-{
-	delete ui->teamEList->currentItem();
-}
-
-void AlliesDialog::deleteFromF()
-{
-	delete ui->teamFList->currentItem();
-}
-
-void AlliesDialog::deleteFromG()
-{
-	delete ui->teamGList->currentItem();
-}
-
-void AlliesDialog::deleteFromH()
-{
-	delete ui->teamHList->currentItem();
+	if (listWidget->hasFocus()) delete listWidget->currentItem();
 }
 
 void AlliesDialog::on_teamAList_itemChanged(QListWidgetItem *item)
@@ -305,4 +279,26 @@ void AlliesDialog::on_saveButton_clicked()
 void AlliesDialog::on_cancelButton_clicked()
 {
 	this->close();
+}
+
+void AlliesDialog::showContextMenu(const QPoint &pos, QListWidget *listWidget)
+{
+	QPoint globalPos = listWidget->mapToGlobal(pos);
+
+	QMenu deleteMenu;
+	deleteMenu.addAction("Delete", this, [&](){deleteFrom((listWidget));});
+
+	deleteMenu.exec(globalPos);
+}
+
+void AlliesDialog::on_clearButton_clicked()
+{
+	ui->teamAList->clear();
+	ui->teamBList->clear();
+	ui->teamCList->clear();
+	ui->teamDList->clear();
+	ui->teamEList->clear();
+	ui->teamFList->clear();
+	ui->teamGList->clear();
+	ui->teamHList->clear();
 }

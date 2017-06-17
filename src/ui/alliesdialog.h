@@ -28,14 +28,7 @@ private slots:
 	void on_DButton_clicked();
 	void on_HButton_clicked();
 
-	void deleteFromA();
-	void deleteFromB();
-	void deleteFromC();
-	void deleteFromD();
-	void deleteFromE();
-	void deleteFromF();
-	void deleteFromG();
-	void deleteFromH();
+	void deleteFrom(QListWidget *listWidget);
 
 	void on_teamAList_itemChanged(QListWidgetItem *item);
 	void on_teamEList_itemChanged(QListWidgetItem *item);
@@ -48,6 +41,9 @@ private slots:
 
 	void on_saveButton_clicked();
 	void on_cancelButton_clicked();
+
+	void showContextMenu(const QPoint &pos, QListWidget *listWidget);
+	void on_clearButton_clicked();
 
 private:
 	Ui::AlliesDialog *ui;
