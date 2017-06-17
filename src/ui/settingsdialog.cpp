@@ -27,16 +27,20 @@ void SettingsDialog::on_rulesFind_clicked()
 {
 	QString ts_rules_path = ui->rulesFileEdit->text();
 	ts_rules_path = getRulesPathFor("rules.ini", ts_rules_path);
-	tsRulesPath = ts_rules_path + "/rules.ini";
-	ui->rulesFileEdit->setText(ts_rules_path);
+	if (!ts_rules_path.isEmpty()) {
+		tsRulesPath = ts_rules_path + "/rules.ini";
+		ui->rulesFileEdit->setText(ts_rules_path);
+	}
 }
 
 void SettingsDialog::on_firestrmFind_clicked()
 {
 	QString fs_rules_path = ui->firestrmEdit->text();
 	fs_rules_path = getRulesPathFor("firestrm.ini", fs_rules_path);
-	fsRulesPath = fs_rules_path + "/firestrm.ini";
-	ui->firestrmEdit->setText(fs_rules_path);
+	if (!fs_rules_path.isEmpty()) {
+		fsRulesPath = fs_rules_path + "/firestrm.ini";
+		ui->firestrmEdit->setText(fs_rules_path);
+	}
 }
 
 void SettingsDialog::on_saveButton_clicked()
