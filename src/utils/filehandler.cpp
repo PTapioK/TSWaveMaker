@@ -314,8 +314,10 @@ void FileHandler::parseSections()
 		}
 	}
 
-	alliesID = fileData.GetInt("AllyBySpawnDefault", "Basic");
-	if (alliesID != NULL) {
+	t_Key* alliesIDKey = fileData.GetKey("AllyBySpawnDefault", "Basic");
+	if (alliesIDKey != NULL) {
+		alliesID = atoi(alliesIDKey->szValue.c_str());
+
 		std::stringstream ss;
 		ss << "AllyBySpawnLocation" << alliesID;
 		std::string secStr = ss.str();
