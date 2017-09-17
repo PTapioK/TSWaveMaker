@@ -282,14 +282,16 @@ void TriggerSection::on_EventParamBox_activated()
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		Event *curEvent = curTrig->getEvent(ui->EventList->row(ui->EventList->selectedItems().last()));
 		int32_t curEventType = curEvent->getType();
+		TargetType curEventTargetType = getEventTargetType(curEventType);
 		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 			for(int32_t b = 0; b != ui->EventList->selectedItems().size(); ++b) {
 				if (b < int32_t(trig->events.size())) {
 					Event *event = trig->getEvent(ui->EventList->row(ui->EventList->selectedItems().at(b)));
 					int32_t eventType = event->getType();
-					if (curEventType == eventType) {
-						switch(getEventTargetType(eventType)) {
+					TargetType eventTargetType = getEventTargetType(eventType);
+					if (curEventTargetType == eventTargetType) {
+						switch(eventTargetType) {
 							case TargetType::NONE:
 								event->setParameter("0");
 								break;
