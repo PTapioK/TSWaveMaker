@@ -923,16 +923,18 @@ void TriggerSection::on_ActionParamValueBox_activated()
 		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
 		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
 		int32_t curActionType = curAction->getType();
+		int32_t paramID = ui->ActionParamNameBox->currentIndex();
+		TargetType curActionTargetType = getActionTargetType(curActionType, paramID);
 		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
 			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
 			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
 				if (b < int32_t(trig->actions.size())) {
 					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
 					int32_t actionType = action->getType();
-					int32_t paramID = ui->ActionParamNameBox->currentIndex();
-					if (curActionType == actionType) {
+					TargetType actionTargetType = getActionTargetType(actionType, paramID);
+					if (curActionTargetType == actionTargetType) {
 						if (paramID < 6) {
-							switch(getActionTargetType(actionType, paramID)) {
+							switch(actionTargetType) {
 								case TargetType::NONE:
 									action->setWaypoint(0);
 									break;
