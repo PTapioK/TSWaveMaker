@@ -22,7 +22,7 @@ class FileHandler {
 		void deleteLineFromBuffer(QString section, QString ID);
 		void deleteSectionFromBuffer(QString section);
 
-		void parseSections();
+		QString parseSections();
 		void parseRules();
 
 		void clear();

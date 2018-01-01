@@ -19,7 +19,11 @@ void FileHandler::load(QString mapFilePath)
 	filePath = mapFilePath;
 	fileData.SetFileName(mapFilePath.toStdString());
 	readToBuffer();
-	parseSections();
+	const QString parseErr = parseSections();
+	if (!parseErr.isEmpty()) {
+		qDebug() << parseErr;
+		QMessageBox::warning(NULL, "Warning!", "Found invalid structure while parsing file: " + mapFilePath + ".\n\n" + parseErr + "\n\nFile didn't load correctly.");
+	}
 }
 
 void FileHandler::save(QString as)
@@ -106,9 +110,8 @@ void FileHandler::deleteSectionFromBuffer(QString section)
 	fileData.DeleteSection(section.toStdString());
 }
 
-void FileHandler::parseSections()
+QString FileHandler::parseSections()
 {
-
 	t_Section * trSec = fileData.GetSection("Triggers");
 	if(trSec != NULL) {
 		triggers.clear();
@@ -130,12 +133,17 @@ void FileHandler::parseSections()
 				bool isHard = curLine[6].toInt();
 				int16_t unknown = curLine[7].toShort();
 
-				triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard, unknown);
+				try {
+					triggers[ID] = new Trigger(ID, house, attachID, name, isDisabled, isEasy, isMedium, isHard, unknown);
+				} catch (std::bad_alloc) {
+					QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for trigger: " + curLine.join(","));
+					exit(EXIT_FAILURE);
+					return QString("");
+				}
 			} else {
-				qDebug() << "Error parsing trigger line: " + curLine.join(",");
+				return "More or less than 8 parameters for trigger: " + curLine.join(",");
 			}
 		}
-
 	}
 
 	t_Section * tagSec = fileData.GetSection("Tags");
@@ -154,9 +162,15 @@ void FileHandler::parseSections()
 				QString name = curLine[1];
 				QString triggerID = curLine[2];
 
-				tags[name] = new Tag(ID, name, triggerID, mode);
+				try {
+					tags[name] = new Tag(ID, name, triggerID, mode);
+				} catch (std::bad_alloc) {
+					QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for tag: " + curLine.join(","));
+					exit(EXIT_FAILURE);
+					return QString("");
+				}
 			} else {
-				qDebug() << "Error parsing tag line: " + curLine.join(",");
+				return "More or less than 3 parameters for tag: " + curLine.join(",");
 			}
 		}
 	}
@@ -310,6 +324,8 @@ void FileHandler::parseSections()
 				cont.key = atoi(Key.c_str());
 
 				buildings[atoi(Key.c_str())] = cont;
+			} else {
+				return "Empty name for building: " + QString::fromStdString(buildingID);
 			}
 		}
 	}
@@ -351,6 +367,8 @@ void FileHandler::parseSections()
 
 	parseHouseTypes(currentMapSettings);
 	parseTutorial(currentMapSettings);
+
+	return QString("");
 }
 
 void FileHandler::parseRules()
@@ -380,6 +398,9 @@ void FileHandler::parseRules()
 					cont.key = atoi(Key.c_str());
 
 					buildings[buildingIndex] = cont;
+				} else {
+					QMessageBox::warning(NULL, "Warning!", "Empty name for building: " + QString::fromStdString(buildingID));
+					qDebug() << "Empty name for building: " + QString::fromStdString(buildingID);
 				}
 
 				++buildingIndex;
@@ -418,6 +439,9 @@ void FileHandler::parseRules()
 					cont.key = atoi(Key.c_str()) + 169;
 
 					buildings[buildingIndex] = cont;
+				} else {
+					QMessageBox::warning(NULL, "Warning!", "Empty name for building: " + QString::fromStdString(buildingID));
+					qDebug() << "Empty name for building: " + QString::fromStdString(buildingID);
 				}
 
 				++buildingIndex;
@@ -439,7 +463,13 @@ Taskforce* FileHandler::getTaskforce(std::string taskforceID)
 		std::string name = "New Taskforce";
 		int32_t group = -1;
 
-		Taskforce *nTaskforce = new Taskforce(QString::fromStdString(taskforceID));
+		Taskforce *nTaskforce = new (std::nothrow) Taskforce(QString::fromStdString(taskforceID));
+		if (nTaskforce == NULL) {
+			qDebug() << "Failed to reserve memory for taskforce: " + QString::fromStdString(taskforceID);
+			QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for taskforce: " + QString::fromStdString(taskforceID));
+			exit(EXIT_FAILURE);
+			return NULL;
+		}
 
 		KeyList * taskl = cTaskF->GetKeyList();
 		for(KeyItor keyIT = taskl->begin(); keyIT < taskl->end(); ++keyIT) {
@@ -480,7 +510,13 @@ Script* FileHandler::getScript(std::string scriptID)
 
 		std::string name = "New Script";
 
-		Script *nScript = new Script(QString::fromStdString(scriptID));
+		Script *nScript = new (std::nothrow) Script(QString::fromStdString(scriptID));
+		if (nScript == NULL) {
+			qDebug() << "Failed to reserve memory for script: " + QString::fromStdString(scriptID);
+			QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for script: " + QString::fromStdString(scriptID));
+			exit(EXIT_FAILURE);
+			return NULL;
+		}
 
 		KeyList * scriptl = cScript->GetKeyList();
 		for(KeyItor keyIT = scriptl->begin(); keyIT < scriptl->end(); ++keyIT) {
@@ -578,12 +614,18 @@ Team* FileHandler::getTeam(std::string teamID)
 		transportsreturnonunload = convertToBool(fileData.GetString("TransportsReturnOnUnload", teamID));
 		areteammembersrecruitable = convertToBool(fileData.GetString("AreTeamMembersRecruitable", teamID));
 
-
-		return new Team(QString::fromStdString(teamID), max, tag, full, name, group, house, script, whiner, droppod, suicide,
-						loadable, prebuild, priority, waypoint, annoyance, ionimmune, recruiter,
-						reinforce, taskforce, techlevel, aggressive, autocreate, guardslower,
-						ontransonly, avoidthreats, looserecruit, veteranlevel, isbasedefense,
-						onlytargethousenemy, transportsreturnonunload, areteammembersrecruitable);
+		try {
+			return new Team(QString::fromStdString(teamID), max, tag, full, name, group, house, script, whiner, droppod, suicide,
+							   loadable, prebuild, priority, waypoint, annoyance, ionimmune, recruiter,
+							   reinforce, taskforce, techlevel, aggressive, autocreate, guardslower,
+							   ontransonly, avoidthreats, looserecruit, veteranlevel, isbasedefense,
+							   onlytargethousenemy, transportsreturnonunload, areteammembersrecruitable);
+		} catch (std::bad_alloc) {
+			qDebug() << "Failed to reserve memory for team: " + QString::fromStdString(teamID);
+			QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for team: " + QString::fromStdString(teamID));
+			exit(EXIT_FAILURE);
+			return NULL;
+		}
 	}
 
 	return NULL;
@@ -608,6 +650,9 @@ void FileHandler::parseUnitTypes(QSettings &rules, std::map<QString, unitContain
 				cont.key = (*keyIT).toShort();
 
 				unitMap[unitID] = cont;
+			} else {
+				QMessageBox::warning(NULL, "Warning!", "Empty name for unit: " + unitID);
+				qDebug() << "Empty name for unit: " + unitID;
 			}
 		}
 	}
