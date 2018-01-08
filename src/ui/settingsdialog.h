@@ -30,7 +30,10 @@ class SettingsDialog : public QDialog
 		void on_ascNumBox_clicked();
 
 		void on_alphaOrdBox_clicked();
-	private:
+
+		void on_disWarnings_clicked();
+
+private:
 		Ui::SettingsDialog *ui;
 };
 

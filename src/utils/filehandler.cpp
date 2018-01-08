@@ -21,8 +21,7 @@ void FileHandler::load(QString mapFilePath)
 	readToBuffer();
 	const QString parseErr = parseSections();
 	if (!parseErr.isEmpty()) {
-		qDebug() << parseErr;
-		QMessageBox::warning(NULL, "Warning!", "Found invalid structure while parsing file: " + mapFilePath + ".\n\n" + parseErr + "\n\nFile didn't load correctly.");
+		showWarning("Found invalid structure while parsing file: " + mapFilePath + ".\n\n" + parseErr + "\n\nFile didn't load correctly.");
 	}
 }
 
@@ -399,8 +398,7 @@ void FileHandler::parseRules()
 
 					buildings[buildingIndex] = cont;
 				} else {
-					QMessageBox::warning(NULL, "Warning!", "Empty name for building: " + QString::fromStdString(buildingID));
-					qDebug() << "Empty name for building: " + QString::fromStdString(buildingID);
+					showWarning("Empty name for building: " + QString::fromStdString(buildingID));
 				}
 
 				++buildingIndex;
@@ -440,8 +438,7 @@ void FileHandler::parseRules()
 
 					buildings[buildingIndex] = cont;
 				} else {
-					QMessageBox::warning(NULL, "Warning!", "Empty name for building: " + QString::fromStdString(buildingID));
-					qDebug() << "Empty name for building: " + QString::fromStdString(buildingID);
+					showWarning("Empty name for building: " + QString::fromStdString(buildingID));
 				}
 
 				++buildingIndex;
@@ -651,8 +648,7 @@ void FileHandler::parseUnitTypes(QSettings &rules, std::map<QString, unitContain
 
 				unitMap[unitID] = cont;
 			} else {
-				QMessageBox::warning(NULL, "Warning!", "Empty name for unit: " + unitID);
-				qDebug() << "Empty name for unit: " + unitID;
+				showWarning("Empty name for unit: " + unitID);
 			}
 		}
 	}

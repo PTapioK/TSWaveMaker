@@ -21,6 +21,8 @@ extern QSettings scriptStrings;
 extern QSettings triggerStrings;
 
 extern bool cloneOfNaming, ascNumNaming, alphabetNaming;
+
+extern bool disableWarnings;
 }
 
 #endif // SETTINGS_H

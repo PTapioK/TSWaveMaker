@@ -15,17 +15,20 @@ QSettings scriptStrings(scriptStringsPath, QSettings::IniFormat);
 QSettings triggerStrings(triggerStringsPath, QSettings::IniFormat);
 
 bool cloneOfNaming, ascNumNaming, alphabetNaming;
+bool disableWarnings;
 
 void loadSettings(bool ask)
 {
 	QString ts_rules_path = settings.value("rules/rulesPath").toString();
 	QString fs_rules_path = settings.value("rules/firestrmPath").toString();
 
-	cloneOfNaming = settings.value("cloneOfNaming").toBool();
-	ascNumNaming  = settings.value("increaseNumberNaming").toBool();
-	alphabetNaming = settings.value("alphabetsInOrderNaming").toBool();
+	cloneOfNaming = settings.value("cloneOfNaming", "false").toBool();
+	ascNumNaming  = settings.value("increaseNumberNaming", "false").toBool();
+	alphabetNaming = settings.value("alphabetsInOrderNaming", "false").toBool();
 
 	lastUsedPath = settings.value("lastUsedPath", ".").toString();
+
+	disableWarnings = settings.value("disableWarnings", "true").toBool();
 
 	if(ask) {
 		if(ts_rules_path.isEmpty()) {

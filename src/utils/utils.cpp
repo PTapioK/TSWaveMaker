@@ -434,3 +434,12 @@ Tag *getTagByName(QString name)
 	exit(EXIT_FAILURE);
 	return NULL;
 }
+
+
+void showWarning(const QString &msg)
+{
+	qDebug() << msg;
+	if (!disableWarnings) {
+		QMessageBox::warning(NULL, "Warning!", msg);
+	}
+}

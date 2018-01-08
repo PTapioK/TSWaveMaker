@@ -16,6 +16,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 	ui->cloneOfBox->setChecked(cloneOfNaming);
 	ui->ascNumBox->setChecked(ascNumNaming);
 	ui->alphaOrdBox->setChecked(alphabetNaming);
+
+	ui->disWarnings->setChecked(disableWarnings);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -52,6 +54,8 @@ void SettingsDialog::on_saveButton_clicked()
 	settings.setValue("increaseNumberNaming", ui->ascNumBox->isChecked());
 	settings.setValue("alphabetsInOrderNaming", ui->alphaOrdBox->isChecked());
 
+	settings.setValue("disableWarnings", ui->disWarnings->isChecked());
+
 	settings.sync();
 }
 
@@ -74,4 +78,9 @@ void SettingsDialog::on_ascNumBox_clicked()
 void SettingsDialog::on_alphaOrdBox_clicked()
 {
 	alphabetNaming = ui->alphaOrdBox->isChecked();
+}
+
+void SettingsDialog::on_disWarnings_clicked()
+{
+	disableWarnings = ui->disWarnings->isChecked();
 }
