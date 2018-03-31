@@ -1,0 +1,23 @@
+install:
+    - mkdir build
+    - cd build
+    - set PATH=%PATH%;C:\Qt\5.9.4\msvc2015_64\bin
+
+build_script:
+    - qmake ..
+    - nmake Release
+    - mkdir bin
+    - copy .\Release\TSWaveMaker.exe .\bin\
+    - windeployqt --release --no-opengl-sw --no-angle --no-webkit2 --no-compiler-runtime --no-system-d3d-compiler --no-translations --no-quick-import bin\TSWaveMaker.exe
+    - rmdir /S /Q .\bin\iconengines
+    - rmdir /S /Q .\bin\imageformats
+    - del .\bin\Qt5Svg.dll
+    - copy ..\scriptstrings.ini .\bin\
+    - copy ..\triggerstrings.ini .\bin\
+    - 7z.exe a TSWaveMaker.zip .\bin\*
+
+artifacts:
+    - path: build\bin\TSWaveMaker.exe
+      name: TSWaveMaker.exe
+    - path: build\TSWaveMaker.zip
+      name: TSWaveMaker package
