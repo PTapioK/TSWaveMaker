@@ -254,7 +254,12 @@ QString FileHandler::parseSections()
 				int16_t unknown = curLine[2 + i*3].toShort();
 				int32_t param = curLine[3 + i*3].toInt();
 
-				triggers[ID]->addEvent(new Event(eType, param, ID, unknown));
+				auto triggerIT = triggers.find(ID);
+				if (triggerIT != triggers.end()) {
+					triggerIT->second->addEvent(new Event(eType, param, ID, unknown));
+				} else {
+					return "Found event without trigger!";
+				}
 			}
 
 		}
@@ -285,7 +290,12 @@ QString FileHandler::parseSections()
 
 				QString wPoint = curLine[8 + i*8];
 
-				triggers[ID]->addAction(new Action(ID, aType, params, wPoint));
+				auto triggerIT = triggers.find(ID);
+				if (triggerIT != triggers.end()) {
+					triggerIT->second->addAction(new Action(ID, aType, params, wPoint));
+				} else {
+					return "Found action without trigger!";
+				}
 			}
 
 		}
