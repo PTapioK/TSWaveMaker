@@ -66,7 +66,12 @@ class TriggerSection : public QDockWidget
 		void on_ActionParamValueBox_activated();
 
 		void on_AParamAOButton_clicked();
-	private:
+
+		void on_TriggerHouseBox_activated();
+
+		void on_AttachedTriggerBox_activated();
+
+private:
 		Ui::TriggerSection *ui;
 
 		void cleanActionList();
@@ -76,6 +81,8 @@ class TriggerSection : public QDockWidget
 		void updateActionTypeBox();
 		void updateActionParamNameBox();
 		void updateActionParamValueBox();
+		void updateTriggerHouseBox();
+		void updateAttachedTriggerBox();
 		void resetActionLine(Action *action);
 		uint16_t addTutorialText(QString text);
 

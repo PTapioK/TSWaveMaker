@@ -24,6 +24,8 @@ class Trigger
 		void setID(QString newID);
 		void setDis(bool dis);
 		void setName(QString nName);
+		void setHouse(QString nHouse);
+		void setAttachedTriggerID(QString nAttachedID);
 
 		void addEvent(Event *nEvent);
 		void addAction(Action *nAction);
@@ -44,7 +46,11 @@ class Trigger
 		bool hasEventType(int32_t type);
 		bool hasActionType(int32_t type);
 
+		QString getHouse() const;
+
 		QString getID() const;
+
+		QString getAttachedTriggerID() const;
 
 		bool isDisabled() const;
 

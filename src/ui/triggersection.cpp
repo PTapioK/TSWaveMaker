@@ -21,6 +21,8 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 	ui->WaveTimer->setTime(QTime(0, 0, 0));
 	ui->EventList->clear();
 	ui->ActionList->clear();
+	ui->TriggerHouseBox->clear();
+	ui->AttachedTriggerBox->clear();
 	ui->TagOr->toggle();
 
 	if(ui->TriggerList->selectedItems().size() != 0) {
@@ -69,6 +71,9 @@ void TriggerSection::on_TriggerList_itemSelectionChanged()
 			++i;
 			ui->ActionList->addItem(QString::number(i));
 		}
+
+		updateTriggerHouseBox();
+		updateAttachedTriggerBox();
 	} else {
 		ui->NameEdit->setText("");
 	}
@@ -895,6 +900,39 @@ void TriggerSection::updateActionParamValueBox()
 	}
 }
 
+void TriggerSection::updateTriggerHouseBox()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int i = 0;
+		for(auto IT = houses.begin(); IT != houses.end(); ++IT) {
+			if (IT->first != -1) {
+				ui->TriggerHouseBox->addItem(IT->second, IT->first);
+				if (IT->second == curTrig->getHouse()) {
+					ui->TriggerHouseBox->setCurrentIndex(i);
+				}
+				++i;
+			}
+		}
+	}
+}
+
+void TriggerSection::updateAttachedTriggerBox()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		int i = 0;
+		ui->AttachedTriggerBox->addItem("<none>", "<none>");
+		for (auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
+			ui->AttachedTriggerBox->addItem(IT->second->getName(), IT->second->getID());
+			++i;
+			if (IT->second->getID() == curTrig->getAttachedTriggerID()) {
+				ui->AttachedTriggerBox->setCurrentIndex(i);
+			}
+		}
+	}
+}
+
 void TriggerSection::resetActionLine(Action *action)
 {
 	std::array<QString, 6> params = action->getParameters();
@@ -1300,11 +1338,15 @@ void TriggerSection::updateUi()
 	ui->TriggerList->clear();
 	ui->EventTypeBox->clear();
 	ui->ActionTypeBox->clear();
+	ui->TriggerHouseBox->clear();
+	ui->AttachedTriggerBox->clear();
 	for(auto IT = triggers.begin(); IT != triggers.end(); ++IT) {
 		ui->TriggerList->addItem(IT->second->getName());
 	}
 	updateEventTypeBox();
 	updateActionTypeBox();
+	updateTriggerHouseBox();
+	updateAttachedTriggerBox();
 }
 
 QString TriggerSection::getTriggerNameByPosition(uint32_t pos)
@@ -1415,6 +1457,28 @@ void TriggerSection::on_TagRepeatingOr_clicked()
 			Trigger *curTrig = getTriggerByName(trigName);
 			Tag *curTrigTag = getTagByTriggerID(curTrig->getID());
 			curTrigTag->setMode(2);
+		}
+	}
+}
+
+void TriggerSection::on_TriggerHouseBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString trigName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(trigName);
+			curTrig->setHouse(houses[ui->TriggerHouseBox->currentData().toInt()]);
+		}
+	}
+}
+
+void TriggerSection::on_AttachedTriggerBox_activated()
+{
+	if(ui->TriggerList->selectedItems().size() != 0) {
+		for (int a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			QString trigName = ui->TriggerList->selectedItems().at(a)->text();
+			Trigger *curTrig = getTriggerByName(trigName);
+			curTrig->setAttachedTriggerID(ui->AttachedTriggerBox->currentData().toString());
 		}
 	}
 }

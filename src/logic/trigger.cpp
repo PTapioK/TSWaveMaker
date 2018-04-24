@@ -91,6 +91,11 @@ QString Trigger::getID() const
 	return ID;
 }
 
+QString Trigger::getAttachedTriggerID() const
+{
+	return attachID;
+}
+
 void Trigger::setID(QString newID)
 {
 	ID = newID;
@@ -133,6 +138,16 @@ void Trigger::setDis(bool dis)
 void Trigger::setName(QString nName)
 {
 	name = nName;
+}
+
+void Trigger::setHouse(QString nHouse)
+{
+	house = nHouse;
+}
+
+void Trigger::setAttachedTriggerID(QString nAttachedID)
+{
+	attachID = nAttachedID;
 }
 
 void Trigger::addEvent(Event *nEvent)
@@ -226,4 +241,9 @@ bool Trigger::hasActionType(int32_t type)
 		}
 	}
 	return false;
+}
+
+QString Trigger::getHouse() const
+{
+	return house;
 }

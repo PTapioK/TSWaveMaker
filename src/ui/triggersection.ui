@@ -130,7 +130,7 @@
       <x>10</x>
       <y>30</y>
       <width>131</width>
-      <height>271</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -140,10 +140,10 @@
    <widget class="QCheckBox" name="isDisabledCheck">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>170</x>
       <y>180</y>
-      <width>81</width>
-      <height>20</height>
+      <width>91</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -473,7 +473,7 @@
       <x>280</x>
       <y>30</y>
       <width>51</width>
-      <height>271</height>
+      <height>272</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -612,7 +612,7 @@
       <x>150</x>
       <y>210</y>
       <width>121</width>
-      <height>81</height>
+      <height>93</height>
      </rect>
     </property>
     <property name="title">
@@ -663,7 +663,7 @@
        <x>10</x>
        <y>60</y>
        <width>121</width>
-       <height>17</height>
+       <height>16</height>
       </rect>
      </property>
      <property name="font">
@@ -733,6 +733,52 @@
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;Ending to value:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="AttachedTriggerBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="AttachedTriggerLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Attached trigger&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="TriggerHouseBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TriggerHouseLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Trigger house&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
