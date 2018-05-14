@@ -19,9 +19,9 @@ void FileHandler::load(QString mapFilePath)
 	filePath = mapFilePath;
 	fileData.SetFileName(mapFilePath.toStdString());
 	readToBuffer();
-	const QString parseErr = parseSections();
-	if (!parseErr.isEmpty()) {
-		showWarning("Found invalid structure while parsing file: " + mapFilePath + ".\n\n" + parseErr + "\n\nFile didn't load correctly.");
+	const QStringList parseErrs = parseSections();
+	for (auto IT = parseErrs.begin(); IT != parseErrs.end(); ++IT) {
+		showWarning("Found invalid structure while parsing file: " + mapFilePath + ".\n\n" + *IT + "\n\nFile didn't load correctly.");
 	}
 }
 
@@ -109,8 +109,10 @@ void FileHandler::deleteSectionFromBuffer(QString section)
 	fileData.DeleteSection(section.toStdString());
 }
 
-QString FileHandler::parseSections()
+QStringList FileHandler::parseSections()
 {
+	QStringList errorList;
+
 	t_Section * trSec = fileData.GetSection("Triggers");
 	if(trSec != NULL) {
 		triggers.clear();
@@ -137,10 +139,10 @@ QString FileHandler::parseSections()
 				} catch (std::bad_alloc) {
 					QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for trigger: " + curLine.join(","));
 					exit(EXIT_FAILURE);
-					return QString("");
+					return QStringList("");
 				}
 			} else {
-				return "More or less than 8 parameters for trigger: " + curLine.join(",");
+				errorList.push_back("More or less than 8 parameters for trigger: " + curLine.join(","));
 			}
 		}
 	}
@@ -166,10 +168,10 @@ QString FileHandler::parseSections()
 				} catch (std::bad_alloc) {
 					QMessageBox::critical(NULL, "Fatal error!", "Failed to reserve memory for tag: " + curLine.join(","));
 					exit(EXIT_FAILURE);
-					return QString("");
+					return QStringList("");
 				}
 			} else {
-				return "More or less than 3 parameters for tag: " + curLine.join(",");
+				errorList.push_back("More or less than 3 parameters for tag: " + curLine.join(","));
 			}
 		}
 	}
@@ -258,7 +260,7 @@ QString FileHandler::parseSections()
 				if (triggerIT != triggers.end()) {
 					triggerIT->second->addEvent(new Event(eType, param, ID, unknown));
 				} else {
-					return "Found event without trigger!";
+					errorList.push_back("Found event without trigger!");
 				}
 			}
 
@@ -294,7 +296,7 @@ QString FileHandler::parseSections()
 				if (triggerIT != triggers.end()) {
 					triggerIT->second->addAction(new Action(ID, aType, params, wPoint));
 				} else {
-					return "Found action without trigger!";
+					errorList.push_back("Found action without trigger!");
 				}
 			}
 
@@ -334,7 +336,7 @@ QString FileHandler::parseSections()
 
 				buildings[atoi(Key.c_str())] = cont;
 			} else {
-				return "Empty name for building: " + QString::fromStdString(buildingID);
+				errorList.push_back("Empty name for building: " + QString::fromStdString(buildingID));
 			}
 		}
 	}
@@ -377,7 +379,7 @@ QString FileHandler::parseSections()
 	parseHouseTypes(currentMapSettings);
 	parseTutorial(currentMapSettings);
 
-	return QString("");
+	return errorList;
 }
 
 void FileHandler::parseRules()
