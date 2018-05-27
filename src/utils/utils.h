@@ -40,6 +40,9 @@ extern int32_t getComboBoxMaxWidth(QComboBox *box);
 extern bool lessThanQString(const QString &str1, const QString &str2);
 extern void clearContainers();
 
+extern variableContainer* findLocalVariableByName(const QString &name, bool errorOnMissing = false);
+extern uint16_t getLocalVariableKeyByName(const QString &name);
+
 extern void showWarning(const QString &msg);
 
 #endif // UTILS_H

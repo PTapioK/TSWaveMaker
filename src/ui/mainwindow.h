@@ -6,6 +6,7 @@
 #include "teamsection.h"
 #include "scriptsection.h"
 #include "taskforcesection.h"
+#include "variablesection.h"
 
 class MainWindow : public QMainWindow
 {
@@ -31,6 +32,7 @@ class MainWindow : public QMainWindow
 		TeamSection * teamSct;
 		ScriptSection * scriptSct;
 		TaskforceSection * taskforceSct;
+		VariableSection * variableSct;
 
 };
 

@@ -80,6 +80,11 @@ void FileHandler::saveToBuffer()
 	for (auto IT = tutorial.begin(); IT != tutorial.end(); ++IT) {
 		saveLineToBuffer("Tutorial", QString::number(IT.key()), IT.value());
 	}
+
+	deleteSectionFromBuffer("VariableNames");
+	for (auto IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+		saveLineToBuffer("VariableNames", QString::number(IT->first), IT->second.name + "," + QString::number(IT->second.set));
+	}
 }
 
 void FileHandler::saveLineToBuffer(QString section, QString ID, QString value)

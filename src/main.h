@@ -51,6 +51,7 @@ class TriggerSection;
 class TeamSection;
 class ScriptSection;
 class TaskforceSection;
+class VariableSection;
 class InfoDialog;
 class SettingsDialog;
 class AlliesDialog;

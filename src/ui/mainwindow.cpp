@@ -26,11 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	teamSct			= new TeamSection(this);
 	scriptSct		= new ScriptSection(this);
 	taskforceSct	= new TaskforceSection(this);
+	variableSct		= new VariableSection(this);
 
 	addDockWidget(Qt::LeftDockWidgetArea, triggerSct);
 	addDockWidget(Qt::RightDockWidgetArea, teamSct);
 	addDockWidget(Qt::BottomDockWidgetArea, scriptSct);
 	addDockWidget(Qt::BottomDockWidgetArea, taskforceSct);
+	addDockWidget(Qt::BottomDockWidgetArea, variableSct);
 
 	newFile();
 }
@@ -56,6 +58,7 @@ void MainWindow::newFile()
 	teamSct->updateUi();
 	scriptSct->updateUi();
 	taskforceSct->updateUi();
+	variableSct->updateUi();
 }
 
 void MainWindow::openFile()
@@ -76,6 +79,7 @@ void MainWindow::openFile()
 	teamSct->updateUi();
 	scriptSct->updateUi();
 	taskforceSct->updateUi();
+	variableSct->updateUi();
 
 	this->setWindowTitle(CAPTIONBASE + tr(" | ") + newFilePath);
 	Settings::lastUsedPath = QFileInfo(newFilePath).path();

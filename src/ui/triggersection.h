@@ -71,7 +71,7 @@ class TriggerSection : public QDockWidget
 
 		void on_AttachedTriggerBox_activated();
 
-private:
+	private:
 		Ui::TriggerSection *ui;
 
 		void cleanActionList();

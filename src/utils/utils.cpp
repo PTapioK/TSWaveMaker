@@ -443,3 +443,29 @@ void showWarning(const QString &msg)
 		QMessageBox::warning(NULL, "Warning!", msg);
 	}
 }
+
+variableContainer *findLocalVariableByName(const QString &name, bool errorOnMissing)
+{
+	for(auto IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+		if((*IT).second.name == name) {
+			return &(IT->second);
+		}
+	}
+	if (errorOnMissing) {
+		QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find local variable with name: " + name + ".\nThe program will now terminate.");
+		exit(EXIT_FAILURE);
+	}
+	return NULL;
+}
+
+uint16_t getLocalVariableKeyByName(const QString &name)
+{
+	for(auto IT = localvariables.begin(); IT != localvariables.end(); ++IT) {
+		if((*IT).second.name == name) {
+			return IT->first;
+		}
+	}
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find local variable with name: " + name + ".\nThe program will now terminate.");
+	exit(EXIT_FAILURE);
+	return -1;
+}
