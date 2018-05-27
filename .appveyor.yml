@@ -2,7 +2,7 @@ install:
     - mkdir build
     - cd build
     - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
-    - set PATH=%PATH%;C:\Qt\5.9.4\msvc2015_64\bin
+    - set PATH=%PATH%;C:\Qt\5.9.5\msvc2015_64\bin
 
 build_script:
     - qmake ..
