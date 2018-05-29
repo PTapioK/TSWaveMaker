@@ -174,6 +174,26 @@ QString getTeamNameByID(QString ID)
 	return QString("");
 }
 
+QString getTagNameByID(QString tagID)
+{
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
+		if(IT->second->getID() == tagID) {
+			return IT->second->getName();
+		}
+	}
+	return QString("");
+}
+
+QString getTagIDByName(QString name)
+{
+	for(auto IT = tags.begin(); IT != tags.end(); ++IT) {
+		if(IT->second->getName() == name) {
+			return IT->second->getID();
+		}
+	}
+	return QString("");
+}
+
 Team* getTeamByName(QString name)
 {
 	for(auto IT = teams.begin(); IT != teams.end(); ++IT) {

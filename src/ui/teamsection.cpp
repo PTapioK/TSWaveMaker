@@ -17,22 +17,28 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 {
 	if(ui->TeamList->selectedItems().size() != 0) {
 		ui->scriptBox->clear();
-		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for (auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->scriptBox->addItem(IT->second->getName());
 		}
 
 		ui->AOSBox->clear();
-		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for (auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->AOSBox->addItem(IT->second->getName());
 		}
 		ui->AOEBox->clear();
-		for(auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
+		for (auto IT = scripts.begin(); IT != scripts.end(); ++IT) {
 			ui->AOEBox->addItem(IT->second->getName());
 		}
 
 		ui->taskforceBox->clear();
-		for(auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
+		for (auto IT = taskforces.begin(); IT != taskforces.end(); ++IT) {
 			ui->taskforceBox->addItem(IT->second->getName());
+		}
+
+		ui->TagBox->clear();
+		ui->TagBox->addItem("<None>");
+		for (auto IT = tags.begin(); IT != tags.end(); ++IT) {
+			ui->TagBox->addItem(IT->second->getName());
 		}
 
 		ui->TNameEdit->setText(ui->TeamList->selectedItems().last()->text());
@@ -64,6 +70,12 @@ void TeamSection::on_TeamList_itemSelectionChanged()
 		ui->taskforceBox->setCurrentIndex(ui->taskforceBox->findText(getTaskforceNameByID(curTeam->taskForceID)));
 
 		ui->HouseBox->setCurrentIndex(ui->HouseBox->findText(curTeam->getHouse()));
+
+		ui->GroupIDBox->setValue(curTeam->group);
+		ui->VetLevelBox->setValue(curTeam->veteranlevel);
+		QString tagName = getTagNameByID(curTeam->tagID);
+		if (tagName.isEmpty()) tagName = "<None>";
+		ui->TagBox->setCurrentIndex(ui->TagBox->findText(tagName));
 	}
 }
 
@@ -337,6 +349,37 @@ void TeamSection::updateUi()
 	for (auto IT = houses.begin(); IT != houses.end(); ++IT) {
 		if (IT->first >= 0) {
 			ui->HouseBox->addItem(IT->second);
+		}
+	}
+}
+
+void TeamSection::on_GroupIDBox_editingFinished()
+{
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			getTeamByName(ui->TeamList->selectedItems().at(a)->text())->group = ui->GroupIDBox->value();
+		}
+	}
+}
+
+void TeamSection::on_VetLevelBox_editingFinished()
+{
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			getTeamByName(ui->TeamList->selectedItems().at(a)->text())->veteranlevel = ui->VetLevelBox->value();
+		}
+	}
+}
+
+void TeamSection::on_TagBox_activated()
+{
+	if(ui->TeamList->selectedItems().size() != 0) {
+		for(int a = 0; a != ui->TeamList->selectedItems().size(); ++a) {
+			if (ui->TagBox->currentText() == QString("<None>")) {
+				getTeamByName(ui->TeamList->selectedItems().at(a)->text())->tagID = "";
+			} else {
+				getTeamByName(ui->TeamList->selectedItems().at(a)->text())->tagID = getTagIDByName(ui->TagBox->currentText());
+			}
 		}
 	}
 }

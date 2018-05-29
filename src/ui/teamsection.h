@@ -76,7 +76,13 @@ class TeamSection : public QDockWidget
 
 		void on_HouseBox_activated();
 
-	private:
+		void on_GroupIDBox_editingFinished();
+
+		void on_VetLevelBox_editingFinished();
+
+		void on_TagBox_activated();
+
+private:
 		Ui::TeamSection *ui;
 };
 

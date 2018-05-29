@@ -6,9 +6,12 @@
 
 extern QString findFirstFreeID();
 
-extern Trigger* getTriggerByName(QString name);
 extern Tag* getTagByTriggerID(QString trigID);
 extern Tag* getTagByName(QString name);
+extern QString getTagNameByID(QString tagID);
+extern QString getTagIDByName(QString name);
+
+extern Trigger* getTriggerByName(QString name);
 extern QString getTriggerIDByName(QString name);
 
 extern Team* getTeamByName(QString name);
