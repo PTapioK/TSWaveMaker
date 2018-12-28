@@ -42,6 +42,7 @@
 #include <stdarg.h>
 #include <fstream>
 #include <float.h>
+#include <sstream>
 
 #ifdef WIN32
 #include <windows.h>
@@ -198,7 +199,6 @@ bool CDataFile::Load(t_Str szFileName)
 
 	return true;
 }
-
 
 // Save
 // Attempts to save the Section list and keys to the file. Note that if Load
@@ -508,6 +508,83 @@ bool CDataFile::DeleteKey(t_Str szKey, t_Str szFromSection)
 	return false;
 }
 
+// AddFromText
+// Parses data from a string as it was a file.
+bool CDataFile::AddFromText(std::stringstream &ss)
+{
+    if ( !ss.str().empty() )
+    {
+        bool bDone = false;
+        bool bAutoKey = (m_Flags & AUTOCREATE_KEYS) == AUTOCREATE_KEYS;
+        bool bAutoSec = (m_Flags & AUTOCREATE_SECTIONS) == AUTOCREATE_SECTIONS;
+
+        t_Str szLine;
+        t_Str szComment;
+        char buffer[MAX_BUFFER_LEN];
+        t_Section* pSection = GetSection("");
+
+        // These need to be set, we'll restore the original values later.
+        m_Flags |= AUTOCREATE_KEYS;
+        m_Flags |= AUTOCREATE_SECTIONS;
+
+        while ( !bDone )
+        {
+            memset(buffer, 0, MAX_BUFFER_LEN);
+            ss.getline(buffer, MAX_BUFFER_LEN);
+
+            szLine = buffer;
+            Trim(szLine);
+
+            bDone = ( ss.eof() || ss.bad() || ss.fail() );
+
+            if ( szLine.find_first_of(CommentIndicators) == 0 )
+            {
+                szComment += "\n";
+                szComment += szLine;
+            }
+            else
+            if ( szLine.find_first_of('[') == 0 ) // new section
+            {
+                szLine.erase( 0, 1 );
+                szLine.erase( szLine.find_last_of(']'), 1 );
+
+                CreateSection(szLine, szComment);
+                pSection = GetSection(szLine);
+                szComment = t_Str("");
+            }
+            else
+            if ( szLine.size() > 0 ) // we have a key, add this key/value pair
+            {
+                t_Str szKey = GetNextWord(szLine);
+                t_Str szValue = szLine;
+
+                if ( szKey.size() > 0 && szValue.size() > 0 )
+                {
+                    SetValue(szKey, szValue, szComment, pSection->szName);
+                    szComment = t_Str("");
+                }
+            }
+        }
+
+        // Restore the original flag values.
+        if ( !bAutoKey )
+            m_Flags &= ~AUTOCREATE_KEYS;
+
+        if ( !bAutoSec )
+            m_Flags &= ~AUTOCREATE_SECTIONS;
+    }
+    else
+    {
+        Report(E_INFO, "[CDataFile::Load] Unable to open file. Does it exist?");
+        return false;
+    }
+
+    m_bDirty = false;
+
+    return true;
+}
+
+
 // CreateKey
 // Given a key, a value and a section, this function will attempt to locate the
 // Key within the given section, and if it finds it, change the keys value to
@@ -634,6 +711,11 @@ t_Key*	CDataFile::GetKey(t_Str szKey, t_Str szSection)
 	}
 
 	return NULL;
+}
+
+const SectionList* CDataFile::GetSectionList() const
+{
+	return &m_Sections;
 }
 
 // GetSection

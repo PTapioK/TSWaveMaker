@@ -210,7 +210,7 @@ public:
 	bool		SetKeyComment(t_Str szKey, t_Str szComment, t_Str szSection = t_Str(""));
 
 				// Sets the comment for a given section
-	bool		SetSectionComment(t_Str szSection, t_Str szComment);
+	bool		SetSectionComment(t_Str szSection, t_Str szComment); 
 
 				// DeleteKey: Deletes a given key from a specific section
 	bool		DeleteKey(t_Str szKey, t_Str szFromSection = t_Str(""));
@@ -218,6 +218,8 @@ public:
 				// DeleteSection: Deletes a given section.
 	bool		DeleteSection(t_Str szSection);
 				
+                // AddFromText: Adds data from a string.
+	bool        AddFromText(std::stringstream &ss);
 				// Key/Section handling methods
 				/////////////////////////////////////////////////////////////////
 
@@ -263,7 +265,7 @@ public:
 	// Section. Returns NULL otherwise.
 	t_Key*		GetKey(t_Str szKey, t_Str szSection);
 
-
+	const SectionList* GetSectionList() const;
 // Data
 public:
 	long		m_Flags;		// Our settings flags.

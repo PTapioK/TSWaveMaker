@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow
 		void infoDialog();
 		void settingsDialog();
 		void alliesDialog();
+		void iniAdderDialog();
 
 	private:
 		Ui::MainWindow *ui;

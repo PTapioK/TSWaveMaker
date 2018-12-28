@@ -28,6 +28,8 @@ class FileHandler {
 		void clear();
 
 		QString getFilePath() const;
+
+		const CDataFile* getDataHandle() const;
 	private:
 		QString filePath;
 		CDataFile fileData;

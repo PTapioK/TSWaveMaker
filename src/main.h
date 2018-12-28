@@ -43,6 +43,7 @@ enum class SATargetType;
 #include "ui/infodialog.h"
 #include "ui/settingsdialog.h"
 #include "ui/alliesdialog.h"
+#include "ui/iniadderdialog.h"
 #include "utils/filehandler.h"
 
 namespace Ui {
@@ -55,6 +56,7 @@ class VariableSection;
 class InfoDialog;
 class SettingsDialog;
 class AlliesDialog;
+class INIAdderDialog;
 }
 
 class FileHandler;

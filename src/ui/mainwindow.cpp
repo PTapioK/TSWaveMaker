@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(infoDialog()));
     // Connect allies menu
     connect(ui->actionAllies, SIGNAL(triggered()), this, SLOT(alliesDialog()));
+	// Connect ini adder menu
+	connect(ui->actionINIAdder, SIGNAL(triggered()), this, SLOT(iniAdderDialog()));
 
 	triggerSct		= new TriggerSection(this);
 	teamSct			= new TeamSection(this);
@@ -124,5 +126,11 @@ void MainWindow::settingsDialog()
 void MainWindow::alliesDialog()
 {
     AlliesDialog * dialog = new AlliesDialog;
-    dialog->show();
+	dialog->show();
+}
+
+void MainWindow::iniAdderDialog()
+{
+	INIAdderDialog * dialog = new INIAdderDialog;
+	dialog->show();
 }

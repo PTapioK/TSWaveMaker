@@ -69,6 +69,7 @@
     </property>
     <addaction name="actionSettings"/>
     <addaction name="actionAllies"/>
+    <addaction name="actionINIAdder"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -112,6 +113,11 @@
   <action name="actionAllies">
    <property name="text">
     <string>Allies</string>
+   </property>
+  </action>
+  <action name="actionINIAdder">
+   <property name="text">
+    <string>INIAdder</string>
    </property>
   </action>
  </widget>

@@ -732,6 +732,11 @@ QString FileHandler::getFilePath() const
 	return filePath;
 }
 
+const CDataFile* FileHandler::getDataHandle() const
+{
+	return &fileData;
+}
+
 bool FileHandler::convertToBool(std::string str) const
 {
 	if(str == "yes" || str == "true") return true;
