@@ -92,7 +92,7 @@ Tag* getTagByTriggerID(QString trigID)
 			return (*IT).second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find trigger with ID: " + trigID + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find tag for trigger with ID: " + trigID + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -138,7 +138,7 @@ Trigger* getTriggerByName(QString name)
 			return IT->second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find trigger with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find trigger with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -201,7 +201,7 @@ Team* getTeamByName(QString name)
 			return IT->second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find team with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find team with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -264,7 +264,7 @@ Taskforce* getTaskforceByName(QString name)
 			return IT->second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find taskforce with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find taskforce with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -277,7 +277,7 @@ Script* getScriptByName(QString name)
 			return IT->second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find script with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find script with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -450,7 +450,7 @@ Tag *getTagByName(QString name)
 			return IT->second;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find tag with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find tag with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return NULL;
 }
@@ -472,7 +472,7 @@ variableContainer *findLocalVariableByName(const QString &name, bool errorOnMiss
 		}
 	}
 	if (errorOnMissing) {
-		QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find local variable with name: " + name + ".\nThe program will now terminate.");
+		QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find local variable with name: " + name + ".\nThe program will now terminate.");
 		exit(EXIT_FAILURE);
 	}
 	return NULL;
@@ -485,7 +485,7 @@ uint16_t getLocalVariableKeyByName(const QString &name)
 			return IT->first;
 		}
 	}
-	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occured when trying to find local variable with name: " + name + ".\nThe program will now terminate.");
+	QMessageBox::critical(NULL, "Fatal error!", "Fatal error occurred while trying to find local variable with name: " + name + ".\nThe program will now terminate.");
 	exit(EXIT_FAILURE);
 	return -1;
 }
