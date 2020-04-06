@@ -17,7 +17,7 @@ QSettings triggerStrings(triggerStringsPath, QSettings::IniFormat);
 bool cloneOfNaming, ascNumNaming, alphabetNaming;
 bool disableWarnings;
 
-void loadSettings(bool ask)
+void loadSettings()
 {
 	QString ts_rules_path = settings.value("rules/rulesPath").toString();
 	QString fs_rules_path = settings.value("rules/firestrmPath").toString();
@@ -30,18 +30,30 @@ void loadSettings(bool ask)
 
 	disableWarnings = settings.value("disableWarnings", "true").toBool();
 
-	if(ask) {
-		if(ts_rules_path.isEmpty()) {
-			if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				ts_rules_path = getRulesPathFor("rules.ini", ts_rules_path);
-			}
-		}
-		if(fs_rules_path.isEmpty()) {
-			if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				fs_rules_path = getRulesPathFor("firestrm.ini", fs_rules_path);
-			}
-		}
-	}
+    QDir current_path(QCoreApplication::applicationDirPath());
+    const QString relative_ini_path = "../../ini/";
+
+    if(QFile::exists(current_path.absoluteFilePath(relative_ini_path + "rules.ini")))
+    {
+        QFileInfo ts_rules_info(current_path.absoluteFilePath(relative_ini_path + "rules.ini"));
+        ts_rules_path = ts_rules_info.absolutePath();
+    }
+    if(QFile::exists(current_path.absoluteFilePath(relative_ini_path + "firestrm.ini")))
+    {
+        QFileInfo fs_rules_info(current_path.absoluteFilePath(relative_ini_path + "firestrm.ini"));
+        fs_rules_path = fs_rules_info.absolutePath();
+    }
+
+    if(ts_rules_path.isEmpty()) {
+        if(QMessageBox::question(NULL, "Rules.ini path hasn't been set", "Rules.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+            ts_rules_path = getRulesPathFor("rules.ini", ts_rules_path);
+        }
+    }
+    if(fs_rules_path.isEmpty()) {
+        if(QMessageBox::question(NULL, "Firestrm.ini path hasn't been set", "Firestrm.ini path has not been set. Do you want set it now?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+            fs_rules_path = getRulesPathFor("firestrm.ini", fs_rules_path);
+        }
+    }
 
 	settings.setValue("rules/rulesPath", ts_rules_path);
 	settings.setValue("rules/firestrmPath", fs_rules_path);

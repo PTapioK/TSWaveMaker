@@ -5,7 +5,7 @@
 
 namespace Settings
 {
-extern void loadSettings(bool ask = true);
+extern void loadSettings();
 extern QString getRulesPathFor(QString fileName, QString path);
 
 extern const QString settingsFilePath;
