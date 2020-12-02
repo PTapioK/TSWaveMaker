@@ -59,6 +59,8 @@ class TriggerSection : public QDockWidget
 
 		void on_TEParamAOButton_clicked();
 
+		void on_TAParamAOButton_clicked();
+
 		void on_ActionTypeBox_activated();
 
 		void on_ActionParamNameBox_activated();
@@ -71,7 +73,7 @@ class TriggerSection : public QDockWidget
 
 		void on_AttachedTriggerBox_activated();
 
-	private:
+private:
 		Ui::TriggerSection *ui;
 
 		void cleanActionList();

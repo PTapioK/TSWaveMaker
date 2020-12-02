@@ -604,6 +604,168 @@ void TriggerSection::on_TEParamAOButton_clicked()
 	}
 }
 
+// Make selected triggers selected actions grow in ascending order
+void TriggerSection::on_TAParamAOButton_clicked()
+{
+	if(ui->ActionList->selectedItems().size() != 0 && ui->TriggerList->selectedItems().size() != 0) {
+		Trigger *curTrig = getTriggerByName(ui->TriggerList->selectedItems().last()->text());
+		Action *curAction = curTrig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().last()));
+		int32_t curActionType = curAction->getType();
+		size_t ITPlus = 0;
+		for (int32_t a = 0; a != ui->TriggerList->selectedItems().size(); ++a) {
+			Trigger *trig = getTriggerByName(ui->TriggerList->selectedItems().at(a)->text());
+			for(int32_t b = 0; b != ui->ActionList->selectedItems().size(); ++b) {
+				if (b < int32_t(trig->actions.size())) {
+					Action *action = trig->getAction(ui->ActionList->row(ui->ActionList->selectedItems().at(b)));
+					int32_t actionType = action->getType();
+					if (curActionType == actionType) {
+						int32_t paramID = ui->ActionParamNameBox->currentIndex();
+						switch(getActionTargetType(actionType, paramID)) {
+							case TargetType::NONE:
+								break;
+							case TargetType::WAYPOINT:
+							{
+								auto IT = std::find(waypoints.begin(), waypoints.end(), ui->SAParameterBox->currentIndex());
+								auto endIT = std::find(waypoints.begin(), waypoints.end(), ui->EAParameterBox->currentIndex());
+								++endIT;
+								IT += ITPlus;
+								if (IT != waypoints.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number(*IT));
+								}
+								break;
+							}
+							case TargetType::HOUSE:
+							{
+								auto IT = houses.begin();
+								auto endIT = houses.end();
+								for(auto iterIT = houses.begin(); iterIT != houses.end(); ++iterIT) {
+									if((*iterIT).second == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != houses.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::TEAM:
+							{
+								auto IT = teams.begin();
+								auto endIT = teams.begin();
+								IT = teams.find(getTeamByName(ui->SAParameterBox->currentText())->getID());
+								endIT = teams.find(getTeamByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != teams.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::BUILDING:
+							{
+								auto IT = buildings.begin();
+								auto endIT = buildings.end();
+								for(auto iterIT = buildings.begin(); iterIT != buildings.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != buildings.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).first));
+								}
+								break;
+							}
+							case TargetType::INFANTRY:
+							{
+								auto IT = infantry.begin();
+								auto endIT = infantry.begin();
+								for(auto iterIT = infantry.begin(); iterIT != infantry.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != infantry.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::VEHICLE:
+							{
+								auto IT = vehicles.begin();
+								auto endIT = vehicles.begin();
+								for(auto iterIT = vehicles.begin(); iterIT != vehicles.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != vehicles.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							case TargetType::AIRCRAFT:
+							{
+								auto IT = aircraft.begin();
+								auto endIT = aircraft.begin();
+								for(auto iterIT = aircraft.begin(); iterIT != aircraft.end(); ++iterIT) {
+									if((*iterIT).second.name == ui->SAParameterBox->currentText()) {
+										IT = iterIT;
+									}
+									if((*iterIT).second.name == ui->EAParameterBox->currentText()) {
+										endIT = iterIT;
+									}
+								}
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != aircraft.end() && IT != endIT) {
+									action->setParameter(paramID, QString::number((*IT).second.key));
+								}
+								break;
+							}
+							default:
+								action->setParameter(paramID, QString::number(std::min(ui->SAParameterBox->currentIndex() + ITPlus, size_t(ui->EAParameterBox->currentIndex()))));
+								break;
+						}
+					}
+				}
+			}
+			++ITPlus;
+		}
+	}
+}
+
 // New action
 void TriggerSection::on_NewAction_clicked()
 {

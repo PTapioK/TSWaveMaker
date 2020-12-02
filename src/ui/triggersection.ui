@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1050</width>
-    <height>340</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
   <property name="maximumSize">
    <size>
     <width>1050</width>
-    <height>340</height>
+    <height>380</height>
    </size>
   </property>
   <property name="font">
@@ -130,7 +130,7 @@
       <x>10</x>
       <y>30</y>
       <width>131</width>
-      <height>171</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -211,7 +211,7 @@
       <x>670</x>
       <y>30</y>
       <width>51</width>
-      <height>271</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -400,7 +400,7 @@
     <property name="geometry">
      <rect>
       <x>750</x>
-      <y>240</y>
+      <y>270</y>
       <width>121</width>
       <height>20</height>
      </rect>
@@ -416,7 +416,7 @@
     <property name="geometry">
      <rect>
       <x>880</x>
-      <y>240</y>
+      <y>270</y>
       <width>161</width>
       <height>22</height>
      </rect>
@@ -448,7 +448,7 @@
     <property name="geometry">
      <rect>
       <x>880</x>
-      <y>280</y>
+      <y>310</y>
       <width>161</width>
       <height>22</height>
      </rect>
@@ -458,7 +458,7 @@
     <property name="geometry">
      <rect>
       <x>770</x>
-      <y>280</y>
+      <y>310</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -473,7 +473,7 @@
       <x>280</x>
       <y>30</y>
       <width>51</width>
-      <height>272</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="selectionMode">
@@ -610,7 +610,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>210</y>
+      <y>240</y>
       <width>121</width>
       <height>93</height>
      </rect>
@@ -680,7 +680,7 @@
     <property name="geometry">
      <rect>
       <x>350</x>
-      <y>210</y>
+      <y>240</y>
       <width>301</width>
       <height>23</height>
      </rect>
@@ -693,7 +693,7 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>240</y>
+      <y>270</y>
       <width>161</width>
       <height>22</height>
      </rect>
@@ -703,7 +703,7 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>280</y>
+      <y>310</y>
       <width>161</width>
       <height>22</height>
      </rect>
@@ -713,7 +713,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>240</y>
+      <y>270</y>
       <width>121</width>
       <height>20</height>
      </rect>
@@ -726,7 +726,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>280</y>
+      <y>310</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -739,7 +739,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
+      <y>310</y>
       <width>131</width>
       <height>22</height>
      </rect>
@@ -749,7 +749,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>290</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -762,7 +762,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>260</y>
       <width>131</width>
       <height>22</height>
      </rect>
@@ -772,13 +772,26 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>210</y>
+      <y>240</y>
       <width>131</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Trigger house&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="TAParamAOButton">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>240</y>
+      <width>301</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Triggers use action parameters in ascending order</string>
     </property>
    </widget>
   </widget>
