@@ -630,7 +630,11 @@ void TriggerSection::on_TAParamAOButton_clicked()
 								++endIT;
 								IT += ITPlus;
 								if (IT != waypoints.end() && IT != endIT) {
-									action->setParameter(paramID, QString::number(*IT));
+									if (paramID < 6) {
+										action->setParameter(paramID, QString::number(*IT));
+									} else {
+										action->setWaypoint(*IT);
+									}
 								}
 								break;
 							}
@@ -667,6 +671,51 @@ void TriggerSection::on_TAParamAOButton_clicked()
 								}
 								if (IT != teams.end() && IT != endIT) {
 									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TRIGGER:
+							{
+								auto IT = triggers.begin();
+								auto endIT = triggers.begin();
+								IT = triggers.find(getTriggerByName(ui->SAParameterBox->currentText())->getID());
+								endIT = triggers.find(getTriggerByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != triggers.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TAG:
+							{
+								auto IT = tags.begin();
+								auto endIT = tags.begin();
+								IT = tags.find(getTagByName(ui->SAParameterBox->currentText())->getID());
+								endIT = tags.find(getTagByName(ui->EAParameterBox->currentText())->getID());
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != tags.end() && IT != endIT) {
+									action->setParameter(paramID, IT->second->getID());
+								}
+								break;
+							}
+							case TargetType::TEXT:
+							{
+								auto IT = tutorial.begin();
+								auto endIT = tutorial.begin();
+								IT = tutorial.find(getTutorialKeyByText(ui->SAParameterBox->currentText()));
+								endIT = tutorial.find(getTutorialKeyByText(ui->SEParameterBox->currentText()));
+								++endIT;
+								for(size_t i = 0; i < ITPlus; ++i) {
+									++IT;
+								}
+								if (IT != tutorial.end() && IT != endIT) {
+									action->setParameter(paramID, IT.key());
 								}
 								break;
 							}
